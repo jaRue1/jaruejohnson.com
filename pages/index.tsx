@@ -5,10 +5,12 @@ import Banner from "../components/Banner"
 import LeftSide from "../components/LeftSide"
 import RightSide from "../components/RightSide"
 import Experience from "../components/Experience"
+import Archive from "../components/Archive"
+import Projects from "../components/Projects"
+import Contact from "../components/Contact"
+import Footer from "../components/Footer"
 
 import { motion } from "framer-motion"
-import Projects from "../components/Projects"
-
 export default function Home() {
   return (
     <>
@@ -18,7 +20,7 @@ export default function Home() {
 
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="font-bodyFont w-full h-screen bg-bodyColor text-textLight overflow-x-hidden overflow-y-scroll">
+      <main className="font-bodyFont w-full h-screen bg-bodyColor text-textLight overflow-x-hidden overflow-y-scroll scrollbar scrollbar-track-textDark/20 scrollbar-thumb-textDark/60">
         <Navbar />
         <div className="w-full h-[88vh] xl:flex items-center gap-20 justify-between">
           <motion.div
@@ -35,9 +37,9 @@ export default function Home() {
             <About />
             <Experience />
             <Projects />
-            {/* Archive */}
-            {/* Contact */}
-            {/* Footer */}
+            <Archive />
+            <Contact />
+            <Footer />
           </div>
 
           <motion.div
