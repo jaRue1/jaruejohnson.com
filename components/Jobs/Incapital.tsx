@@ -11,7 +11,7 @@ function Incapital() {
     >
       <h3 className="flex gap-1 font-medium text-xl font-titleFont">
         Software Engineer Intern{" "}
-        <span className="text-textGreen tracking-wide">
+        <span className="text-textOrange tracking-wide">
           <a href="https://www.insperex.com/" target="_blank">
             @Incapital
           </a>
@@ -22,13 +22,13 @@ function Incapital() {
       </p>
       <ul className="mt-6 flex flex-col gap-3">
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span>
             Incapital aka Insperex is a company that sells financial products
             powered by software.
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               <a href="https://www.insperex.com/" target="_blank">
                 Learn More
               </a>
@@ -36,7 +36,7 @@ function Incapital() {
           </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span className="flex flex-col gap-2 ">
@@ -52,12 +52,12 @@ function Incapital() {
           </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span>
             Some of the technologies I became proficient in while working here
-            are <span className="text-textGreen">C# · JavaScript</span>
+            are <span className="text-textOrange">C# · JavaScript</span>
           </span>
         </li>
       </ul>

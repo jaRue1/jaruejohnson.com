@@ -11,7 +11,7 @@ function AwsCert() {
     >
       <h3 className="flex gap-1 font-medium text-xl font-titleFont">
         AWS Certified Developer{" "}
-        <span className="text-textGreen tracking-wide">
+        <span className="text-textOrange tracking-wide">
           <a
             href="https://www.credly.com/badges/71b8fb33-2255-4c0c-bc47-d62aa2fe1b9b/linked_in_profile"
             target="_blank"
@@ -25,7 +25,7 @@ function AwsCert() {
       </p>
       <ul className="mt-6 flex flex-col gap-3">
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span>
@@ -35,7 +35,7 @@ function AwsCert() {
             AWS service APIs, AWS CLI, and SDKs; using containers; and deploying
             with a CI/CD pipeline. I am able to develop, deploy, and debug
             cloud-based applications that follow AWS best practices.{" "}
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               <a
                 href="https://aws.amazon.com/certification/certified-developer-associate/#:~:text=AWS%20Certified%20Developer%20%2D%20Associate%20showcases,based%20applications%20by%20using%20AWS."
                 target="_blank"
@@ -46,7 +46,7 @@ function AwsCert() {
           </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span className="flex flex-col gap-2 ">
@@ -76,13 +76,13 @@ function AwsCert() {
           </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span>
             Some of the technologies / services I became proficient in while
             working here are{" "}
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               Python · JavaScript · S3 · Route53 · CloudFront · RDS · ECS · ECR
               · EC2 · Lambda · SNS · SQS · API Gateway and more.
             </span>

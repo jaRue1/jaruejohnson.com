@@ -12,7 +12,7 @@ function Watsco() {
     >
       <h3 className="flex gap-1 font-medium text-xl font-titleFont">
         Platform Engineer{" "}
-        <span className="text-textGreen tracking-wide">
+        <span className="text-textOrange tracking-wide">
           <a href="https://www.watscoventures.com/" target="_blank">
             @Watsco Ventures
           </a>
@@ -23,7 +23,7 @@ function Watsco() {
       </p>
       <ul className="mt-6 flex flex-col gap-3">
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span>
@@ -31,7 +31,7 @@ function Watsco() {
             solutions to contractors in the HVAC industry. This company is the
             technical arm of Watsco one of North Americas largest distributors
             of commercial HVAC equipment and supplies over 90,000 contractors.{" "}
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               <a href="https://www.watscoventures.com/" target="_blank">
                 Learn More
               </a>
@@ -39,7 +39,7 @@ function Watsco() {
           </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span className="flex flex-col gap-2 ">
@@ -66,13 +66,13 @@ function Watsco() {
           </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span>
             Some of the technologies I became proficient in while working here
             are{" "}
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               Terraform · Docker · Bash · Git · JavaScript · AWS · Kafka ·
               Kubernetes
             </span>

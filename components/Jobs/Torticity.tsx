@@ -10,7 +10,7 @@ function Torticity() {
     >
       <h3 className="flex gap-1 font-medium text-xl font-titleFont">
         Software Engineer{" "}
-        <span className="text-textGreen tracking-wide">
+        <span className="text-textOrange tracking-wide">
           <a href="https://torticity.com/" target="_blank">
             @Torticity
           </a>
@@ -22,7 +22,7 @@ function Torticity() {
       </p>
       <ul className="mt-6 flex flex-col gap-3">
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span>
@@ -30,7 +30,7 @@ function Torticity() {
             powered by technology. They are strategically position in the mass
             tort and personal injury industries and provide solutions for those
             niches.{" "}
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               <a href="https://torticity.com/" target="_blank">
                 Learn More
               </a>
@@ -39,7 +39,7 @@ function Torticity() {
         </li>
 
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span className="flex flex-col gap-2 ">
@@ -62,13 +62,13 @@ function Torticity() {
           </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
-          <span className="text-textGreen mt-1">
+          <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
           <span>
             Some of the technologies I became proficient in while working here
             are{" "}
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               Object-Oriented Programming (OOP) · NestJS · Nuxt.js · Vue.js ·
               Cypress.io · Tailwind CSS · PostgresSQL
             </span>
