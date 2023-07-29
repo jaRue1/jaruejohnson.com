@@ -14,7 +14,7 @@ function Contact() {
       <p className="max-w-[600px] text-center text-textDark">
         Although I am not currently looking for any new opportunities, my inbox
         is always open. Whether you have a questions or just want to say hello,
-        I will try my best to get back with you.
+        I will try my best to get back with you!
       </p>
       <a href="mailto:jaruejohnson@outlook.com">
         <button className="w-40 h-14 border border-textGreen mt-6 font-titleFont text-sm tracking-wider rounded-md hover:bg-hoverColor duration-300 text-textGreen">
