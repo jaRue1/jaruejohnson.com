@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/no-unescaped-entities */
 import React from "react"
 import SectionTitle from "./SectionTitle"
 
@@ -16,31 +17,33 @@ function About() {
           <p>
             <span className="text-textGreen">
               {" "}
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </span>
-            Laboriosam, laudantium? Praesentium quaerat, tempora ipsum, ea enim
-            corporis sunt blanditiis omnis, odit nemo iure temporibus animi
-            soluta architecto libero velit sed! Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Quisquam, voluptatum. Lorem ipsum
-            dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.
+              Hello, I'm Jarue "Rue" Johnson, born and raised in Florida, and
+              I've been in love with technology since I was 16.
+            </span>{" "}
+            My dad, a engineer himself, was the one who introduced me to the
+            world of tech. Learning from him and many others, I've grown a lot,
+            not just as an engineer, but as a person too..
           </p>
           <p>
             <span className="text-textGreen">
               {" "}
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </span>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-            voluptatum. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Quisquam, voluptatum.
+              What really makes me happy is using my tech skills to help others.
+            </span>{" "}
+            My love for helping people has been with me since I was a kid. Plus,
+            I'm a big fan of sports and music. What's really cool is that I get
+            to mix these interests with my love for coding, and that's where the
+            magic happens!
           </p>
           <p>
             <span className="text-textGreen">
               {" "}
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </span>
-            Quisquam, voluptatum. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Quisquam, voluptatum. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Quisquam, voluptatum.
+              The awesome thing about coding is that there are no real limits.
+            </span>{" "}
+            You can do so much with it, and the only limits are the ones you put
+            on yourself! In short, I'm not just an engineer, but also someone
+            who loves to solve problems and dream big. I'm excited to keep
+            learning and growing, and to use technology to make a real
+            difference in the world.
           </p>
           <p>
             {" "}
@@ -137,6 +140,24 @@ function About() {
                 <AiFillThunderbolt />
               </span>
               Mongo
+            </li>
+            <li className="flex items-center ">
+              <span className="text-textGreen">
+                <AiFillThunderbolt />
+              </span>
+              Bash
+            </li>
+            <li className="flex items-center ">
+              <span className="text-textGreen">
+                <AiFillThunderbolt />
+              </span>
+              Docker
+            </li>
+            <li className="flex items-center ">
+              <span className="text-textGreen">
+                <AiFillThunderbolt />
+              </span>
+              Terraform
             </li>
           </ul>
         </div>

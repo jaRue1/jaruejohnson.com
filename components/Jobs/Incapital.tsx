@@ -11,7 +11,11 @@ function Incapital() {
     >
       <h3 className="flex gap-1 font-medium text-xl font-titleFont">
         Software Engineer Intern{" "}
-        <span className="text-textGreen tracking-wide">@Incapital</span>
+        <span className="text-textGreen tracking-wide">
+          <a href="https://www.insperex.com/" target="_blank">
+            @Incapital
+          </a>
+        </span>
       </h3>
       <p className="text-sm mt-1 font-medium text-textDark">
         Oct 2019 - Dec 2019{" "}
@@ -21,28 +25,40 @@ function Incapital() {
           <span className="text-textGreen mt-1">
             <TiArrowForward />{" "}
           </span>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum
-          tempora, ad exercitationem unde ut repudiandae ipsum explicabo aliquam
-          pariatur molestias, suscipit consequuntur dignissimos eius velit
-          inventore maxime optio sit. Commodi.
+          <span>
+            Incapital aka Insperex is a company that sells financial products
+            powered by software.
+            <span className="text-textGreen">
+              <a href="https://www.insperex.com/" target="_blank">
+                Learn More
+              </a>
+            </span>
+          </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
           <span className="text-textGreen mt-1">
             <TiArrowForward />{" "}
           </span>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum
-          tempora, ad exercitationem unde ut repudiandae ipsum explicabo aliquam
-          pariatur molestias, suscipit consequuntur dignissimos eius velit
-          inventore maxime optio sit. Commodi.
+          <span className="flex flex-col gap-2 ">
+            <p>
+              - Troubleshoot and resolved various errors on the Incapnet
+              (internal website platform), improving overall system stability.
+            </p>
+            <p>
+              - Leveraged C# object-oriented design to rectify errors and
+              generate new logic, preventing recurrence of similar issues within
+              the MVC application.
+            </p>
+          </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
           <span className="text-textGreen mt-1">
             <TiArrowForward />{" "}
           </span>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum
-          tempora, ad exercitationem unde ut repudiandae ipsum explicabo aliquam
-          pariatur molestias, suscipit consequuntur dignissimos eius velit
-          inventore maxime optio sit. Commodi.
+          <span>
+            Some of the technologies I became proficient in while working here
+            are <span className="text-textGreen">C# · JavaScript</span>
+          </span>
         </li>
       </ul>
     </motion.div>

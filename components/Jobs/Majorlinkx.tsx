@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from "react"
 import { motion } from "framer-motion"
 import { TiArrowForward } from "react-icons/ti"
@@ -11,7 +12,11 @@ function Majorlinkx() {
     >
       <h3 className="flex gap-1 font-medium text-xl font-titleFont">
         Software Engineer
-        <span className="text-textGreen tracking-wide">@Majorlinkx</span>
+        <span className="text-textGreen tracking-wide">
+          <a href="https://majorlinkx.com/" target="_blank">
+            @Majorlinkx
+          </a>
+        </span>
       </h3>
       <p className="text-sm mt-1 font-medium text-textDark">
         Jun 2021 - Present{" "}
@@ -21,28 +26,48 @@ function Majorlinkx() {
           <span className="text-textGreen mt-1">
             <TiArrowForward />{" "}
           </span>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum
-          tempora, ad exercitationem unde ut repudiandae ipsum explicabo aliquam
-          pariatur molestias, suscipit consequuntur dignissimos eius velit
-          inventore maxime optio sit. Commodi.
+          <span>
+            Majorlinx in a dev agency that build custom technical solutions to
+            small to medium size business. That have implement solutions in
+            multiple industries including Music, Beauty Salons, Hospitality,
+            Retailers and E-commerce.{" "}
+            <span className="text-textGreen">
+              <a href="https://majorlinkx.com/" target="_blank">
+                Learn More
+              </a>
+            </span>
+          </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
           <span className="text-textGreen mt-1">
             <TiArrowForward />{" "}
           </span>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum
-          tempora, ad exercitationem unde ut repudiandae ipsum explicabo aliquam
-          pariatur molestias, suscipit consequuntur dignissimos eius velit
-          inventore maxime optio sit. Commodi.
+          <span className="flex flex-col gap-2 ">
+            <p>
+              - Overhauled existing websites with no look and feel. Using SASS,
+              NextJs,
+            </p>
+            <p>
+              - Implement integrations with third parties such as Stripe and
+              Twilio
+            </p>
+            <p>
+              - Migrated Data from csv's to MySql database hosted in AWS and
+              implement api to access said data.
+            </p>
+          </span>
         </li>
         <li className="text-base flex gap-2 text-textDark">
           <span className="text-textGreen mt-1">
             <TiArrowForward />{" "}
           </span>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum
-          tempora, ad exercitationem unde ut repudiandae ipsum explicabo aliquam
-          pariatur molestias, suscipit consequuntur dignissimos eius velit
-          inventore maxime optio sit. Commodi.
+          <span>
+            Some of the technologies I became proficient in while working here
+            are{" "}
+            <span className="text-textGreen">
+              React.js · NextJS · AWS · Git · SASS · Express.js · MySQL
+            </span>
+          </span>
         </li>
       </ul>
     </motion.div>

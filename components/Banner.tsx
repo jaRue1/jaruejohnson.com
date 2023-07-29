@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from "react"
 import { motion } from "framer-motion"
 export default function Banner() {
@@ -34,24 +35,27 @@ export default function Banner() {
       >
         Im a software engineer based in the United States. I have 3 years of
         experience in web development. I have a passion for building web
-        applications and learning new technologies. Some of the technologies I
-        enjoy working with include ReactJS, NextJS TailwindCSS, NestJS, VueJS,
-        NuxtJS, AWS, Postgres and MongoDB.{" "}
-        <a href="">
+        applications and learning new technologies.{" "}
+        <a
+          href="https://www.linkedin.com/in/jarue-johnson-9a08241ab/"
+          target="_blank"
+        >
           <span className="text-textGreen inline-flex relative cursor-pointer h-7 overflow-x-hidden group">
-            Learn More
+            Let's Connect
             <span className="absolute w-full h-[1px] bg-textGreen left-0 bottom-1 -translate-x-[110%] group-hover:translate-x-0 transition-transform-500" />
           </span>
         </a>
       </motion.p>
-      <motion.button
-        initial={{ y: 10, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.9 }}
-        className="w-52 h-14 text-sm font-titleFont border border-textGreen rounded-md text-textGreen tracking-wide hover:bg-hoverColor duration-300"
-      >
-        See my latest project.
-      </motion.button>
+      <a href="https://github.com/jaRue1" target="_blank">
+        <motion.button
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.9 }}
+          className="w-52 h-14 text-sm font-titleFont border border-textGreen rounded-md text-textGreen tracking-wide hover:bg-hoverColor duration-300"
+        >
+          See my latest projects.
+        </motion.button>
+      </a>
     </section>
   )
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import SectionTitle from "./SectionTitle"
 
 import Torticity from "./Jobs/Torticity"
+import AwsCert from "./Jobs/AwsCert"
 import Majorlinkx from "./Jobs/Majorlinkx"
 import Watsco from "./Jobs/Watsco"
 import Incapital from "./Jobs/Incapital"
@@ -11,30 +12,41 @@ function Experience() {
   const [jobMajorlinkx, setJobMajorlinkx] = useState(false)
   const [jobWatsco, setJobWatsco] = useState(false)
   const [jobIncapital, setJobIncapital] = useState(false)
-
+  const [jobAwsCert, setJobAwsCert] = useState(false)
   const handleTorticity = () => {
     setJobTorticity(true)
     setJobMajorlinkx(false)
     setJobWatsco(false)
     setJobIncapital(false)
+    setJobAwsCert(false)
   }
   const handleMajorlinkx = () => {
     setJobTorticity(false)
     setJobMajorlinkx(true)
     setJobWatsco(false)
     setJobIncapital(false)
+    setJobAwsCert(false)
   }
   const handleWatsco = () => {
     setJobTorticity(false)
     setJobMajorlinkx(false)
     setJobWatsco(true)
     setJobIncapital(false)
+    setJobAwsCert(false)
   }
   const handleIncapital = () => {
     setJobTorticity(false)
     setJobMajorlinkx(false)
     setJobWatsco(false)
     setJobIncapital(true)
+    setJobAwsCert(false)
+  }
+  const handleAwsCert = () => {
+    setJobTorticity(false)
+    setJobMajorlinkx(false)
+    setJobWatsco(false)
+    setJobIncapital(false)
+    setJobAwsCert(true)
   }
 
   return (
@@ -54,6 +66,16 @@ function Experience() {
             }  bg-transparent hover:bg-[#112240] py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             Torticity
+          </li>
+          <li
+            onClick={handleAwsCert}
+            className={`${
+              jobAwsCert
+                ? "border-l-textGreen border-l-2 text-textGreen"
+                : "border-l-hoverColor border-l-2  text-textDark"
+            }  bg-transparent hover:bg-[#112240] py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
+          >
+            AWS Cert
           </li>
           <li
             onClick={handleMajorlinkx}
@@ -87,6 +109,7 @@ function Experience() {
           </li>
         </ul>
         {jobTorticty && <Torticity />}
+        {jobAwsCert && <AwsCert />}
         {jobMajorlinkx && <Majorlinkx />}
         {jobWatsco && <Watsco />}
         {jobIncapital && <Incapital />}
