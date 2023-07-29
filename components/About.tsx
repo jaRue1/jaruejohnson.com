@@ -15,7 +15,7 @@ function About() {
       <div className="flex flex-col lgl:flex-row gap-16">
         <div className="w-full lgl:w-2/3 text-base text-textDark font-medium flex flex-col gap-4">
           <p>
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               {" "}
               Hello, I'm Jarue "Rue" Johnson, born and raised in Florida, and
               I've been in love with technology since I was 16.
@@ -25,7 +25,7 @@ function About() {
             not just as an engineer, but as a person too..
           </p>
           <p>
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               {" "}
               What really makes me happy is using my tech skills to help others.
             </span>{" "}
@@ -35,7 +35,7 @@ function About() {
             magic happens!
           </p>
           <p>
-            <span className="text-textGreen">
+            <span className="text-textOrange">
               {" "}
               The awesome thing about coding is that there are no real limits.
             </span>{" "}
@@ -52,109 +52,109 @@ function About() {
           </p>
           <ul className="max-w-[450px] text-sm font-titleFont grid grid-cols-3 gap-2 mt-6">
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               HTML5
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Tailwind CSS
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               JavaScript (ES6+)
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               TypeScript
             </li>
             <li className="flex items-center">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               React JS
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Next JS
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Vue JS
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Nuxt JS
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Nest JS
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               AWS
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Cypress JS
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Jest
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               MySQL
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Postgres
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Mongo
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Bash
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Docker
             </li>
             <li className="flex items-center ">
-              <span className="text-textGreen">
+              <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
               Terraform
@@ -170,8 +170,8 @@ function About() {
                 src="/assets/images/profile.png"
                 alt="profile"
               />
-              <div className="hidden lgl:inline-block absolute w-full h-80 bg-textGreen/20 rounded-md top-0 left-0 group-hover:bg-transparent duration-300">
-                <div className="hidden lgl:inline-flex w-full h-80 border-2 border-textGreen rounded-md group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform duration-300 " />
+              <div className="hidden lgl:inline-block absolute w-full h-80 bg-textOrange/20 rounded-md top-0 left-0 group-hover:bg-transparent duration-300">
+                <div className="hidden lgl:inline-flex w-full h-80 border-2 border-textOrange rounded-md group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform duration-300 " />
               </div>
             </div>
           </div>

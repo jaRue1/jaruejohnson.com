@@ -11,7 +11,7 @@ export default function Banner() {
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.6 }}
-        className="text-lg font-titleFont tracking-wide text-textGreen"
+        className="text-lg font-titleFont tracking-wide text-textOrange"
       >
         Hi, my name is{" "}
       </motion.h3>
@@ -40,9 +40,9 @@ export default function Banner() {
           href="https://www.linkedin.com/in/jarue-johnson-9a08241ab/"
           target="_blank"
         >
-          <span className="text-textGreen inline-flex relative cursor-pointer h-7 overflow-x-hidden group">
+          <span className="text-textOrange inline-flex relative cursor-pointer h-7 overflow-x-hidden group">
             Let's Connect
-            <span className="absolute w-full h-[1px] bg-textGreen left-0 bottom-1 -translate-x-[110%] group-hover:translate-x-0 transition-transform-500" />
+            <span className="absolute w-full h-[1px] bg-textOrange left-0 bottom-1 -translate-x-[110%] group-hover:translate-x-0 transition-transform-500" />
           </span>
         </a>
       </motion.p>
@@ -51,7 +51,7 @@ export default function Banner() {
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.9 }}
-          className="w-52 h-14 text-sm font-titleFont border border-textGreen rounded-md text-textGreen tracking-wide hover:bg-hoverColor duration-300"
+          className="w-52 h-14 text-sm font-titleFont border border-textOrange rounded-md text-textOrange tracking-wide hover:bg-hoverColor duration-300"
         >
           See my latest projects.
         </motion.button>

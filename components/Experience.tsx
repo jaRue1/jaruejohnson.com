@@ -61,9 +61,9 @@ function Experience() {
             onClick={handleTorticity}
             className={`${
               jobTorticty
-                ? "border-l-textGreen border-l-2 text-textGreen"
+                ? "border-l-textOrange border-l-2 text-textOrange"
                 : "border-l-hoverColor border-l-2  text-textDark"
-            }  bg-transparent hover:bg-[#112240] py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
+            }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             Torticity
           </li>
@@ -71,9 +71,9 @@ function Experience() {
             onClick={handleAwsCert}
             className={`${
               jobAwsCert
-                ? "border-l-textGreen border-l-2 text-textGreen"
+                ? "border-l-textOrange border-l-2 text-textOrange"
                 : "border-l-hoverColor border-l-2  text-textDark"
-            }  bg-transparent hover:bg-[#112240] py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
+            }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             AWS Cert
           </li>
@@ -81,9 +81,9 @@ function Experience() {
             onClick={handleMajorlinkx}
             className={`${
               jobMajorlinkx
-                ? "border-l-textGreen border-l-2 text-textGreen"
+                ? "border-l-textOrange border-l-2 text-textOrange"
                 : "border-l-hoverColor border-l-2  text-textDark"
-            }  bg-transparent hover:bg-[#112240] py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
+            }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             Majorlinkx
           </li>
@@ -91,9 +91,9 @@ function Experience() {
             onClick={handleWatsco}
             className={`${
               jobWatsco
-                ? "border-l-textGreen border-l-2 text-textGreen"
+                ? "border-l-textOrange border-l-2 text-textOrange"
                 : "border-l-hoverColor border-l-2  text-textDark"
-            }  bg-transparent hover:bg-[#112240] py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
+            }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             Watsco
           </li>
@@ -101,9 +101,9 @@ function Experience() {
             onClick={handleIncapital}
             className={`${
               jobIncapital
-                ? "border-l-textGreen border-l-2 text-textGreen"
+                ? "border-l-textOrange border-l-2 text-textOrange"
                 : "border-l-hoverColor border-l-2  text-textDark"
-            }  bg-transparent hover:bg-[#112240] py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
+            }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             Incapital
           </li>
