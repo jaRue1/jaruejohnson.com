@@ -21,7 +21,7 @@ function Torticity() {
         {/* implement some way to calculate how long I worked at a company */}
       </p>
       <ul className="mt-6 flex flex-col gap-3">
-        <li className="text-base flex gap-2 text-textDark">
+        <li className="text-base flex gap-2 text-textLight">
           <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
@@ -38,7 +38,7 @@ function Torticity() {
           </span>
         </li>
 
-        <li className="text-base flex gap-2 text-textDark">
+        <li className="text-base flex gap-2 text-textLight">
           <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
@@ -61,7 +61,7 @@ function Torticity() {
             </p>
           </span>
         </li>
-        <li className="text-base flex gap-2 text-textDark">
+        <li className="text-base flex gap-2 text-textLight">
           <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>

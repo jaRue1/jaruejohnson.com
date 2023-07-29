@@ -11,7 +11,7 @@ function Contact() {
         04. What's Next
       </p>
       <h2 className="font-titleFont text-5xl font-semibold"> Get In Touch</h2>
-      <p className="max-w-[600px] text-center text-textDark">
+      <p className="max-w-[600px] text-center text-textLight">
         Although I am not currently looking for any new opportunities, my inbox
         is always open. Whether you have a questions or just want to say hello,
         I will try my best to get back with you!
