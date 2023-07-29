@@ -1,0 +1,55 @@
+name: Deploy to S3 Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.15.0
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Next.js app
+        run: npm run build && npm run export
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.BUCKET_REGION }}
+
+      - name: Clear S3 bucket
+        run: aws s3 rm s3://${{ secrets.BUCKET_NAME }}/ --recursive
+
+      - name: Sync _next folder to S3
+        run: aws s3 sync ./out/_next/ s3://${{ secrets.BUCKET_NAME }}/_next/
+
+      - name: Remove HTML file extensions
+        run: |
+          for file in $(find ./out -name "*.html"); do
+            mv "$file" "${file%%.html}"
+          done
+
+      - name: Sync HTML files to S3
+        run: aws s3 sync --content-type "text/html" --metadata-directive REPLACE ./out/ s3://${{ secrets.BUCKET_NAME }}/ --exclude "*.jpg" --exclude "*.png" --exclude "*.jpeg" --exclude "_next/*" --exclude "*.svg"
+
+      - name: Sync other files to S3
+        run: aws s3 sync ./out/ s3://${{ secrets.BUCKET_NAME }}/ --exclude "*.*" --include "*.jpg" --include "*.png" --include "*.jpeg" --include "*.svg"
+
+      - name: Invalidate CloudFront distribution
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*" --no-cli-pager

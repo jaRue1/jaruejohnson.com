@@ -14,20 +14,20 @@ function Archive() {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-10 lgl:px-10">
         <ArchiveCard
           title="AWS Node Crud Api"
-          link=""
-          description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, corrupti officiis dolore ducimus recusandae iure animi harum. Inventore quas esse sed ipsum molestiae atque, hic ipsa minus enim fugiat quis?"
+          link="https://github.com/jaRue1/aws-node-crud-api"
+          description="This is a tutorial on how to use aws service EC2 and CICD tools Code pipeline and Code deploy"
           tech={["Node Js", "AWS", "Bash"]}
         />
         <ArchiveCard
           title="AWS 101"
-          link=""
-          description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, corrupti officiis dolore ducimus recusandae iure animi harum. Inventore quas esse sed ipsum molestiae atque, hic ipsa minus enim fugiat quis?"
+          link="https://github.com/jaRue1/aws-101"
+          description="This is a repo I created to become proficient with aws core concepts as well as use their services effectively"
           tech={["Terraform", "Bash", "Python", "JavaScript"]}
         />
         <ArchiveCard
           title="CSV Parser App"
-          link=""
-          description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, corrupti officiis dolore ducimus recusandae iure animi harum. Inventore quas esse sed ipsum molestiae atque, hic ipsa minus enim fugiat quis?"
+          link="https://github.com/jaRue1/CSV-Parser-App"
+          description="This app interacts with a mySQL DB , Express/Node Api and uses React to render the Frontend. I built this to showcase my love for anime."
           tech={["ReactJS", "Node Js", "Express", "SQL"]}
         />
         {showMore && (
@@ -40,8 +40,8 @@ function Archive() {
               {" "}
               <ArchiveCard
                 title="React S3"
-                link=""
-                description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, corrupti officiis dolore ducimus recusandae iure animi harum. Inventore quas esse sed ipsum molestiae atque, hic ipsa minus enim fugiat quis?"
+                link="https://github.com/jaRue1/react-s3"
+                description="This project is example of using react and the aws-sdk to upload images to S3."
                 tech={["React Js", "s3", "aws-sdk"]}
               />
             </motion.div>
@@ -53,8 +53,8 @@ function Archive() {
             >
               <ArchiveCard
                 title="TypeScript 101"
-                link=""
-                description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, corrupti officiis dolore ducimus recusandae iure animi harum. Inventore quas esse sed ipsum molestiae atque, hic ipsa minus enim fugiat quis?"
+                link="https://github.com/jaRue1/typeScript101"
+                description="Everything you need to know about the basics of building with typescript. I created this when I was teaching myself the basics of TypeScript"
                 tech={["Typecript"]}
               />
             </motion.div>
@@ -66,10 +66,11 @@ function Archive() {
             >
               {" "}
               <ArchiveCard
-                title="Nest Js Task Api"
-                link=""
-                description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, corrupti officiis dolore ducimus recusandae iure animi harum. Inventore quas esse sed ipsum molestiae atque, hic ipsa minus enim fugiat quis?"
-                tech={["Nest JS", "Postgres", "Jest"]}
+                title="Nest Js Crud Api"
+                link="https://github.com/jaRue1/nest-crud-api"
+                description="This is a example of a crud api that uses nestjsx/crud dependency to implement crud functionality. 
+                This project use an relational database sqlite to store data I also used the swagger ui library to create and interactive ui. "
+                tech={["Nest JS", "Sqlite", "Swagger"]}
               />
             </motion.div>
 
@@ -81,8 +82,8 @@ function Archive() {
               {" "}
               <ArchiveCard
                 title="Nest Js Mircoservice"
-                link=""
-                description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, corrupti officiis dolore ducimus recusandae iure animi harum. Inventore quas esse sed ipsum molestiae atque, hic ipsa minus enim fugiat quis?"
+                link="https://github.com/jaRue1/nsestjs-mircoservice-1"
+                description="This was a project where I learned how to build microservices with Nest Js. I learn a lot about software architecture from this."
                 tech={["Nest JS", "Mongo DB", "MySQL", "Rabbit MQ"]}
               />
             </motion.div>
@@ -95,9 +96,9 @@ function Archive() {
               {" "}
               <ArchiveCard
                 title="TDD Starter"
-                link=""
-                description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, corrupti officiis dolore ducimus recusandae iure animi harum. Inventore quas esse sed ipsum molestiae atque, hic ipsa minus enim fugiat quis?"
-                tech={["Jest"]}
+                link="https://github.com/jaRue1/tdd"
+                description="This a basic starter for any trying to learn how to write test and adopt the test drive development mindset "
+                tech={["Jest", "JavaScript"]}
               />
             </motion.div>
 
@@ -109,8 +110,8 @@ function Archive() {
               {" "}
               <ArchiveCard
                 title="dashboard app"
-                link=""
-                description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, corrupti officiis dolore ducimus recusandae iure animi harum. Inventore quas esse sed ipsum molestiae atque, hic ipsa minus enim fugiat quis?"
+                link="https://github.com/jaRue1/dashboard-app"
+                description="I built a dashboard so that I could gain a better understanding of UX/UI decisions. It was interesting to switch between dev and user roles to see if what I built made sense."
                 tech={["React JS", "Material UI"]}
               />
             </motion.div>
