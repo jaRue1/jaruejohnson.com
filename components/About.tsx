@@ -13,7 +13,7 @@ function About() {
     >
       <SectionTitle title="About Me" titleNum="01." />
       <div className="flex flex-col lgl:flex-row gap-16">
-        <div className="w-full lgl:w-2/3 text-base text-textDark font-medium flex flex-col gap-4">
+        <div className="w-full lgl:w-2/3 text-base text-textLight font-medium flex flex-col gap-4">
           <p>
             <span className="text-textOrange">
               {" "}

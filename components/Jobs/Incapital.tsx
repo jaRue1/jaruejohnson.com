@@ -21,7 +21,7 @@ function Incapital() {
         Oct 2019 - Dec 2019{" "}
       </p>
       <ul className="mt-6 flex flex-col gap-3">
-        <li className="text-base flex gap-2 text-textDark">
+        <li className="text-base flex gap-2 text-textLight">
           <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
@@ -35,7 +35,7 @@ function Incapital() {
             </span>
           </span>
         </li>
-        <li className="text-base flex gap-2 text-textDark">
+        <li className="text-base flex gap-2 text-textLight">
           <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
@@ -51,7 +51,7 @@ function Incapital() {
             </p>
           </span>
         </li>
-        <li className="text-base flex gap-2 text-textDark">
+        <li className="text-base flex gap-2 text-textLight">
           <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>

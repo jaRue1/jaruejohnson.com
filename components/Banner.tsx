@@ -31,7 +31,7 @@ export default function Banner() {
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.8 }}
-        className="text-base md:max-w-[650px] text-textDark font-medium"
+        className="text-base md:max-w-[650px] text-textLight font-medium"
       >
         Im a software engineer based in the United States. I have 3 years of
         experience in web development. I have a passion for building web

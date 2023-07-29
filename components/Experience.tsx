@@ -62,7 +62,7 @@ function Experience() {
             className={`${
               jobTorticty
                 ? "border-l-textOrange border-l-2 text-textOrange"
-                : "border-l-hoverColor border-l-2  text-textDark"
+                : "border-l-hoverColor border-l-2  text-textLight"
             }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             Torticity
@@ -72,7 +72,7 @@ function Experience() {
             className={`${
               jobAwsCert
                 ? "border-l-textOrange border-l-2 text-textOrange"
-                : "border-l-hoverColor border-l-2  text-textDark"
+                : "border-l-hoverColor border-l-2  text-textLight"
             }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             AWS Cert
@@ -82,7 +82,7 @@ function Experience() {
             className={`${
               jobMajorlinkx
                 ? "border-l-textOrange border-l-2 text-textOrange"
-                : "border-l-hoverColor border-l-2  text-textDark"
+                : "border-l-hoverColor border-l-2  text-textLight"
             }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             Majorlinkx
@@ -92,7 +92,7 @@ function Experience() {
             className={`${
               jobWatsco
                 ? "border-l-textOrange border-l-2 text-textOrange"
-                : "border-l-hoverColor border-l-2  text-textDark"
+                : "border-l-hoverColor border-l-2  text-textLight"
             }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             Watsco
@@ -102,7 +102,7 @@ function Experience() {
             className={`${
               jobIncapital
                 ? "border-l-textOrange border-l-2 text-textOrange"
-                : "border-l-hoverColor border-l-2  text-textDark"
+                : "border-l-hoverColor border-l-2  text-textLight"
             }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
             Incapital
