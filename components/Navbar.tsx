@@ -4,11 +4,7 @@ import { motion } from "framer-motion"
 import { MdOutlineClose } from "react-icons/md"
 
 import { TbBrandGithub, TbBrandTwitter } from "react-icons/tb"
-import {
-  SlSocialYoutube,
-  SlSocialLinkedin,
-  SlSocialInstagram,
-} from "react-icons/sl"
+import { SlSocialLinkedin, SlSocialInstagram } from "react-icons/sl"
 
 const Navbar = () => {
   const ref = useRef<string | any>("")

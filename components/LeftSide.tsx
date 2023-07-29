@@ -1,10 +1,6 @@
 import React from "react"
 import { TbBrandGithub, TbBrandTwitter } from "react-icons/tb"
-import {
-  SlSocialYoutube,
-  SlSocialLinkedin,
-  SlSocialInstagram,
-} from "react-icons/sl"
+import { SlSocialLinkedin, SlSocialInstagram } from "react-icons/sl"
 
 function LeftSide() {
   return (
