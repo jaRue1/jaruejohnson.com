@@ -42,3 +42,13 @@ module.exports = {
   },
   plugins: [require("tailwind-scrollbar")],
 }
+
+// xs:text-red-500
+// sm:text-blue-500
+// sml:text-green-500
+// md:text-purple-500
+// mdl:text-yellow-500
+// lg:text-black-500
+// lg:text-cyan-500
+// lgl:text-indigo-500
+// xl:text-rose-500

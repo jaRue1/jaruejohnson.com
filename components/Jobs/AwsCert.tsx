@@ -9,14 +9,14 @@ function AwsCert() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.1 }}
     >
-      <h3 className="flex gap-1 font-medium text-xl font-titleFont">
+      <h3 className="flex gap-1 font-medium text-xl font-titleFont xs:text-xs sm:text-base sm:items-center sml:text-xl">
         AWS Certified Developer{" "}
         <span className="text-textOrange tracking-wide">
           <a
             href="https://www.credly.com/badges/71b8fb33-2255-4c0c-bc47-d62aa2fe1b9b/linked_in_profile"
             target="_blank"
           >
-            @AWS Creds
+            @Credly
           </a>
         </span>
       </h3>
@@ -29,12 +29,11 @@ function AwsCert() {
             <TiArrowForward />{" "}
           </span>
           <span>
-            AWS Certified Developer – Associate I earned this certification by
+            AWS Certified Developer Associate, I earned this certification by
             having a comprehensive understanding of application life-cycle
             management. I demonstrated proficiency in writing applications with
-            AWS service APIs, AWS CLI, and SDKs; using containers; and deploying
-            with a CI/CD pipeline. I am able to develop, deploy, and debug
-            cloud-based applications that follow AWS best practices.{" "}
+            AWS service APIs, the AWS CLI, using SDKs, containers and deploying
+            applications via CI/CD pipeline.{" "}
             <span className="text-textOrange">
               <a
                 href="https://aws.amazon.com/certification/certified-developer-associate/#:~:text=AWS%20Certified%20Developer%20%2D%20Associate%20showcases,based%20applications%20by%20using%20AWS."
