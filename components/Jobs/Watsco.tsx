@@ -10,9 +10,9 @@ function Watsco() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.1 }}
     >
-      <h3 className="flex gap-1 font-medium text-xl font-titleFont">
+      <h3 className="flex gap-1 font-medium text-xl font-titleFont xs:text-xs sm:text-base sm:items-center sml:text-xl">
         Platform Engineer{" "}
-        <span className="text-textOrange tracking-wide">
+        <span className="text-textOrange tracking-wide   ">
           <a href="https://www.watscoventures.com/" target="_blank">
             @Watsco Ventures
           </a>

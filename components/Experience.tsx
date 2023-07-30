@@ -56,7 +56,7 @@ function Experience() {
     >
       <SectionTitle title="My Experience" titleNum="02." />
       <div className="w-full mt-10 flex flex-col md:flex-row gap-16">
-        <ul className="md:w-52 flex flex-col">
+        <ul className="md:w-52 flex flex-col ">
           <li
             onClick={handleTorticity}
             className={`${
@@ -75,7 +75,7 @@ function Experience() {
                 : "border-l-hoverColor border-l-2  text-textLight"
             }  bg-transparent hover:bg-customBg py-3 text-sm cursor-pointer duration-300 px-8 font-medium`}
           >
-            AWS Cert
+            AWS
           </li>
           <li
             onClick={handleMajorlinkx}

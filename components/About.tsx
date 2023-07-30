@@ -50,115 +50,262 @@ function About() {
             Here are a few technologies, languages and tools I have been working
             with recently:
           </p>
-          <ul className="max-w-[450px] text-sm font-titleFont grid grid-cols-3 gap-2 mt-6">
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              HTML5
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Tailwind CSS
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              JS (ES6+)
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              TypeScript
-            </li>
-            <li className="flex items-center">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              React JS
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Next JS
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Vue JS
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Nuxt JS
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Nest JS
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              AWS
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Cypress JS
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Jest
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              MySQL
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Postgres
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Mongo
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Bash
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Docker
-            </li>
-            <li className="flex items-center ">
-              <span className="text-textOrange">
-                <AiFillThunderbolt />
-              </span>
-              Terraform
-            </li>
+          <ul className="max-w-[450px] text-sm font-titleFont grid grid-cols-4 gap-2 mt-6">
+            <a
+              href="https://developer.mozilla.org/en-US/docs/Glossary/HTML5"
+              target="_blank"
+            >
+              <li className="flex items-center hover:text-textOrange">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                HTML5
+              </li>
+            </a>
+
+            <a href="https://tailwindcss.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Tailwind
+              </li>
+            </a>
+
+            <a href="https://flowbite.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Flowbite
+              </li>
+            </a>
+
+            <a href="https://sass-lang.com/guide/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                SASS
+              </li>
+            </a>
+
+            <a href="http://es6-features.org/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                JS (ES6+)
+              </li>
+            </a>
+
+            <a href="https://www.typescriptlang.org/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                TypeScript
+              </li>
+            </a>
+
+            <a href="https://www.python.org/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Python
+              </li>
+            </a>
+
+            <a
+              href="https://learn.microsoft.com/en-us/dotnet/csharp/"
+              target="_blank"
+            >
+              {/*  Build Something Real World with this */}
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  {" "}
+                  <AiFillThunderbolt />
+                </span>
+                C#
+              </li>
+            </a>
+
+            <a href="https://react.dev/" target="_blank">
+              <li className="flex items-center hover:text-textOrange">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                React
+              </li>
+            </a>
+
+            <a href="https://nextjs.org/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Next
+              </li>
+            </a>
+
+            <a href="https://vuejs.org/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Vue
+              </li>
+            </a>
+
+            <a href="https://nuxt.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Nuxt
+              </li>
+            </a>
+
+            <a href="https://nestjs.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Nest
+              </li>
+            </a>
+
+            <a href="https://expressjs.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Express
+              </li>
+            </a>
+
+            <a href="https://aws.amazon.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                AWS
+              </li>
+            </a>
+
+            <a href="https://cloud.google.com/gcp" target="_blank">
+              {" "}
+              {/*  Build Something Real World with this */}
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                GCP
+              </li>
+            </a>
+
+            <a href="https://www.chaijs.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Chai
+              </li>
+            </a>
+
+            <a href="https://mochajs.org/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Mocha
+              </li>
+            </a>
+
+            <a href="https://www.cypress.io/app/?gad=1" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Cypress
+              </li>
+            </a>
+
+            <a href="https://jestjs.io/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Jest
+              </li>
+            </a>
+
+            <a href="https://www.mysql.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                MySQL
+              </li>
+            </a>
+
+            <a href="https://www.postgresql.org/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Postgres
+              </li>
+            </a>
+
+            <a href="https://www.mongodb.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Mongo
+              </li>
+            </a>
+            {/*  Build Something Real World with this */}
+            <a href="https://redis.io/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Redis
+              </li>
+            </a>
+
+            <a
+              href="https://www.gnu.org/software/bash/manual/bash.html"
+              target="_blank"
+            >
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Bash
+              </li>
+            </a>
+
+            <a href="https://www.docker.com/" target="_blank">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Docker
+              </li>
+            </a>
+
+            <a href="https://developer.hashicorp.com/terraform?ajs_aid=bdf16eee-8a78-446d-ae45-a94dc4206ea1&product_intent=terraform">
+              <li className="flex items-center hover:text-textOrange ">
+                <span className="text-textOrange">
+                  <AiFillThunderbolt />
+                </span>
+                Terraform
+              </li>
+            </a>
           </ul>
         </div>
 

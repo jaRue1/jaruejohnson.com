@@ -10,7 +10,7 @@ function Majorlinkx() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.1 }}
     >
-      <h3 className="flex gap-1 font-medium text-xl font-titleFont">
+      <h3 className="flex gap-1 font-medium text-xl font-titleFont xs:text-xs sm:text-lg sm:items-center sml:text-xl">
         Software Engineer
         <span className="text-textOrange tracking-wide">
           <a href="https://majorlinkx.com/" target="_blank">
