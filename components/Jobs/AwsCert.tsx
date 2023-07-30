@@ -52,9 +52,7 @@ function AwsCert() {
           <span className="flex flex-col gap-2 ">
             <p>
               - Application Development and Deployment: I can design, build, and
-              deploy scalable, secure applications on the AWS platform. They can
-              use AWS services and SDKs to write code and set up code pipelines
-              for deployment.
+              deploy scalable, secure applications on the AWS platform.
             </p>
             <p>
               - Serverless Applications: I can create and manage serverless
@@ -63,14 +61,14 @@ function AwsCert() {
             </p>
             <p>
               - Database Management: I have the knowledge to work with AWS
-              databases such as Amazon RDS, DynamoDB, and Aurora. They can
-              design and maintain these databases, ensuring optimal performance,
-              and security.
+              databases such as Amazon RDS, DynamoDB, and Aurora. I can design
+              and maintain these databases, ensuring optimal performance, and
+              security.
             </p>
             <p>
               - Performance Optimization and Troubleshooting: I am capable of
-              optimizing the performance of AWS applications and services. They
-              can also diagnose and troubleshoot issues, using services like AWS
+              optimizing the performance of AWS applications and services. I can
+              also diagnose and troubleshoot issues, using services like AWS
               CloudWatch, to ensure smooth operations.
             </p>
           </span>
