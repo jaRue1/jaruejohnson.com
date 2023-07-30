@@ -122,7 +122,7 @@ function Projects() {
                 <img src="/assets/images/affirmations.png" alt="" />
               </div>
             </a>
-            <div className="w-full xl:w-1/2 flex flex-col gap-6 lgl:justify-between items-end text-right xl:-ml-16 z-10">
+            <div className="w-full xl:w-1/2 flex flex-col gap-6 items-end text-right xl:-ml-16 z-10">
               <p className="font-titleFont text-textOrange text-sm tracking-wide">
                 Feature Project
               </p>

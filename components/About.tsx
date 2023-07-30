@@ -67,7 +67,7 @@ function About() {
               <span className="text-textOrange">
                 <AiFillThunderbolt />
               </span>
-              JavaScript (ES6+)
+              JS (ES6+)
             </li>
             <li className="flex items-center ">
               <span className="text-textOrange">

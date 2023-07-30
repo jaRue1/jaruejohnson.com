@@ -44,7 +44,7 @@ function Majorlinkx() {
           </span>
           <span className="flex flex-col gap-2 ">
             <p>
-              - Overhauled existing websites with no look and feel. Using SASS,
+              - Overhauled existing websites with new look and feel. Using SASS,
               NextJs,
             </p>
             <p>
