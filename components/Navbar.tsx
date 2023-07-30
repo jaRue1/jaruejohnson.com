@@ -106,7 +106,7 @@ const Navbar = () => {
               </motion.li>
             </Link>
           </ul>
-          <a href="/assets/jarue_johnson_resume_2023.pdf" target="_blank">
+          {/* <a href="/assets/jarue_johnson_resume_2023.pdf" target="_blank">
             <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -115,7 +115,7 @@ const Navbar = () => {
             >
               Resume
             </motion.button>
-          </a>
+          </a> */}
         </div>
         {/* small icon section */}
         <div
