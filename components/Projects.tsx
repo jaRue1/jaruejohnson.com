@@ -1,4 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+
+// Need to refactor this with Senior Level Projects
+// Better pics and more information on challenges and how I overcame them,
 import React from "react"
 import SectionTitle from "./SectionTitle"
 import { TbBrandGithub } from "react-icons/tb"

@@ -70,7 +70,7 @@ function Torticity() {
             are{" "}
             <span className="text-textOrange">
               Object-Oriented Programming (OOP) · NestJS · Nuxt.js · Vue.js ·
-              Cypress.io · Tailwind CSS · PostgresSQL
+              Cypress.io · Tailwind CSS · PostgresSQL · Jest
             </span>
           </span>
         </li>

@@ -27,9 +27,9 @@ function Majorlinkx() {
             <TiArrowForward />{" "}
           </span>
           <span>
-            Majorlinx in a dev agency that build custom technical solutions to
-            small to medium size business. That have implement solutions in
-            multiple industries including Music, Beauty Salons, Hospitality,
+            Majorlinkx is a dev agency that builds custom technical solutions
+            for small to medium size businesses. They have implement solutions
+            in multiple industries including Music, Beauty Salons, Hospitality,
             Retailers and E-commerce.{" "}
             <span className="text-textOrange">
               <a href="https://majorlinkx.com/" target="_blank">

@@ -6,14 +6,36 @@ function Archive() {
   return (
     <div className="max-w-contentContainer mx-auto py-24">
       <div className="w-full flex flex-col items-center">
-        <h2 className="text-3xl font-titleFont font-semibold">
-          Other Projects
-        </h2>
-        <p className="text-sm font-titleFont text-textOrange">
+        <h2 className="text-3xl font-titleFont font-semibold">My Projects</h2>
+        <p className="text-sm pt-2 font-titleFont text-textOrange">
           view my archive
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-10 lgl:px-10">
+        <ArchiveCard
+          title="Amazon Clone"
+          link="https://github.com/jaRue1/amazon-clone"
+          description="This an amazon clone built with ReactJS and integrated with stripe ayment
+          gateway. It has a fully functional cart and a user
+          authentication system deployed on firebase"
+          tech={["Material - Ui ", "React Js", "Stripe", "Firebase"]}
+        />
+        <ArchiveCard
+          title="Trello Clone"
+          link="https://github.com/jaRue1/trello-clone"
+          description="built with NuxtJS and styled with user can
+          create boards and add tasks to the board. Also color coordinated
+          the boards and even upload images as the background of the
+          board."
+          tech={["NuxtJS", "Vuetify", "Firebase"]}
+        />
+        <ArchiveCard
+          title="Affirmations App"
+          link="https://github.com/jaRue1/affirmations-react-app"
+          description="built with ReactJS and integrated with google and login and deployed on firebase"
+          tech={["ReactJS", "Node Js", "Firebase"]}
+        />
+
         <ArchiveCard
           title="AWS Node Crud Api"
           link="https://github.com/jaRue1/aws-node-crud-api"
