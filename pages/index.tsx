@@ -17,7 +17,7 @@ export default function Home() {
         <title>Jarue Johnson</title>
         <meta name="description" content="Jarue Johnson Portfolio" />
 
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
       <main className="font-bodyFont w-full h-screen bg-bodyColor text-textLight overflow-x-hidden overflow-y-scroll scrollbar scrollbar-track-textDark/20 scrollbar-thumb-textDark/60">
         <Navbar />
