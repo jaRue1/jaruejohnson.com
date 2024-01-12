@@ -314,7 +314,7 @@ function About() {
             <div className="w-full h-full relative flex pl-6 lgl:pl-0">
               <img
                 className=" z-20 rounded-lg h-full object-cover -translate-x-4 -translate-y-4 transition-transform duration-300 "
-                src="/assets/images/profile.png"
+                src="/assets/images/test.jpg"
                 alt="profile"
               />
               <div className="hidden lgl:inline-block absolute w-full h-80 bg-textOrange/20 rounded-md top-0 left-0 group-hover:bg-transparent duration-300">
