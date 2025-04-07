@@ -2,6 +2,9 @@
 import React from "react"
 import { motion } from "framer-motion"
 export default function Banner() {
+  const yearIStartedCoding = new Date(2020, 0, 1)
+  const yearNow = new Date()
+  const yearsOfCoding = yearNow.getFullYear() - yearIStartedCoding.getFullYear()
   return (
     <section
       id="home"
@@ -33,9 +36,9 @@ export default function Banner() {
         transition={{ duration: 0.5, delay: 0.8 }}
         className="text-base md:max-w-[650px] text-textLight font-medium"
       >
-        Im a software engineer based in the United States. I have 3 years of
-        experience in web development. I have a passion for building web
-        applications and learning new technologies.{" "}
+        Im a software engineer based in the United States. I have{" "}
+        {yearsOfCoding} years of experience in web development. I have a passion
+        for building web applications and learning new technologies.{" "}
         <a
           href="https://www.linkedin.com/in/jarue-johnson-9a08241ab/"
           target="_blank"
