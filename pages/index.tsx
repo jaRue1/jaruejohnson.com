@@ -35,6 +35,7 @@ export default function Home() {
             <Banner />
             <About />
             <Experience />
+            {/* My approach to building */}
             <Archive />
             <Contact />
             <Footer />

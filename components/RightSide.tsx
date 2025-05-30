@@ -4,9 +4,11 @@ function RightSide() {
   return (
     <div className="w-full h-full flex flex-col items-center justify-end gap-6 text-textLight">
       <div className="mb-10">
-        <a href="mailto:jaruejohnson@outook.com">
-          <p className="text-sm rotate-90 w-72 tracking-wide text-textOrange">
-            jaruejohnson@outook.com
+        <a
+          className="cursor-pointer hover:opacity-80"
+        >
+          <p className="text-sm rotate-90 w-72 tracking-wide text-textOrange pointer-events-auto">
+            jaruejohnson@outlook.com
           </p>
         </a>
       </div>

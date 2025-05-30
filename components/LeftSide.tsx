@@ -24,11 +24,12 @@ function LeftSide() {
             <SlSocialLinkedin />
           </span>
         </a>
-        <a href="https://www.instagram.com/jarue_johnson" target="_blank">
+        {/* No need to show ig here */}
+        {/* <a href="https://www.instagram.com/jarue_johnson" target="_blank">
           <span className="w-10 h-10 text-xl bg-hoverColor rounded-full inline-flex items-center justify-center hover:text-textOrange cursor-pointer hover:-translate-y-2 transition-all duration-300">
             <SlSocialInstagram />
           </span>
-        </a>
+        </a> */}
       </div>
       <span className="w-[2px] h-32 bg-textDark"></span>
     </div>
