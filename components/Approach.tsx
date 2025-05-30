@@ -31,7 +31,7 @@ const PhaseCard = ({ phaseNumber, title, description, bgColor, delay }: PhasePro
       
       <div className="relative z-10">
         <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
-          <span className="inline-block px-4 py-2 bg-yellow-400 text-black text-sm font-semibold rounded-full group-hover:bg-textOrange group-hover:text-white transition-all duration-300">
+          <span className="inline-block px-4 py-2 bg-textOrange text-white text-sm font-semibold rounded-full group-hover:bg-white group-hover:text-textOrange transition-all duration-300">
             {phaseNumber}
           </span>
         </div>
@@ -59,28 +59,28 @@ function Approach() {
     {
       phaseNumber: "Phase 1",
       title: "Plan & Strategy",
-      description: "Discuss things like your business model, your target audience, and your goals will help us understand what you want to achieve with your website. Then we can plan something like site structure, content, and design.",
+      description: "Discuss things like your business model, your target audience, and your goals will help me understand what you want to achieve with your product. Then I can plan something like architecture, user experience, and technical implementation.",
       bgColor: "", // No longer needed since all cards have same color
       delay: 0.1
     },
     {
       phaseNumber: "Phase 2", 
       title: "Design & Develop",
-      description: "Once agreed on the plan, I cue my lofi playlist and start designing things then deep dive into coding. I kept you in the loop by sharing the progress and asking for feedback.",
+      description: "Once agreed on the plan, I cue my lofi playlist and start designing the user experience then deep dive into coding. I keep you in the loop by sharing the progress and asking for feedback.",
       bgColor: "", // No longer needed since all cards have same color
       delay: 0.2
     },
     {
       phaseNumber: "Phase 3",
       title: "Test & Review", 
-      description: "We will test the website on different devices and browsers to make sure it is working correctly. We will also review the website with you to make sure it meets your expectations.",
+      description: "I will test the application on different devices and browsers to make sure it is working correctly. I will also review the product with you to make sure it meets your expectations.",
       bgColor: "", // No longer needed since all cards have same color
       delay: 0.3
     },
     {
       phaseNumber: "Phase 4",
       title: "Launch & Support",
-      description: "Once everything is ready, we come to the most exciting part, launching the website. By following the best practices, we will make sure your website is secure and fast. Continuous support is also provided to make sure your website is always up to date.",
+      description: "Once everything is ready, I come to the most exciting part, launching the product. By following the best practices, I will make sure your application is secure and performant. Continuous support is also provided to make sure your product is always up to date.",
       bgColor: "", // No longer needed since all cards have same color
       delay: 0.4
     }
