@@ -11,7 +11,7 @@ function Majorlinkx() {
       transition={{ duration: 0.1 }}
     >
       <h3 className="flex gap-1 font-medium text-xl font-titleFont xs:text-xs sm:text-lg sm:items-center sml:text-xl">
-        Software Engineer
+        Founding Engineer
         <span className="text-textOrange tracking-wide">
           <a href="https://majorlinkx.com/" target="_blank">
             @Majorlinkx
@@ -28,7 +28,7 @@ function Majorlinkx() {
           </span>
           <span>
             Majorlinkx is a dev agency that builds custom technical solutions
-            for small to medium size businesses. They have implement solutions
+            for small to medium size businesses. We have implemented solutions
             in multiple industries including Music, Beauty Salons, Hospitality,
             Retailers and E-commerce.{" "}
             <span className="text-textOrange">
@@ -42,18 +42,23 @@ function Majorlinkx() {
           <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
+          <span>
+            As Founding Engineer, I lead multiple projects from conception to completion, consistently delivering ahead of schedule while maintaining high code quality and client satisfaction.
+          </span>
+        </li>
+        <li className="text-base flex gap-2 text-textLight">
+          <span className="text-textOrange mt-1">
+            <TiArrowForward />{" "}
+          </span>
           <span className="flex flex-col gap-2 ">
             <p>
-              - Overhauled existing websites with new look and feel. Using SASS,
-              NextJs,
+              - Architect and develop full-stack applications using modern frameworks and cloud infrastructure
             </p>
             <p>
-              - Implement integrations with third parties such as Stripe and
-              Twilio
+              - Implement integrations with third parties such as Stripe, Twilio, and various APIs
             </p>
             <p>
-              - Migrated Data from csv's to MySql database hosted in AWS and
-              implement api to access said data.
+              - Design and manage database migrations, API development, and cloud deployments using infrastructure as code
             </p>
           </span>
         </li>
@@ -62,10 +67,9 @@ function Majorlinkx() {
             <TiArrowForward />{" "}
           </span>
           <span>
-            Some of the technologies I became proficient in while working here
-            are{" "}
+            Technologies I work with include{" "}
             <span className="text-textOrange">
-              React.js · NextJS · AWS · Git · SASS · Express.js · MySQL
+              React.js · NextJS · NuxtJS · NestJS · AWS · SST · Terraform · Git · SASS · Express.js · PostgreSQL · MySQL
             </span>
           </span>
         </li>
