@@ -29,7 +29,7 @@ function Contact() {
               viewport={{ once: true }}
               className="font-titleFont text-lg text-textOrange font-semibold flex items-center tracking-wide"
             >
-              05. What's Next
+              04. What's Next
             </motion.p>
             
             <motion.h2 

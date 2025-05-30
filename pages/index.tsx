@@ -6,6 +6,7 @@ import LeftSide from "../components/LeftSide"
 import RightSide from "../components/RightSide"
 import Experience from "../components/Experience"
 import Approach from "../components/Approach"
+import Showcase from "../components/Showcase"
 import Archive from "../components/Archive"
 import Contact from "../components/Contact"
 import Footer from "../components/Footer"
@@ -46,7 +47,7 @@ export default function Home() {
               <About />
               <Experience />
               <Approach />
-              <Archive />
+              <Showcase />
               <Contact />
               <Footer />
             </div>
