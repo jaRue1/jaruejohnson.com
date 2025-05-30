@@ -31,7 +31,7 @@ const PhaseCard = ({ phaseNumber, title, description, bgColor, delay }: PhasePro
       
       <div className="relative z-10">
         <div className="mb-4 transform group-hover:scale-110 transition-transform duration-300">
-          <span className="inline-block px-4 py-2 bg-textOrange text-white text-sm font-semibold rounded-full group-hover:bg-white group-hover:text-textOrange transition-all duration-300">
+          <span className="inline-block px-4 py-2 bg-gradient-to-r from-gray-800/60 to-gray-700/40 backdrop-blur-sm border border-gray-600/30 text-textOrange text-sm font-semibold rounded-full group-hover:from-textOrange/20 group-hover:to-textOrange/10 group-hover:border-textOrange/40 group-hover:text-textLight transition-all duration-300 shadow-lg">
             {phaseNumber}
           </span>
         </div>
