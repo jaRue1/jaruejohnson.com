@@ -40,7 +40,7 @@ const ProjectCard = ({ title, description, focus, features, icon, stakeholder, l
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-4 mb-3">
+              <div className="flex flex-wrap items-center gap-4 mb-3">
                 <h3 className="text-3xl lg:text-4xl font-titleFont font-semibold text-textLight group-hover:text-textOrange transition-colors duration-300">
                   {title}
                 </h3>
