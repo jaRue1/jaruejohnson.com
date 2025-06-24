@@ -20,9 +20,9 @@ function Contact() {
           <div className="absolute top-4 right-4 w-24 h-24 bg-gradient-to-br from-textOrange/15 to-transparent rounded-full blur-xl" />
           <div className="absolute bottom-6 left-6 w-20 h-20 bg-gradient-to-br from-textOrange/10 to-transparent rounded-full blur-lg" />
           <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-gradient-to-br from-textOrange/5 to-transparent rounded-full blur-md" />
-          
+
           <div className="relative z-10 flex flex-col gap-6 lgl:gap-8 items-center justify-center text-center">
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -31,8 +31,8 @@ function Contact() {
             >
               04. What's Next
             </motion.p>
-            
-            <motion.h2 
+
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
@@ -41,17 +41,17 @@ function Contact() {
             >
               Get In Touch
             </motion.h2>
-            
-            <motion.p 
+
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
               viewport={{ once: true }}
               className="max-w-[600px] text-center text-textLight leading-relaxed"
             >
-              Although I am not currently looking for any new opportunities, my inbox
-              is always open. Whether you have a questions or just want to say hello,
-              I will try my best to get back with you.
+              Although I am not currently looking for any new opportunities, my
+              inbox is always open. Whether you have a questions or just want to
+              say hello, I will try my best to get back with you.
             </motion.p>
 
             {/* Email CTA */}
@@ -63,11 +63,11 @@ function Contact() {
               className="mt-4"
             >
               <motion.a
-                href="mailto:jaruejohnson@outlook.com"
-                whileHover={{ 
+                href="mailto:jaruejohnson21@gmail.com"
+                whileHover={{
                   scale: 1.05,
                   y: -2,
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
                 whileTap={{ scale: 0.98 }}
                 className="group relative inline-block"
@@ -75,10 +75,10 @@ function Contact() {
                 <div className="relative px-8 py-4 bg-gradient-to-r from-gray-800/50 to-gray-700/30 border-2 border-textOrange/50 rounded-xl text-textOrange font-semibold tracking-wide overflow-hidden transition-all duration-300 hover:border-textOrange hover:text-white">
                   {/* Button background animation */}
                   <span className="absolute inset-0 bg-gradient-to-r from-textOrange to-orange-600 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300" />
-                  
+
                   {/* Button content */}
                   <span className="relative z-10 flex items-center justify-center">
-                    jaruejohnson@outlook.com
+                    jaruejohnson21@gmail.com
                     <motion.span
                       className="ml-2 group-hover:translate-x-1 transition-transform duration-300"
                       initial={{ x: 0 }}
@@ -87,7 +87,7 @@ function Contact() {
                       →
                     </motion.span>
                   </span>
-                  
+
                   {/* Button glow effect */}
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-textOrange/20 to-orange-600/20 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
                 </div>
@@ -105,16 +105,16 @@ function Contact() {
               <p className="max-w-[600px] text-center text-textDark mb-4">
                 Alternatively, you can reach out to me on:
               </p>
-              
+
               <div className="flex flex-wrap justify-center gap-4">
                 <motion.a
                   href="https://twitter.com/Tru_Rue"
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.1,
                     y: -2,
-                    transition: { duration: 0.2 }
+                    transition: { duration: 0.2 },
                   }}
                   className="group relative"
                 >
@@ -123,15 +123,15 @@ function Contact() {
                     <div className="absolute inset-0 bg-gradient-to-r from-textOrange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
                   </div>
                 </motion.a>
-                
+
                 <motion.a
                   href="https://www.linkedin.com/in/jarue-johnson-9a08241ab"
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.1,
                     y: -2,
-                    transition: { duration: 0.2 }
+                    transition: { duration: 0.2 },
                   }}
                   className="group relative"
                 >
@@ -143,11 +143,14 @@ function Contact() {
               </div>
             </motion.div>
           </div>
-          
+
           {/* Floating particles */}
           <div className="absolute top-8 left-8 w-2 h-2 bg-textOrange rounded-full opacity-60 animate-ping" />
           <div className="absolute bottom-12 right-12 w-1 h-1 bg-textOrange/80 rounded-full opacity-40 animate-pulse" />
-          <div className="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-textOrange/60 rounded-full opacity-50 animate-pulse" style={{ animationDelay: '1s' }} />
+          <div
+            className="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-textOrange/60 rounded-full opacity-50 animate-pulse"
+            style={{ animationDelay: "1s" }}
+          />
         </div>
       </motion.div>
 
