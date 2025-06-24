@@ -131,7 +131,6 @@ function Showcase() {
         "Community engagement and thought leadership"
       ],
       icon: <FiCode />,
-      link: "https://dothething.dev"
     }
   ]
 
@@ -201,7 +200,7 @@ function Showcase() {
             features={projects[activeTab].features}
             icon={projects[activeTab].icon}
             stakeholder={projects[activeTab].stakeholder}
-            link={projects[activeTab].link}
+            link={projects[activeTab]?.link || ""}
           />
         </div>
       </motion.div>

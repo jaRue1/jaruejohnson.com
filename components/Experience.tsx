@@ -53,7 +53,7 @@ function Experience() {
 
   const jobs = [
     { name: "Torticity", handler: handleTorticity, active: jobTorticty },
-    { name: "AWS", handler: handleAwsCert, active: jobAwsCert },
+    { name: "AWS Certified", handler: handleAwsCert, active: jobAwsCert },
     { name: "Majorlinkx", handler: handleMajorlinkx, active: jobMajorlinkx },
     { name: "Watsco", handler: handleWatsco, active: jobWatsco },
     { name: "Incapital", handler: handleIncapital, active: jobIncapital },
