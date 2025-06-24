@@ -200,7 +200,6 @@ function Showcase() {
             features={projects[activeTab].features}
             icon={projects[activeTab].icon}
             stakeholder={projects[activeTab].stakeholder}
-            link={projects[activeTab]?.link || ""}
           />
         </div>
       </motion.div>
