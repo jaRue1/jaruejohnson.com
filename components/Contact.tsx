@@ -63,7 +63,7 @@ function Contact() {
               className="mt-4"
             >
               <motion.a
-                href="mailto:jaruejohnson21@gmail.com"
+                href="mailto:jaruejohnson@outlook.com"
                 whileHover={{
                   scale: 1.05,
                   y: -2,
@@ -78,7 +78,7 @@ function Contact() {
 
                   {/* Button content */}
                   <span className="relative z-10 flex items-center justify-center">
-                    jaruejohnson21@gmail.com
+                    jaruejohnson@outlook.com
                     <motion.span
                       className="ml-2 group-hover:translate-x-1 transition-transform duration-300"
                       initial={{ x: 0 }}
