@@ -135,7 +135,7 @@ function Showcase() {
         <SectionTitle title="What I am building" titleNum="03." />
         <div className="mt-8 text-center">
           <h3 className="text-3xl lgl:text-4xl font-titleFont font-bold text-textLight mb-4">
-            What I'm <span className="text-textOrange">currently working on</span>
+            What I&apos;m <span className="text-textOrange">currently working on</span>
           </h3>
           <p className="text-textDark text-lg max-w-2xl mx-auto">
             Building innovative solutions that bridge technology and business needs.

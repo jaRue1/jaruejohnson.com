@@ -211,7 +211,7 @@ export default function Projects() {
                 My <span className="text-textOrange">Projects</span>
               </h1>
               <p className="text-textDark text-lg max-w-3xl mx-auto leading-relaxed">
-                A timeline of projects I've built, co-founded, and continue to develop. Each represents a unique challenge 
+                A timeline of projects I&apos;ve built, co-founded, and continue to develop. Each represents a unique challenge 
                 and learning experience in my journey as a developer and entrepreneur.
               </p>
             </div>
