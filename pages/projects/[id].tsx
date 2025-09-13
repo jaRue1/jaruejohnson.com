@@ -11,8 +11,8 @@ interface ProjectDetail {
   longDescription: string
   status: string
   stakeholder: string
-  websiteUrl?: string
-  websiteLabel?: string
+  websiteUrl?: string | null
+  websiteLabel?: string | null
   iconName: string
   color: string
   features: string[]

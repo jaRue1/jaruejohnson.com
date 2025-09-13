@@ -4,15 +4,26 @@ import { motion } from "framer-motion"
 import { FiUsers, FiCode, FiCloud, FiMonitor, FiExternalLink, FiArrowRight } from "react-icons/fi"
 import SectionTitle from "../components/SectionTitle"
 
+// Icon mapping function
+const getIcon = (iconName: string) => {
+  const icons: { [key: string]: React.ReactNode } = {
+    FiUsers: <FiUsers />,
+    FiCloud: <FiCloud />,
+    FiMonitor: <FiMonitor />,
+    FiCode: <FiCode />
+  }
+  return icons[iconName] || <FiCode />
+}
+
 interface Project {
   id: string
   title: string
   shortDescription: string
   status: "primary" | "development" | "co-founding" | "content"
   stakeholder: string
-  websiteUrl?: string
-  websiteLabel?: string
-  icon: React.ReactNode
+  websiteUrl?: string | null
+  websiteLabel?: string | null
+  iconName: string
   color: string
   priority: number
 }
@@ -47,7 +58,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
             <div className="flex items-center gap-4">
               <div className={`p-4 rounded-2xl bg-gradient-to-r ${project.color} backdrop-blur-sm border border-gray-600/30 group-hover:border-textOrange/40 transition-all duration-300 group-hover:scale-110`}>
                 <div className="text-textOrange group-hover:text-textLight transition-colors duration-300 text-2xl">
-                  {project.icon}
+                  {getIcon(project.iconName)}
                 </div>
               </div>
               <div>
@@ -140,7 +151,7 @@ export default function Projects() {
       stakeholder: "Majorlinkx",
       websiteUrl: "https://majorlinkx.com",
       websiteLabel: "Visit Majorlinkx",
-      icon: <FiUsers />,
+      iconName: "FiUsers",
       color: "from-blue-800/60 to-blue-700/40",
       priority: 1
     },
@@ -152,7 +163,7 @@ export default function Projects() {
       stakeholder: "Personal Project",
       websiteUrl: "https://cmdcloud.dev",
       websiteLabel: "Visit cmd cloud",
-      icon: <FiCloud />,
+      iconName: "FiCloud",
       color: "from-green-800/60 to-green-700/40",
       priority: 2
     },
@@ -164,7 +175,7 @@ export default function Projects() {
       stakeholder: "Co-founder with Danny Hogan",
       websiteUrl: "https://freshsite.io",
       websiteLabel: "Visit Fresh Site",
-      icon: <FiMonitor />,
+      iconName: "FiMonitor",
       color: "from-purple-800/60 to-purple-700/40",
       priority: 3
     },
@@ -176,7 +187,7 @@ export default function Projects() {
       stakeholder: "Personal Brand",
       websiteUrl: null,
       websiteLabel: null,
-      icon: <FiCode />,
+      iconName: "FiCode",
       color: "from-orange-800/60 to-orange-700/40",
       priority: 4
     }
