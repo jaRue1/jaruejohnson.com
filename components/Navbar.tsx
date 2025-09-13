@@ -116,7 +116,7 @@ const Navbar = () => {
             
             <Link
               onClick={handleScroll}
-              href="#projects"
+              href="#showcase"
               className="group flex items-center font-medium text-textDark hover:text-textOrange cursor-pointer duration-300 nav-link relative"
             >
               <motion.li
@@ -239,7 +239,7 @@ const Navbar = () => {
                   
                   <Link
                     onClick={handleScroll}
-                    href="#projects"
+                    href="#showcase"
                     className="group flex items-center font-medium text-textDark hover:text-textOrange cursor-pointer duration-300 nav-link"
                   >
                     <motion.li

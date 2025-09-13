@@ -1,8 +1,8 @@
-import React, { useState } from "react"
+import React from "react"
 import SectionTitle from "./SectionTitle"
 import { motion } from "framer-motion"
 import { HiOutlineExternalLink } from "react-icons/hi"
-import { FiCode, FiUsers, FiTrendingUp } from "react-icons/fi"
+import { FiUsers, FiTrendingUp } from "react-icons/fi"
 
 interface ProjectProps {
   title: string
@@ -101,36 +101,23 @@ const ProjectCard = ({ title, description, focus, features, icon, stakeholder, l
 }
 
 function Showcase() {
-  const [activeTab, setActiveTab] = useState(0)
-
   const projects = [
     {
-      title: "Nexus",
-      description: "A comprehensive client portal project for MajorLinkx designed for service-based businesses, featuring intuitive project timeline management and real-time status board functionality to streamline client communication and project transparency.",
+      title: "Nexus + Nexus OS",
+      description: "A comprehensive full-stack platform built for Majorlinkx, featuring both a robust client portal for service-based businesses and an integrated operating system layer. This enterprise-level solution streamlines business operations with advanced project management, real-time collaboration tools, and seamless client communication workflows.",
       focus: "primary" as const,
-      stakeholder: "MajorLinkx",
+      stakeholder: "Majorlinkx",
       features: [
-        "Client portal with authentication and role management",
-        "Interactive project timeline and milestone tracking",
-        "Real-time status board with project updates",
-        "Document sharing and collaboration tools",
-        "Automated client notifications and progress reports"
+        "Full-stack client portal with multi-role authentication system",
+        "Nexus OS: Integrated business operating system layer",
+        "Advanced project timeline and milestone management",
+        "Real-time status dashboard with live updates",
+        "Document management and collaboration suite",
+        "Automated workflow and notification systems",
+        "Custom business process automation",
+        "Analytics and reporting dashboard"
       ],
       icon: <FiUsers />,
-    },
-    {
-      title: "dothething.dev",
-      description: "A comprehensive tech platform project for MajorLinkx showcasing our expertise through in-depth tutorials, technology comparisons, and YouTube content designed to establish thought leadership in the development community.",
-      focus: "secondary" as const,
-      stakeholder: "MajorLinkx",
-      features: [
-        "Tech blog with best practices and tutorials",
-        "Technology comparisons with pros and cons",
-        "YouTube content for brand awareness",
-        "Practical 'how to do the thing' guides",
-        "Community engagement and thought leadership"
-      ],
-      icon: <FiCode />,
     }
   ]
 
@@ -148,7 +135,7 @@ function Showcase() {
         <SectionTitle title="What I am building" titleNum="03." />
         <div className="mt-8 text-center">
           <h3 className="text-3xl lgl:text-4xl font-titleFont font-bold text-textLight mb-4">
-            Current <span className="text-textOrange"> projects</span>
+            What I'm <span className="text-textOrange">currently working on</span>
           </h3>
           <p className="text-textDark text-lg max-w-2xl mx-auto">
             Building innovative solutions that bridge technology and business needs.
@@ -156,7 +143,7 @@ function Showcase() {
         </div>
       </motion.div>
 
-      {/* Tab Navigation */}
+      {/* Current Project Display */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -164,44 +151,40 @@ function Showcase() {
         viewport={{ once: true }}
         className="mt-16"
       >
-        <div className="flex justify-center mb-8">
-          <div className="flex bg-gradient-to-r from-gray-900/60 to-gray-800/40 backdrop-blur-sm border border-gray-700/30 rounded-2xl p-2">
-            {projects.map((project, index) => (
-              <motion.button
-                key={index}
-                onClick={() => setActiveTab(index)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`relative px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                  activeTab === index
-                    ? 'text-textLight bg-gradient-to-r from-textOrange to-orange-600 shadow-lg'
-                    : 'text-textDark hover:text-textLight'
-                }`}
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  <span className="text-lg">{project.icon}</span>
-                  {project.title}
-                </span>
-                {activeTab !== index && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-textOrange/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                )}
-              </motion.button>
-            ))}
-          </div>
-        </div>
-
-        {/* Tab Content */}
         <div className="relative min-h-[400px]">
           <ProjectCard
-            key={activeTab}
-            title={projects[activeTab].title}
-            description={projects[activeTab].description}
-            focus={projects[activeTab].focus}
-            features={projects[activeTab].features}
-            icon={projects[activeTab].icon}
-            stakeholder={projects[activeTab].stakeholder}
+            title={projects[0].title}
+            description={projects[0].description}
+            focus={projects[0].focus}
+            features={projects[0].features}
+            icon={projects[0].icon}
+            stakeholder={projects[0].stakeholder}
           />
         </div>
+        
+        {/* My Projects Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="flex justify-center mt-12"
+        >
+          <motion.a
+            href="/projects"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="group relative px-8 py-4 bg-gradient-to-r from-gray-900/60 to-gray-800/40 backdrop-blur-sm border border-gray-700/30 rounded-2xl hover:from-textOrange/20 hover:to-textOrange/10 hover:border-textOrange/40 transition-all duration-300 overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-textOrange/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="relative z-10 flex items-center gap-3 text-textLight group-hover:text-textOrange transition-colors duration-300 font-semibold">
+              <FiTrendingUp className="text-xl" />
+              My Projects
+            </span>
+            {/* Animated border glow */}
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-textOrange/20 via-transparent to-textOrange/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+          </motion.a>
+        </motion.div>
       </motion.div>
 
       {/* Bottom decorative line */}
@@ -216,4 +199,4 @@ function Showcase() {
   )
 }
 
-export default Showcase 
+export default Showcase
