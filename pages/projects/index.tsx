@@ -2,7 +2,7 @@ import Head from "next/head"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { FiUsers, FiCode, FiCloud, FiMonitor, FiExternalLink, FiArrowRight } from "react-icons/fi"
-import SectionTitle from "../components/SectionTitle"
+import SectionTitle from "../../components/SectionTitle"
 
 // Icon mapping function
 const getIcon = (iconName: string) => {
