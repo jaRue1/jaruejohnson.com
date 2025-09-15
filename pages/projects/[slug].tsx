@@ -391,15 +391,15 @@ export default function ProjectPage({ project }: ProjectPageProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = Object.keys(projectsData).map((id) => ({
-    params: { id },
+  const paths = Object.keys(projectsData).map((slug) => ({
+    params: { slug },
   }))
 
   return { paths, fallback: false }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const project = projectsData[params?.id as string]
+  const project = projectsData[params?.slug as string]
   
   if (!project) {
     return { notFound: true }
