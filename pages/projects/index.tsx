@@ -167,18 +167,18 @@ export default function Projects() {
       color: "from-green-800/60 to-green-700/40",
       priority: 2
     },
-    {
-      id: "fresh-site",
-      title: "Fresh Site",
-      shortDescription: "Co-founding a revolutionary website builder specifically designed for Instagram content creators. Fresh Site democratizes web presence by providing speed and simplicity - if you have an Instagram, you should have a website. We focus on quick setup without overwhelming configuration options.",
-      status: "co-founding",
-      stakeholder: "Co-founder with Danny Hogan",
-      websiteUrl: "https://freshsite.io",
-      websiteLabel: "Visit Fresh Site",
-      iconName: "FiMonitor",
-      color: "from-purple-800/60 to-purple-700/40",
-      priority: 3
-    },
+    // {
+    //   id: "fresh-site",
+    //   title: "Fresh Site",
+    //   shortDescription: "Co-founding a revolutionary website builder specifically designed for Instagram content creators. Fresh Site democratizes web presence by providing speed and simplicity - if you have an Instagram, you should have a website. We focus on quick setup without overwhelming configuration options.",
+    //   status: "co-founding",
+    //   stakeholder: "Co-founder with Danny Hogan",
+    //   websiteUrl: "https://freshsite.io",
+    //   websiteLabel: "Visit Fresh Site",
+    //   iconName: "FiMonitor",
+    //   color: "from-purple-800/60 to-purple-700/40",
+    //   priority: 3
+    // },
     {
       id: "dothething-dev",
       title: "dothething.dev",
