@@ -92,41 +92,41 @@ const projectsData: { [key: string]: ProjectDetail } = {
       "Never hit surprise invoices or forced Enterprise tiers"
     ]
   },
-  "fresh-site": {
-    id: "fresh-site",
-    title: "Fresh Site", 
-    description: "Revolutionary website builder for Instagram creators",
-    longDescription: "Fresh Site is democratizing web presence for content creators by providing the fastest and simplest way to turn your Instagram into a professional website. Co-founded with Danny Hogan, this platform eliminates the complexity of traditional website builders while maintaining professional quality and functionality.",
-    status: "Co-founding",
-    stakeholder: "Co-founder with Danny Hogan",
-    websiteUrl: "https://freshsite.io",
-    websiteLabel: "Visit Fresh Site",
-    iconName: "FiMonitor",
-    color: "from-purple-800/60 to-purple-700/40",
-    features: [
-      "One-click Instagram integration",
-      "Pre-designed templates for creators",
-      "Automated content synchronization",
-      "Mobile-first responsive design",
-      "Built-in analytics and performance tracking",
-      "Simple pricing with no hidden fees",
-      "Custom domain support",
-      "SEO optimization tools"
-    ],
-    techStack: ["React", "Next.js", "Nuxt.js", "Nest.js", "Supabase", "Appify", "Stripe", "Instagram API", "Vercel", "PostgreSQL", "TypeScript", "Tailwind CSS", "Docker", "AWS"],
-    overview: [
-      "Fresh Site addresses the gap between social media presence and professional web presence for content creators.",
-      "The platform focuses on speed and simplicity, allowing creators to launch a professional website in minutes, not hours.",
-      "Built specifically for Instagram creators who need a web presence but don't want to deal with complex website builders."
-    ],
-    keyHighlights: [
-      "Launch a website in under 5 minutes",
-      "Automatic Instagram content sync",
-      "Creator-focused design templates",
-      "No technical knowledge required",
-      "Affordable pricing for creators"
-    ]
-  },
+  // "fresh-site": {
+  //   id: "fresh-site",
+  //   title: "Fresh Site", 
+  //   description: "Revolutionary website builder for Instagram creators",
+  //   longDescription: "Fresh Site is democratizing web presence for content creators by providing the fastest and simplest way to turn your Instagram into a professional website. Co-founded with Danny Hogan, this platform eliminates the complexity of traditional website builders while maintaining professional quality and functionality.",
+  //   status: "Co-founding",
+  //   stakeholder: "Co-founder with Danny Hogan",
+  //   websiteUrl: "https://freshsite.io",
+  //   websiteLabel: "Visit Fresh Site",
+  //   iconName: "FiMonitor",
+  //   color: "from-purple-800/60 to-purple-700/40",
+  //   features: [
+  //     "One-click Instagram integration",
+  //     "Pre-designed templates for creators",
+  //     "Automated content synchronization",
+  //     "Mobile-first responsive design",
+  //     "Built-in analytics and performance tracking",
+  //     "Simple pricing with no hidden fees",
+  //     "Custom domain support",
+  //     "SEO optimization tools"
+  //   ],
+  //   techStack: ["React", "Next.js", "Nuxt.js", "Nest.js", "Supabase", "Appify", "Stripe", "Instagram API", "Vercel", "PostgreSQL", "TypeScript", "Tailwind CSS", "Docker", "AWS"],
+  //   overview: [
+  //     "Fresh Site addresses the gap between social media presence and professional web presence for content creators.",
+  //     "The platform focuses on speed and simplicity, allowing creators to launch a professional website in minutes, not hours.",
+  //     "Built specifically for Instagram creators who need a web presence but don't want to deal with complex website builders."
+  //   ],
+  //   keyHighlights: [
+  //     "Launch a website in under 5 minutes",
+  //     "Automatic Instagram content sync",
+  //     "Creator-focused design templates",
+  //     "No technical knowledge required",
+  //     "Affordable pricing for creators"
+  //   ]
+  // },
   "dothething-dev": {
     id: "dothething-dev",
     title: "dothething.dev",
