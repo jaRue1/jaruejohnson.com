@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import SectionTitle from "./SectionTitle"
 import { motion } from "framer-motion"
 
+import CypherLearning from "./Jobs/CypherLearning"
 import Torticity from "./Jobs/Torticity"
 import AwsCert from "./Jobs/AwsCert"
 import Majorlinkx from "./Jobs/Majorlinkx"
@@ -9,13 +10,23 @@ import Watsco from "./Jobs/Watsco"
 import Incapital from "./Jobs/Incapital"
 
 function Experience() {
-  const [jobTorticty, setJobTorticity] = useState(true)
+  const [jobCypherLearning, setJobCypherLearning] = useState(true)
+  const [jobTorticty, setJobTorticity] = useState(false)
   const [jobMajorlinkx, setJobMajorlinkx] = useState(false)
   const [jobWatsco, setJobWatsco] = useState(false)
   const [jobIncapital, setJobIncapital] = useState(false)
   const [jobAwsCert, setJobAwsCert] = useState(false)
 
+  const handleCypherLearning = () => {
+    setJobCypherLearning(true)
+    setJobTorticity(false)
+    setJobMajorlinkx(false)
+    setJobWatsco(false)
+    setJobIncapital(false)
+    setJobAwsCert(false)
+  }
   const handleTorticity = () => {
+    setJobCypherLearning(false)
     setJobTorticity(true)
     setJobMajorlinkx(false)
     setJobWatsco(false)
@@ -23,6 +34,7 @@ function Experience() {
     setJobAwsCert(false)
   }
   const handleMajorlinkx = () => {
+    setJobCypherLearning(false)
     setJobTorticity(false)
     setJobMajorlinkx(true)
     setJobWatsco(false)
@@ -30,6 +42,7 @@ function Experience() {
     setJobAwsCert(false)
   }
   const handleWatsco = () => {
+    setJobCypherLearning(false)
     setJobTorticity(false)
     setJobMajorlinkx(false)
     setJobWatsco(true)
@@ -37,6 +50,7 @@ function Experience() {
     setJobAwsCert(false)
   }
   const handleIncapital = () => {
+    setJobCypherLearning(false)
     setJobTorticity(false)
     setJobMajorlinkx(false)
     setJobWatsco(false)
@@ -44,6 +58,7 @@ function Experience() {
     setJobAwsCert(false)
   }
   const handleAwsCert = () => {
+    setJobCypherLearning(false)
     setJobTorticity(false)
     setJobMajorlinkx(false)
     setJobWatsco(false)
@@ -52,6 +67,7 @@ function Experience() {
   }
 
   const jobs = [
+    { name: "Cypher Learning", handler: handleCypherLearning, active: jobCypherLearning },
     { name: "Torticity", handler: handleTorticity, active: jobTorticty },
     { name: "AWS Certified", handler: handleAwsCert, active: jobAwsCert },
     { name: "Majorlinkx", handler: handleMajorlinkx, active: jobMajorlinkx },
@@ -123,7 +139,7 @@ function Experience() {
 
         {/* Job Content */}
         <motion.div
-          key={`${jobTorticty}-${jobAwsCert}-${jobMajorlinkx}-${jobWatsco}-${jobIncapital}`}
+          key={`${jobCypherLearning}-${jobTorticty}-${jobAwsCert}-${jobMajorlinkx}-${jobWatsco}-${jobIncapital}`}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4 }}
@@ -132,8 +148,9 @@ function Experience() {
           {/* Background decorative elements */}
           <div className="absolute top-4 right-4 w-20 h-20 bg-gradient-to-br from-textOrange/10 to-transparent rounded-full blur-xl" />
           <div className="absolute bottom-4 left-4 w-16 h-16 bg-gradient-to-br from-textOrange/5 to-transparent rounded-full blur-lg" />
-          
+
           <div className="relative z-10">
+            {jobCypherLearning && <CypherLearning />}
             {jobTorticty && <Torticity />}
             {jobAwsCert && <AwsCert />}
             {jobMajorlinkx && <Majorlinkx />}

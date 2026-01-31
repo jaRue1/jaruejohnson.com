@@ -2,7 +2,7 @@ import Head from "next/head"
 import Link from "next/link"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { motion } from "framer-motion"
-import { FiUsers, FiCode, FiCloud, FiMonitor, FiExternalLink, FiArrowLeft, FiCalendar, FiUser } from "react-icons/fi"
+import { FiUsers, FiCode, FiCloud, FiMonitor, FiExternalLink, FiArrowLeft, FiCalendar, FiUser, FiTarget } from "react-icons/fi"
 
 interface ProjectDetail {
   id: string
@@ -19,15 +19,54 @@ interface ProjectDetail {
   techStack?: string[]
   overview: string[]
   keyHighlights: string[]
+  year?: string
 }
 
 const projectsData: { [key: string]: ProjectDetail } = {
+  "decypher": {
+    id: "decypher",
+    title: "DeCypher",
+    description: "A Life LMS OS application for personal growth and goal tracking",
+    longDescription: "DeCypher is a comprehensive Life Learning Management System built with Ruby on Rails 8. It combines AI-powered learning plans, gamified progression systems, habit tracking, and daily journaling into a cohesive personal development platform. The app features 'The Operator' - an AI assistant powered by Claude that generates personalized learning paths based on user goals across 8 life domains.",
+    status: "MVP Complete",
+    stakeholder: "Personal Project",
+    websiteUrl: "https://decypher.life",
+    websiteLabel: "Visit DeCypher",
+    iconName: "FiTarget",
+    color: "from-purple-800/60 to-purple-700/40",
+    features: [
+      "AI-powered learning plan generation via The Operator (Claude API)",
+      "8 life domains with XP-based progression (400 XP per level, 10 levels)",
+      "Mission-based goal system with grades (D, C, B, A) and objectives",
+      "Habit tracking with calendar views and streak calculations",
+      "Daily journaling with mood/motivation tracking",
+      "Dynamic octagon visualization for domain progress",
+      "Skills and achievements tracking system",
+      "Collapsible sidebar with localStorage persistence",
+      "Real-time updates via Hotwire (Turbo + Stimulus)",
+      "Dark theme with mission control aesthetic"
+    ],
+    techStack: ["Ruby on Rails 8", "PostgreSQL", "Hotwire (Turbo + Stimulus)", "Tailwind CSS v4", "Anthropic Claude API", "Solid Queue", "Solid Cable", "Docker", "GitHub Actions", "Render.com"],
+    overview: [
+      "DeCypher follows the 'Law of Fours' methodology: 4 goals per domain setup, 4 missions per domain (grades D, C, B, A), 4 objectives per mission, 4 difficulty levels, and 400 XP to level up.",
+      "The Operator is the AI persona that generates complete learning plans based on user goals, assessing user level (L1-L10) in each domain and creating missions with appropriate difficulty progression.",
+      "This project represents a significant technical expansion into Ruby on Rails, moving beyond the TypeScript/Node ecosystem into a new stack with convention-over-configuration principles."
+    ],
+    keyHighlights: [
+      "First full-stack Ruby on Rails project with Rails 8",
+      "Complete AI integration with structured JSON prompts",
+      "Gamified progression system with XP, levels, and badges",
+      "Real-time UI updates without heavy JavaScript",
+      "Containerized deployment with Docker and CI/CD pipeline"
+    ],
+    year: "2026"
+  },
   "nexus-nexusos": {
     id: "nexus-nexusos",
     title: "Nexus + Nexus OS",
     description: "A comprehensive full-stack platform built for Majorlinkx",
-    longDescription: "Nexus + Nexus OS represents a groundbreaking approach to business management, combining a sophisticated client portal with an integrated operating system layer. Built specifically for Majorlinkx, this enterprise-level solution transforms how service-based businesses manage projects, communicate with clients, and streamline operations.",
-    status: "In Development",
+    longDescription: "Nexus + Nexus OS represents a groundbreaking approach to business management, combining a sophisticated client portal with an integrated operating system layer. Built specifically for Majorlinkx, this enterprise-level solution transforms how service-based businesses manage projects, communicate with clients, and streamline operations. The platform is live and deployed in production.",
+    status: "Live",
     stakeholder: "Majorlinkx",
     websiteUrl: "https://majorlinkx.com",
     websiteLabel: "Visit Majorlinkx",
@@ -58,11 +97,11 @@ const projectsData: { [key: string]: ProjectDetail } = {
     ]
   },
   "cmd-cloud": {
-    id: "cmd-cloud", 
+    id: "cmd-cloud",
     title: "cmd cloud",
     description: "Own your infrastructure. Cut out PaaS vendor middlemen. Deploy in seconds.",
     longDescription: "cmd cloud empowers developers to own their infrastructure completely while getting the speed and feedback loop of PaaS vendors like Railway, Supabase, and Heroku - without ever using them. Get infrastructure provisioned in seconds, not weeks, with full ownership and zero vendor lock-in. Experience proven 40-60% cost reductions while maintaining complete control over your stack.",
-    status: "Live",
+    status: "Orphaned",
     stakeholder: "Personal Project",
     websiteUrl: "https://cmdcloud.dev",
     websiteLabel: "Visit cmd cloud",
@@ -132,7 +171,7 @@ const projectsData: { [key: string]: ProjectDetail } = {
     title: "dothething.dev",
     description: "Developer content and building in public platform",
     longDescription: "dothething.dev represents my commitment to building in public and sharing practical development knowledge. This platform serves as a comprehensive resource for developers who want to learn through real-world examples, practical tutorials, and honest insights into the journey of scaling a development business.",
-    status: "Content Focus",
+    status: "Orphaned",
     stakeholder: "Personal Brand",
     websiteUrl: null,
     websiteLabel: null,
@@ -170,7 +209,8 @@ const getIcon = (iconName: string) => {
     FiUsers: <FiUsers />,
     FiCloud: <FiCloud />,
     FiMonitor: <FiMonitor />,
-    FiCode: <FiCode />
+    FiCode: <FiCode />,
+    FiTarget: <FiTarget />
   }
   return icons[iconName] || <FiCode />
 }
@@ -234,17 +274,38 @@ export default function ProjectPage({ project }: ProjectPageProps) {
                   {project.title}
                 </h1>
                 <div className="flex flex-wrap items-center gap-4 mb-4">
-                  <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full bg-textOrange/20 text-textOrange border border-textOrange/30">
+                  <span className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full ${
+                    project.status === 'Orphaned'
+                      ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+                      : 'bg-textOrange/20 text-textOrange border border-textOrange/30'
+                  }`}>
                     <FiCalendar className="w-4 h-4" />
-                    2025 - Present
+                    {project.status === 'Orphaned' ? '2025' : project.year ? `${project.year} - Present` : '2025 - Present'}
                   </span>
+                  {project.status === 'Live' && (
+                    <span className="inline-block px-4 py-2 text-sm font-semibold bg-green-500/20 text-green-400 border border-green-500/30 rounded-full">
+                      Live
+                    </span>
+                  )}
+                  {project.status === 'MVP Complete' && (
+                    <span className="inline-block px-4 py-2 text-sm font-semibold bg-green-500/20 text-green-400 border border-green-500/30 rounded-full">
+                      Live
+                    </span>
+                  )}
+                  {project.status === 'Orphaned' && (
+                    <span className="inline-block px-4 py-2 text-sm font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-full">
+                      Orphaned
+                    </span>
+                  )}
                   <span className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-gradient-to-r from-gray-800/60 to-gray-700/40 border border-gray-600/30 rounded-full text-textDark">
                     <FiUser className="w-4 h-4" />
                     {project.stakeholder}
                   </span>
-                  <span className="inline-block px-4 py-2 text-sm font-medium bg-gradient-to-r from-gray-800/40 to-gray-700/30 border border-gray-600/30 rounded-full text-green-400">
-                    {project.status}
-                  </span>
+                  {project.status !== 'Orphaned' && (
+                    <span className="inline-block px-4 py-2 text-sm font-medium bg-gradient-to-r from-gray-800/40 to-gray-700/30 border border-gray-600/30 rounded-full text-green-400">
+                      {project.status}
+                    </span>
+                  )}
                 </div>
                 <p className="text-textDark text-lg leading-relaxed">
                   {project.longDescription}

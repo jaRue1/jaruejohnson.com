@@ -1,7 +1,7 @@
 import Head from "next/head"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { FiUsers, FiCode, FiCloud, FiMonitor, FiExternalLink, FiArrowRight } from "react-icons/fi"
+import { FiUsers, FiCode, FiCloud, FiMonitor, FiExternalLink, FiArrowRight, FiTarget } from "react-icons/fi"
 import SectionTitle from "../../components/SectionTitle"
 
 // Icon mapping function
@@ -10,7 +10,8 @@ const getIcon = (iconName: string) => {
     FiUsers: <FiUsers />,
     FiCloud: <FiCloud />,
     FiMonitor: <FiMonitor />,
-    FiCode: <FiCode />
+    FiCode: <FiCode />,
+    FiTarget: <FiTarget />
   }
   return icons[iconName] || <FiCode />
 }
@@ -19,13 +20,15 @@ interface Project {
   id: string
   title: string
   shortDescription: string
-  status: "primary" | "development" | "co-founding" | "content"
+  status: "primary" | "development" | "co-founding" | "content" | "orphan"
   stakeholder: string
   websiteUrl?: string | null
   websiteLabel?: string | null
   iconName: string
   color: string
   priority: number
+  year?: string
+  isLive?: boolean
 }
 
 const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
@@ -67,16 +70,28 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
                 </h3>
                 <div className="flex flex-wrap items-center gap-3 mt-2">
                   <span className={`inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-full transition-all duration-300 ${
-                    project.status === 'primary' 
-                      ? 'bg-textOrange/20 text-textOrange border border-textOrange/30' 
+                    project.status === 'primary'
+                      ? 'bg-textOrange/20 text-textOrange border border-textOrange/30'
                       : project.status === 'co-founding'
                       ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
                       : project.status === 'content'
                       ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                      : project.status === 'orphan'
+                      ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
                       : 'bg-green-500/20 text-green-400 border border-green-500/30'
                   }`}>
-                    2025 - Present
+                    {project.year || '2025 - Present'}
                   </span>
+                  {project.isLive && (
+                    <span className="inline-block px-3 py-1 text-xs font-semibold bg-green-500/20 text-green-400 border border-green-500/30 rounded-full">
+                      Live
+                    </span>
+                  )}
+                  {project.status === 'orphan' && (
+                    <span className="inline-block px-3 py-1 text-xs font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-full">
+                      Orphaned
+                    </span>
+                  )}
                   <span className="inline-block px-3 py-1 text-xs font-medium bg-gradient-to-r from-gray-800/60 to-gray-700/40 border border-gray-600/30 rounded-full text-textDark">
                     {project.stakeholder}
                   </span>
@@ -144,6 +159,20 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
 export default function Projects() {
   const projects: Project[] = [
     {
+      id: "decypher",
+      title: "DeCypher",
+      shortDescription: "A Life LMS OS application built with Ruby on Rails 8, featuring AI-powered learning plans via The Operator (Claude API), gamified progression with XP and levels, habit tracking, daily journaling, and a mission-based goal system following the Law of Fours methodology.",
+      status: "development",
+      stakeholder: "Personal Project",
+      websiteUrl: "https://decypher.life",
+      websiteLabel: "Visit DeCypher",
+      iconName: "FiTarget",
+      color: "from-purple-800/60 to-purple-700/40",
+      priority: 1,
+      isLive: true,
+      year: "2026"
+    },
+    {
       id: "nexus-nexusos",
       title: "Nexus + Nexus OS",
       shortDescription: "A comprehensive full-stack platform built for Majorlinkx, featuring both a robust client portal for service-based businesses and an integrated operating system layer. This enterprise-level solution streamlines business operations with advanced project management and seamless client communication workflows.",
@@ -153,19 +182,21 @@ export default function Projects() {
       websiteLabel: "Visit Majorlinkx",
       iconName: "FiUsers",
       color: "from-blue-800/60 to-blue-700/40",
-      priority: 1
+      priority: 2,
+      isLive: true
     },
     {
       id: "cmd-cloud",
       title: "cmd cloud",
       shortDescription: "A powerful cloud-based development tool that bridges the gap between local development and cloud infrastructure. Provides developers with seamless command-line access to cloud resources, streamlined deployment workflows, and integrated development environments accessible from anywhere.",
-      status: "development",
+      status: "orphan",
       stakeholder: "Personal Project",
       websiteUrl: "https://cmdcloud.dev",
       websiteLabel: "Visit cmd cloud",
       iconName: "FiCloud",
       color: "from-green-800/60 to-green-700/40",
-      priority: 2
+      priority: 3,
+      year: "2025"
     },
     // {
     //   id: "fresh-site",
@@ -183,13 +214,14 @@ export default function Projects() {
       id: "dothething-dev",
       title: "dothething.dev",
       shortDescription: "A comprehensive tech platform focused on practical development content, tutorials, and building in public. This project represents my shift toward content creation, sharing the journey of building and iterating as a developer scaling his business with in-depth tutorials and technology comparisons.",
-      status: "content",
+      status: "orphan",
       stakeholder: "Personal Brand",
       websiteUrl: null,
       websiteLabel: null,
       iconName: "FiCode",
       color: "from-orange-800/60 to-orange-700/40",
-      priority: 4
+      priority: 5,
+      year: "2025"
     }
   ]
 

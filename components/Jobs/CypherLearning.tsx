@@ -1,7 +1,8 @@
 import React from "react"
 import { motion } from "framer-motion"
 import { TiArrowForward } from "react-icons/ti"
-function Torticity() {
+
+function CypherLearning() {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -9,15 +10,15 @@ function Torticity() {
       transition={{ duration: 0.1 }}
     >
       <h3 className="flex gap-1 font-medium text-xl font-titleFont xs:text-xs sm:text-lg sm:items-center sml:text-xl">
-        Software Engineer{" "}
+        Staff Engineer{" "}
         <span className="text-textOrange tracking-wide">
-          <a href="https://torticity.com/" target="_blank">
-            @Torticity
+          <a href="https://www.cypherlearning.com/" target="_blank">
+            @Cypher Learning
           </a>
         </span>
       </h3>
       <p className="text-sm mt-1 font-medium text-textDark">
-        Jan 2022 - Jan 2025
+        Feb 2025 - Present
       </p>
       <ul className="mt-6 flex flex-col gap-3">
         <li className="text-base flex gap-2 text-textLight">
@@ -25,12 +26,11 @@ function Torticity() {
             <TiArrowForward />{" "}
           </span>
           <span>
-            Torticity is a startup in the legal industry that sells services
-            powered by technology. They are strategically position in the mass
-            tort and personal injury industries and provide solutions for those
-            niches.{" "}
+            Cypher Learning is leading the disruption of learning platforms to unleash human
+            potential with modern, AI-powered learning experiences. The platform serves millions
+            of learners across 20,000+ organizations globally.{" "}
             <span className="text-textOrange">
-              <a href="https://torticity.com/" target="_blank">
+              <a href="https://www.cypherlearning.com/" target="_blank">
                 Learn More
               </a>
             </span>
@@ -41,22 +41,18 @@ function Torticity() {
           <span className="text-textOrange mt-1">
             <TiArrowForward />{" "}
           </span>
-          <span className="flex flex-col gap-2 ">
+          <span className="flex flex-col gap-2">
             <p>
-              - Assisted in the successful launch of the Claimant Portal, an
-              external application that streamlined the intake process and
-              provided a secure way for users to upload documents for Personal
-              Injury cases.
+              - Serving as a technical linchpin across the engineering organization, driving
+              technical coherence, modernizing systems, and elevating engineering standards at scale.
             </p>
             <p>
-              - Implemented core features on the internal Dockit application,
-              including the integration of predefined filters using Algolia.
+              - Defining and owning the platform's architectural roadmap across frontend, backend,
+              and mobile, ensuring systems are scalable, secure, and maintainable.
             </p>
             <p>
-              {" "}
-              - Implemented a pivotal feature on the Brief application, enabling
-              users to view documents by leveraging the AWS SDK to interact with
-              S3
+              - Expanding technical expertise into Ruby on Rails, marking a significant growth
+              opportunity beyond the TypeScript/Node ecosystem.
             </p>
           </span>
         </li>
@@ -65,11 +61,9 @@ function Torticity() {
             <TiArrowForward />{" "}
           </span>
           <span>
-            Some of the technologies I became proficient in while working here
-            are{" "}
+            Technologies:{" "}
             <span className="text-textOrange">
-              Object-Oriented Programming (OOP) · NestJS · Nuxt.js · Vue.js ·
-              Cypress.io · Tailwind CSS · PostgresSQL · Jest
+              Ruby on Rails · MySQL · AWS
             </span>
           </span>
         </li>
@@ -78,4 +72,4 @@ function Torticity() {
   )
 }
 
-export default Torticity
+export default CypherLearning
