@@ -19,7 +19,7 @@ function CypherLearning() {
         </span>
       </h3>
       <p className="text-sm mt-1 font-medium text-textDark">
-        Feb 2025 - Present
+        Feb 2026 - Present
       </p>
       <ul className="mt-6 flex flex-col gap-3">
         <li className="text-base flex gap-2 text-textLight">
