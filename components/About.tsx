@@ -23,6 +23,7 @@ function About() {
     { name: "Hotwire", url: "https://hotwired.dev/" },
     { name: "MySQL", url: "https://www.mysql.com/" },
     { name: "PostgreSQL", url: "https://www.postgresql.org/" },
+    { name: "MongoDB", url: "https://www.mongodb.com" },
     { name: "Redis", url: "https://redis.io/" },
     { name: "Bash", url: "https://www.gnu.org/software/bash/manual/bash.html" },
     { name: "Docker", url: "https://www.docker.com/" },

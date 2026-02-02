@@ -67,7 +67,7 @@ function Experience() {
   }
 
   const jobs = [
-    { name: "Cypher Learning", handler: handleCypherLearning, active: jobCypherLearning },
+    { name: "Cypher", handler: handleCypherLearning, active: jobCypherLearning },
     { name: "Torticity", handler: handleTorticity, active: jobTorticty },
     { name: "AWS Certified", handler: handleAwsCert, active: jobAwsCert },
     { name: "Majorlinkx", handler: handleMajorlinkx, active: jobMajorlinkx },
