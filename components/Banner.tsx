@@ -3,7 +3,7 @@ import React from "react"
 import { motion } from "framer-motion"
 
 export default function Banner() {
-  const yearIStartedCoding = new Date(2020, 0, 1)
+  const yearIStartedCoding = new Date(2019, 0, 1)
   const yearNow = new Date()
   const yearsOfCoding = yearNow.getFullYear() - yearIStartedCoding.getFullYear()
   
@@ -47,7 +47,7 @@ export default function Banner() {
                 transition={{ duration: 0.6, delay: 0.8 }}
                 className="text-textDark mt-2 lgl:mt-4 text-3xl lgl:text-5xl"
               >
-                I build things for the web
+                I build products, lead teams, and ship at scale
               </motion.span>
             </motion.h1>
             
@@ -57,9 +57,8 @@ export default function Banner() {
               transition={{ duration: 0.6, delay: 0.9 }}
               className="text-base md:max-w-[650px] text-textLight font-medium leading-relaxed"
             >
-              I'm a software engineer based in the United States. I have{" "}
-              <span className="text-textOrange font-semibold">{yearsOfCoding} years</span> of experience in web development. I have a passion
-              for building web applications and learning new technologies.{" "}
+              I'm a staff software engineer based in the United States with{" "}
+              <span className="text-textOrange font-semibold">{yearsOfCoding} years</span> of experience building web platforms, leading engineering teams, and shipping products at scale. From full-stack development to platform architecture, I focus on turning complex problems into clean, working software.{" "}
               <a
                 href="https://www.linkedin.com/in/jarue-johnson-9a08241ab/"
                 target="_blank"
