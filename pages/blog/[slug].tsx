@@ -29,6 +29,31 @@ interface ArticlePageProps {
   article: Article
 }
 
+function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
+  // Split on both **bold** and `code` patterns
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/)
+  return parts.map((part, j) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={`${keyPrefix}-${j}`} className="text-textOrange font-semibold">
+          {part.slice(2, -2)}
+        </strong>
+      )
+    }
+    if (part.startsWith("`") && part.endsWith("`")) {
+      return (
+        <code
+          key={`${keyPrefix}-${j}`}
+          className="px-1.5 py-0.5 bg-gray-800/80 border border-gray-700/50 rounded text-sm font-mono text-textOrange"
+        >
+          {part.slice(1, -1)}
+        </code>
+      )
+    }
+    return part
+  })
+}
+
 function renderContent(content: string) {
   const lines = content.split("\n")
   const elements: React.ReactNode[] = []
@@ -89,21 +114,9 @@ function renderContent(content: string) {
       const listItems: React.ReactNode[] = []
       while (i < lines.length && lines[i].startsWith("- ")) {
         const itemText = lines[i].replace(/^- /, "")
-        // Handle bold text within list items
-        const parts = itemText.split(/(\*\*[^*]+\*\*)/)
-        const rendered = parts.map((part, j) => {
-          if (part.startsWith("**") && part.endsWith("**")) {
-            return (
-              <strong key={j} className="text-textOrange font-semibold">
-                {part.slice(2, -2)}
-              </strong>
-            )
-          }
-          return part
-        })
         listItems.push(
           <li key={i} className="text-textLight leading-relaxed">
-            {rendered}
+            {renderInline(itemText, `li-${i}`)}
           </li>
         )
         i++
@@ -125,22 +138,10 @@ function renderContent(content: string) {
       continue
     }
 
-    // Regular paragraphs - handle inline bold
-    const parts = line.split(/(\*\*[^*]+\*\*)/)
-    const rendered = parts.map((part, j) => {
-      if (part.startsWith("**") && part.endsWith("**")) {
-        return (
-          <strong key={j} className="text-textOrange font-semibold">
-            {part.slice(2, -2)}
-          </strong>
-        )
-      }
-      return part
-    })
-
+    // Regular paragraphs
     elements.push(
       <p key={i} className="text-textLight leading-relaxed mb-4">
-        {rendered}
+        {renderInline(line, `p-${i}`)}
       </p>
     )
     i++
