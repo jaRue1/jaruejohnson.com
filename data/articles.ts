@@ -211,7 +211,7 @@ If you've got questions about the setup or want to compare notes on your own lab
   {
     title: "8 Days with Ruby on Rails: A TypeScript Dev's Crash Course",
     slug: "8-days-with-ruby-on-rails",
-    date: "2025-11-15",
+    date: "2026-01-31",
     excerpt:
       "I've been writing TypeScript for about 5 years. Recently accepted a role where Rails is the primary stack. What better way to learn than to build an LMS yourself?",
     content: `I've been writing TypeScript for about 5 years. React, Next.js, Node, NestJS, the whole ecosystem. Recently accepted a role at an LMS company where Ruby on Rails is the primary stack.
