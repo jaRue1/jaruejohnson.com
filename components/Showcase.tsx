@@ -2,7 +2,7 @@ import React from "react"
 import SectionTitle from "./SectionTitle"
 import { motion } from "framer-motion"
 import { HiOutlineExternalLink } from "react-icons/hi"
-import { FiUsers, FiTrendingUp } from "react-icons/fi"
+import { FiCode, FiTrendingUp } from "react-icons/fi"
 
 interface ProjectProps {
   title: string
@@ -103,21 +103,21 @@ const ProjectCard = ({ title, description, focus, features, icon, stakeholder, l
 function Showcase() {
   const projects = [
     {
-      title: "Nexus + Nexus OS",
-      description: "A comprehensive full-stack platform built for Majorlinkx, featuring both a robust client portal for service-based businesses and an integrated operating system layer. This enterprise-level solution streamlines business operations with advanced project management, real-time collaboration tools, and seamless client communication workflows.",
+      title: "AI Tooling Layer",
+      description: "Building a tooling layer that allows AI agents to natively interact with the Cypher Learning platform. This architecture enables intelligent agents to operate across the LMS, unlocking automation, content generation, and adaptive learning workflows at scale.",
       focus: "primary" as const,
-      stakeholder: "Majorlinkx",
+      stakeholder: "Cypher Learning",
       features: [
-        "Full-stack client portal with multi-role authentication system",
-        "Nexus OS: Integrated business operating system layer",
-        "Advanced project timeline and milestone management",
-        "Real-time status dashboard with live updates",
-        "Document management and collaboration suite",
-        "Automated workflow and notification systems",
-        "Custom business process automation",
-        "Analytics and reporting dashboard"
+        "Model Context Protocol (MCP) integration",
+        "Agent Context Protocol (ACP) design",
+        "Building tools for agent-to-platform communication",
+        "Tooling layer for native AI interactions",
+        "Tooling registry for agent capabilities",
+        "Automated content generation workflows",
+        "Adaptive learning path orchestration",
+        "Scalable agent execution framework"
       ],
-      icon: <FiUsers />,
+      icon: <FiCode />,
     }
   ]
 
@@ -138,7 +138,7 @@ function Showcase() {
             What I&apos;m <span className="text-textOrange">currently working on</span>
           </h3>
           <p className="text-textDark text-lg max-w-2xl mx-auto">
-            Building innovative solutions that bridge technology and business needs.
+            Building AI tooling architecture that makes agents first-class citizens within enterprise platforms.
           </p>
         </div>
       </motion.div>
