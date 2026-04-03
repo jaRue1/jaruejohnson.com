@@ -1,7 +1,15 @@
 import Head from "next/head"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { FiUsers, FiCode, FiCloud, FiMonitor, FiExternalLink, FiArrowRight, FiTarget } from "react-icons/fi"
+import {
+  FiUsers,
+  FiCode,
+  FiCloud,
+  FiMonitor,
+  FiExternalLink,
+  FiArrowRight,
+  FiTarget,
+} from "react-icons/fi"
 import SectionTitle from "../../components/SectionTitle"
 
 // Icon mapping function
@@ -11,7 +19,7 @@ const getIcon = (iconName: string) => {
     FiCloud: <FiCloud />,
     FiMonitor: <FiMonitor />,
     FiCode: <FiCode />,
-    FiTarget: <FiTarget />
+    FiTarget: <FiTarget />,
   }
   return icons[iconName] || <FiCode />
 }
@@ -31,7 +39,29 @@ interface Project {
   isLive?: boolean
 }
 
-const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
+function getProjectStatusBadgeClasses(status: Project["status"]) {
+  if (status === "primary") {
+    return "bg-textOrange/20 text-textOrange border border-textOrange/30"
+  }
+  if (status === "co-founding") {
+    return "bg-purple-500/20 text-purple-400 border border-purple-500/30"
+  }
+  if (status === "content") {
+    return "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+  }
+  if (status === "orphan") {
+    return "bg-gray-500/20 text-gray-400 border border-gray-500/30"
+  }
+  return "bg-green-500/20 text-green-400 border border-green-500/30"
+}
+
+const ProjectCard = ({
+  project,
+  index,
+}: {
+  project: Project
+  index: number
+}) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: 50 }}
@@ -42,7 +72,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
     >
       {/* Timeline dot - positioned to sit directly on the timeline line */}
       <div className="absolute -left-10 lg:-left-12 top-1/2 transform -translate-y-1/2 w-4 h-4 rounded-full border-2 border-textOrange bg-textOrange shadow-lg shadow-textOrange/30 hidden md:block z-20" />
-      
+
       {/* Project Card */}
       <motion.div
         whileHover={{ scale: 1.02, y: -5 }}
@@ -51,15 +81,17 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
       >
         {/* Animated background overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-textOrange/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        
+
         {/* Animated border glow */}
         <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-textOrange/30 via-transparent to-textOrange/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
-        
+
         <div className="relative z-10">
           {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-center gap-4">
-              <div className={`p-4 rounded-2xl bg-gradient-to-r ${project.color} backdrop-blur-sm border border-gray-600/30 group-hover:border-textOrange/40 transition-all duration-300 group-hover:scale-110`}>
+              <div
+                className={`p-4 rounded-2xl bg-gradient-to-r ${project.color} backdrop-blur-sm border border-gray-600/30 group-hover:border-textOrange/40 transition-all duration-300 group-hover:scale-110`}
+              >
                 <div className="text-textOrange group-hover:text-textLight transition-colors duration-300 text-2xl">
                   {getIcon(project.iconName)}
                 </div>
@@ -69,25 +101,18 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
                   {project.title}
                 </h3>
                 <div className="flex flex-wrap items-center gap-3 mt-2">
-                  <span className={`inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-full transition-all duration-300 ${
-                    project.status === 'primary'
-                      ? 'bg-textOrange/20 text-textOrange border border-textOrange/30'
-                      : project.status === 'co-founding'
-                      ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                      : project.status === 'content'
-                      ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                      : project.status === 'orphan'
-                      ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-                      : 'bg-green-500/20 text-green-400 border border-green-500/30'
-                  }`}>
-                    {project.year || '2025 - Present'}
+                  <span
+                    className={`inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-full transition-all duration-300    
+                    ${getProjectStatusBadgeClasses(project.status)}`}
+                  >
+                    {project.year || "2025 - Present"}
                   </span>
                   {project.isLive && (
                     <span className="inline-block px-3 py-1 text-xs font-semibold bg-green-500/20 text-green-400 border border-green-500/30 rounded-full">
                       Live
                     </span>
                   )}
-                  {project.status === 'orphan' && (
+                  {project.status === "orphan" && (
                     <span className="inline-block px-3 py-1 text-xs font-semibold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-full">
                       Orphaned
                     </span>
@@ -99,12 +124,12 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
               </div>
             </div>
           </div>
-          
+
           {/* Description */}
           <p className="text-textDark leading-relaxed mb-8 text-lg group-hover:text-textLight transition-colors duration-300">
             {project.shortDescription}
           </p>
-          
+
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
             {/* Learn More Button - Links to detailed project page */}
@@ -119,7 +144,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
                 <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
               </motion.button>
             </Link>
-            
+
             {/* Website Button */}
             {project.websiteUrl ? (
               <motion.a
@@ -131,7 +156,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
                 className="group/btn relative px-6 py-3 bg-gradient-to-r from-gray-800/60 to-gray-700/40 backdrop-blur-sm border border-gray-600/30 rounded-xl hover:from-textOrange/20 hover:to-textOrange/10 hover:border-textOrange/40 transition-all duration-300 overflow-hidden flex items-center gap-2"
               >
                 <span className="relative z-10 text-textLight group-hover/btn:text-textOrange transition-colors duration-300">
-                  {project.websiteLabel || 'Visit Website'}
+                  {project.websiteLabel || "Visit Website"}
                 </span>
                 <FiExternalLink className="text-lg text-textOrange group-hover/btn:text-textLight transition-colors duration-300" />
                 <div className="absolute inset-0 bg-gradient-to-r from-textOrange/10 to-transparent opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
@@ -143,11 +168,11 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
             )}
           </div>
         </div>
-        
+
         {/* Decorative elements */}
         <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-gradient-to-br from-textOrange/20 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-125" />
         <div className="absolute -top-2 -left-2 w-16 h-16 bg-gradient-to-br from-textOrange/15 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100" />
-        
+
         {/* Floating particles */}
         <div className="absolute top-4 right-4 w-2 h-2 bg-textOrange rounded-full opacity-0 group-hover:opacity-60 transition-all duration-700 group-hover:animate-ping" />
         <div className="absolute bottom-6 left-6 w-1 h-1 bg-textOrange rounded-full opacity-0 group-hover:opacity-40 transition-all duration-1000 delay-200 group-hover:animate-pulse" />
@@ -158,6 +183,20 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
 
 export default function Projects() {
   const projects: Project[] = [
+    {
+      id: "cypher-ai-tooling",
+      title: "AI Tooling Layer",
+      shortDescription:
+        "Building a tooling layer that allows AI agents to natively interact with the Cypher Learning platform. This architecture enables intelligent agents to operate across the LMS, unlocking automation, content generation, and adaptive learning workflows at scale.",
+      status: "primary",
+      stakeholder: "Cypher Learning",
+      websiteUrl: "https://www.cypherlearning.com",
+      websiteLabel: "Visit Cypher Learning",
+      iconName: "FiCode",
+      color: "from-cyan-800/60 to-cyan-700/40",
+      priority: 1,
+      year: "2026",
+    },
     {
       id: "decypher",
       title: "DeCypher",
@@ -170,12 +209,13 @@ export default function Projects() {
       color: "from-purple-800/60 to-purple-700/40",
       priority: 1,
       isLive: true,
-      year: "2026"
+      year: "2026",
     },
     {
       id: "nexus-nexusos",
       title: "Nexus + Nexus OS",
-      shortDescription: "A comprehensive full-stack platform built for Majorlinkx, featuring both a robust client portal for service-based businesses and an integrated operating system layer. This enterprise-level solution streamlines business operations with advanced project management and seamless client communication workflows.",
+      shortDescription:
+        "A comprehensive full-stack platform built for Majorlinkx, featuring both a robust client portal for service-based businesses and an integrated operating system layer. This enterprise-level solution streamlines business operations with advanced project management and seamless client communication workflows.",
       status: "primary",
       stakeholder: "Majorlinkx",
       websiteUrl: "https://majorlinkx.com",
@@ -183,12 +223,13 @@ export default function Projects() {
       iconName: "FiUsers",
       color: "from-blue-800/60 to-blue-700/40",
       priority: 2,
-      isLive: true
+      isLive: true,
     },
     {
       id: "cmd-cloud",
       title: "cmd cloud",
-      shortDescription: "A powerful cloud-based development tool that bridges the gap between local development and cloud infrastructure. Provides developers with seamless command-line access to cloud resources, streamlined deployment workflows, and integrated development environments accessible from anywhere.",
+      shortDescription:
+        "A powerful cloud-based development tool that bridges the gap between local development and cloud infrastructure. Provides developers with seamless command-line access to cloud resources, streamlined deployment workflows, and integrated development environments accessible from anywhere.",
       status: "orphan",
       stakeholder: "Personal Project",
       websiteUrl: "https://cmdcloud.dev",
@@ -196,7 +237,7 @@ export default function Projects() {
       iconName: "FiCloud",
       color: "from-green-800/60 to-green-700/40",
       priority: 3,
-      year: "2025"
+      year: "2025",
     },
     // {
     //   id: "fresh-site",
@@ -213,7 +254,8 @@ export default function Projects() {
     {
       id: "dothething-dev",
       title: "dothething.dev",
-      shortDescription: "A comprehensive tech platform focused on practical development content, tutorials, and building in public. This project represents my shift toward content creation, sharing the journey of building and iterating as a developer scaling his business with in-depth tutorials and technology comparisons.",
+      shortDescription:
+        "A comprehensive tech platform focused on practical development content, tutorials, and building in public. This project represents my shift toward content creation, sharing the journey of building and iterating as a developer scaling his business with in-depth tutorials and technology comparisons.",
       status: "orphan",
       stakeholder: "Personal Brand",
       websiteUrl: null,
@@ -221,25 +263,34 @@ export default function Projects() {
       iconName: "FiCode",
       color: "from-orange-800/60 to-orange-700/40",
       priority: 5,
-      year: "2025"
-    }
+      year: "2025",
+    },
   ]
 
   return (
     <>
       <Head>
         <title>Projects - Jarue Johnson</title>
-        <meta name="description" content="Jarue Johnson's project timeline and portfolio" />
+        <meta
+          name="description"
+          content="Jarue Johnson's project timeline and portfolio"
+        />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      
+
       <main className="font-bodyFont w-full min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 text-textLight overflow-x-hidden relative">
         {/* Background elements */}
         <div className="absolute inset-0 bg-gradient-to-br from-textOrange/5 via-transparent to-textOrange/3 pointer-events-none" />
         <div className="absolute top-20 left-20 w-72 h-72 bg-textOrange/10 rounded-full blur-3xl animate-pulse opacity-30" />
-        <div className="absolute top-1/3 right-20 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl animate-pulse opacity-20" style={{ animationDelay: '2s' }} />
-        <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-purple-500/8 rounded-full blur-3xl animate-pulse opacity-15" style={{ animationDelay: '4s' }} />
-        
+        <div
+          className="absolute top-1/3 right-20 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl animate-pulse opacity-20"
+          style={{ animationDelay: "2s" }}
+        />
+        <div
+          className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-purple-500/8 rounded-full blur-3xl animate-pulse opacity-15"
+          style={{ animationDelay: "4s" }}
+        />
+
         <div className="relative z-10 max-w-5xl mx-auto px-4 py-24">
           {/* Header */}
           <motion.div
@@ -254,8 +305,9 @@ export default function Projects() {
                 My <span className="text-textOrange">Projects</span>
               </h1>
               <p className="text-textDark text-lg max-w-3xl mx-auto leading-relaxed">
-                A timeline of projects I&apos;ve built, co-founded, and continue to develop. Each represents a unique challenge 
-                and learning experience in my journey as a developer and entrepreneur.
+                A timeline of projects I&apos;ve built, co-founded, and continue
+                to develop. Each represents a unique challenge and learning
+                experience in my journey as a developer and entrepreneur.
               </p>
             </div>
           </motion.div>
@@ -264,7 +316,7 @@ export default function Projects() {
           <div className="relative max-w-4xl mx-auto">
             {/* Timeline line - hidden on mobile, positioned to intersect with dots */}
             <div className="absolute left-4 lg:left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-textOrange/60 via-textOrange/30 to-transparent hidden md:block" />
-            
+
             <div className="space-y-16 lg:space-y-20">
               {projects.map((project, index) => (
                 <ProjectCard key={project.id} project={project} index={index} />
