@@ -420,30 +420,272 @@ Decypher is live at decypher.life if you want to check it out.`,
 
 TypeScript is great for web applications. Rails is great for rapid prototyping. But when I look at the infrastructure and platform-level work I'm gravitating toward (CLI tools, distributed systems, high-performance APIs), Go keeps showing up.
 
-The language is intentionally simple. The concurrency model is built-in. The binaries are small and fast. And the ecosystem around DevOps and cloud-native tooling is dominated by Go.
+The language is intentionally simple. The concurrency model is built-in. The binaries are small and fast. And the ecosystem around DevOps and cloud-native tooling is dominated by Go: Docker, Kubernetes, Terraform, Prometheus. If you're building infrastructure tools, Go is the lingua franca.
 
-## What I'm Building
+## Learning by Building: Cerebro
 
-I'm not learning Go from tutorials alone. I'm building real things:
+I didn't learn Go from tutorials. I built a real tool called **Cerebro**: a CLI that wraps the Datadog API for fast incident diagnosis. Instead of clicking through dashboards in a browser, you type a command and get a color-coded health check across all your services. That project taught me more about Go in a few weeks than months of reading docs would have.
 
-- A CLI tool for managing development environments
-- A lightweight API gateway for internal services
-- Exploring concurrent data processing patterns
+Here's what I picked up along the way.
 
-## Early Observations
+## Package Main and the Entry Point
 
-- The standard library is surprisingly complete. You can build an HTTP server without any dependencies.
-- Error handling feels verbose at first, but it forces you to think about failure modes explicitly.
-- The lack of generics (now partially addressed) made me appreciate TypeScript's type system more.
-- Compile times are essentially instant. Coming from large TypeScript projects, this is refreshing.
+Every Go program starts with \`package main\` and a \`main()\` function. That's it. No framework, no bootstrap file, no dependency injection container. Compare that to a NestJS app where you need a module, a bootstrap function, and a decorator-heavy setup.
 
-## The Plan
+\`\`\`go
+package main
 
-I'm committing to building at least two production-quality tools in Go over the next few months. I'll document the journey here: the wins, the frustrations, and the patterns I discover along the way.
+import "github.com/EDU-20/cerebro/cmd"
 
-More to come.`,
-    tags: ["Go", "Learning", "Backend Development", "Systems Programming"],
-    readTime: "3 min read",
+func main() {
+    cmd.Execute()
+}
+\`\`\`
+
+Three lines. The entire application entry point. The \`cmd\` package handles everything else. This is one of Go's core principles: simplicity at the top level, complexity pushed down into packages.
+
+## Structs Instead of Classes
+
+Go doesn't have classes. It has structs. If you're coming from TypeScript or Java, this feels limiting at first. But structs with methods give you everything you need without inheritance hierarchies.
+
+\`\`\`go
+type Client struct {
+    Ctx       context.Context
+    APIClient *datadog.APIClient
+    Config    *config.Config
+}
+
+func NewClient(cfg *config.Config) (*Client, error) {
+    if cfg.APIKey == "" {
+        return nil, fmt.Errorf("DD_API_KEY is required")
+    }
+
+    ctx := context.WithValue(context.Background(),
+        datadog.ContextAPIKeys, map[string]datadog.APIKey{
+            "apiKeyAuth": {Key: cfg.APIKey},
+            "appKeyAuth": {Key: cfg.AppKey},
+        })
+
+    configuration := datadog.NewConfiguration()
+    apiClient := datadog.NewAPIClient(configuration)
+
+    return &Client{
+        Ctx:       ctx,
+        APIClient: apiClient,
+        Config:    cfg,
+    }, nil
+}
+\`\`\`
+
+No \`class\`, no \`constructor\`, no \`this\`. You define a struct, then write a \`NewXxx\` function that returns a pointer to it. That's the constructor pattern in Go. Validation happens before construction: if the API key is missing, you get an error back immediately.
+
+## Custom Types and Enums with iota
+
+Go doesn't have enums the way TypeScript does. Instead, you create a custom type and use \`iota\` to auto-increment constants. Then you attach a \`String()\` method so the type can describe itself.
+
+\`\`\`go
+type ServiceStatus int
+
+const (
+    StatusGreen  ServiceStatus = iota  // 0
+    StatusYellow                        // 1
+    StatusRed                           // 2
+)
+
+func (s ServiceStatus) String() string {
+    switch s {
+    case StatusGreen:
+        return "GREEN"
+    case StatusYellow:
+        return "YELLOW"
+    case StatusRed:
+        return "RED"
+    default:
+        return "UNKNOWN"
+    }
+}
+\`\`\`
+
+In Cerebro, this powers the health check output. Each service gets evaluated against thresholds, and the status drives the terminal color: green, yellow, or red.
+
+## Error Handling: Verbose, but Honest
+
+This is the one that trips up every developer coming from try/catch languages. Go doesn't have exceptions. Every function that can fail returns an error as its last return value, and you check it immediately.
+
+\`\`\`go
+func Load() (*Config, error) {
+    home, err := os.UserHomeDir()
+    if err != nil {
+        return nil, fmt.Errorf("finding home directory: %w", err)
+    }
+
+    viper.SetConfigName(".cerebro")
+    viper.SetConfigType("yaml")
+    viper.AddConfigPath(home)
+
+    if err := viper.ReadInConfig(); err != nil {
+        if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+            return nil, fmt.Errorf("reading config: %w", err)
+        }
+    }
+
+    var cfg Config
+    if err := viper.Unmarshal(&cfg); err != nil {
+        return nil, fmt.Errorf("parsing config: %w", err)
+    }
+
+    return &cfg, nil
+}
+\`\`\`
+
+The \`%w\` verb wraps the original error with context so you get error chains like "reading config: file is corrupt." The type assertion (\`err.(viper.ConfigFileNotFoundError)\`) lets you check for specific error types and handle them differently. A missing config file is fine (use defaults). A corrupt config file is not.
+
+Yes, it's verbose. But after working with it, I started to appreciate how explicit it is. Every failure path is visible. There's no hidden exception that bubbles up three layers and crashes your program at 2am.
+
+## Goroutines and Concurrency
+
+This is where Go really shines. Concurrency is a first-class citizen, not a library you bolt on. When Cerebro checks the health of all services, it fans out the requests in parallel using goroutines and a WaitGroup.
+
+\`\`\`go
+results := make([]result, len(svcNames))
+var wg sync.WaitGroup
+
+for i, name := range svcNames {
+    wg.Add(1)
+    go func(idx int, svcName string) {
+        defer wg.Done()
+        svc, err := services.GetService(cfg, svcName)
+        if err != nil {
+            results[idx] = result{name: svcName, err: err}
+            return
+        }
+        // ... query metrics, evaluate thresholds
+        overall := services.OverallStatus(metricStatuses)
+        results[idx] = result{name: svcName, status: overall}
+    }(i, name)
+}
+
+wg.Wait()
+\`\`\`
+
+Each goroutine writes to its own index in the results slice, so no mutex is needed. But when multiple goroutines append to a shared slice, you need a mutex to prevent race conditions:
+
+\`\`\`go
+var mu sync.Mutex
+var wg sync.WaitGroup
+
+for metricName, metric := range svc.Metrics {
+    wg.Add(1)
+    go func(mName string, m config.Metric) {
+        defer wg.Done()
+        ms := services.EvaluateMetric(mName, m, res)
+        mu.Lock()
+        metricStatuses = append(metricStatuses, ms)
+        mu.Unlock()
+    }(metricName, metric)
+}
+
+wg.Wait()
+\`\`\`
+
+In TypeScript, you'd use \`Promise.all()\` for parallel execution. In Go, you spawn goroutines with \`go\`, wait with \`sync.WaitGroup\`, and protect shared state with \`sync.Mutex\`. The patterns map to each other conceptually, but Go gives you lower-level control.
+
+## The internal/ Convention
+
+Go has a built-in access control mechanism that I wish TypeScript had. Any package under an \`internal/\` directory cannot be imported by code outside your module. In Cerebro, the structure looks like:
+
+\`\`\`
+cerebro/
+  main.go
+  cmd/
+    root.go
+    status.go
+    metrics.go
+    alerts.go
+    logs.go
+  internal/
+    config/config.go
+    datadog/client.go
+    datadog/metrics.go
+    datadog/monitors.go
+    datadog/logs.go
+    output/formatter.go
+    services/registry.go
+\`\`\`
+
+Everything under \`internal/\` is private to the module. The \`cmd\` package orchestrates, the \`internal\` packages do the actual work. This is enforced by the Go compiler, not by convention or a linter rule. If someone tries to import \`internal/datadog\` from outside the module, it won't compile.
+
+## CLI Tooling with Cobra
+
+Building CLI tools is where Go feels most natural. The Cobra framework (used by kubectl, Hugo, and GitHub CLI) gives you subcommands, flags, and help text generation.
+
+\`\`\`go
+var rootCmd = &cobra.Command{
+    Use:   "cerebro",
+    Short: "Datadog CLI for rapid incident diagnosis",
+}
+
+func Execute() {
+    if err := rootCmd.Execute(); err != nil {
+        fmt.Fprintln(os.Stderr, err)
+        os.Exit(1)
+    }
+}
+
+func init() {
+    rootCmd.PersistentFlags().StringVarP(&flagEnv, "env", "e", "", "environment")
+    rootCmd.PersistentFlags().StringVarP(&flagFormat, "format", "f", "table", "output format")
+}
+\`\`\`
+
+The \`init()\` function is a Go-specific concept: it runs automatically when the package is loaded. No explicit registration needed. And \`PersistentFlags\` means those flags are inherited by every subcommand. So \`cerebro status --env prod\` and \`cerebro alerts --env staging\` both work without duplicating flag definitions.
+
+## HTTP Without a Framework
+
+Go's standard library includes a production-ready HTTP server. No Express, no Fastify, no framework required.
+
+\`\`\`go
+package main
+
+import (
+    "encoding/json"
+    "net/http"
+)
+
+type HealthResponse struct {
+    Status  string \`json:"status"\`
+    Version string \`json:"version"\`
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+    resp := HealthResponse{Status: "ok", Version: "1.0.0"}
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(resp)
+}
+
+func main() {
+    http.HandleFunc("/health", healthHandler)
+    http.ListenAndServe(":8080", nil)
+}
+\`\`\`
+
+That's a complete HTTP server with JSON responses. No dependencies. The struct tags (\`json:"status"\`) control serialization, similar to decorators in NestJS but built into the language.
+
+## What I'd Tell a TypeScript Developer Starting Go
+
+- **Stop looking for the framework.** Go's standard library covers HTTP, JSON, testing, and concurrency. You don't need an Express equivalent.
+- **Embrace the verbosity.** The \`if err != nil\` pattern feels repetitive, but it makes every failure explicit. After a few weeks, you stop fighting it.
+- **Think in packages, not classes.** Go organizes code by package, not by class hierarchy. Group by responsibility, not by type.
+- **Start with a CLI tool.** Go compiles to a single binary with zero dependencies. No node_modules, no runtime. Build a small CLI tool and experience the deployment story firsthand.
+- **Concurrency is not parallelism.** Goroutines are lightweight, but shared state still needs protection. Learn WaitGroup and Mutex before reaching for channels.
+
+## What's Next
+
+Go is becoming a permanent part of my toolkit alongside TypeScript. For web applications and frontends, TypeScript is still my first choice. For CLI tools, infrastructure automation, and high-performance backend services, Go is the better fit.
+
+I'll be writing more about specific patterns as I go deeper. The goal is to build production-quality tools, not just toy projects. Cerebro was the first one. More to come.`,
+    tags: ["Go", "CLI Tools", "Backend Development", "Systems Programming"],
+    readTime: "10 min read",
   },
   {
     title: "Building for Mobile Without Losing Your Mind",
@@ -464,11 +706,183 @@ The first decision is always: native or cross-platform? After evaluating the opt
 - Hot reloading and Expo make the development cycle fast.
 - One codebase for iOS and Android means I can actually ship to both platforms.
 
+## Getting Started: It Feels Like React (Until It Doesn't)
+
+If you know React, your first React Native component will feel familiar:
+
+\`\`\`tsx
+import { View, Text, StyleSheet } from "react-native"
+
+export default function WelcomeCard({ name }: { name: string }) {
+  return (
+    <View style={styles.card}>
+      <Text style={styles.title}>Welcome, {name}</Text>
+      <Text style={styles.subtitle}>Let's build something.</Text>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  card: {
+    padding: 24,
+    backgroundColor: "#1a1a2e",
+    borderRadius: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#fff",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#8892b0",
+    marginTop: 8,
+  },
+})
+\`\`\`
+
+No \`div\`, no \`p\`, no CSS files. \`View\` replaces \`div\`, \`Text\` replaces \`p\` and \`span\`, and \`StyleSheet.create\` replaces your stylesheet. The properties look like CSS but use camelCase and accept only a subset of what the web supports. That's the first adjustment: you can't just copy your Tailwind classes over.
+
+## Navigation: The Biggest Mental Shift
+
+On the web, routing is URL-based. You navigate to \`/dashboard\` and a component renders. In React Native, navigation is stack-based. Screens push onto a stack, and you pop back. It's closer to how native iOS and Android apps work.
+
+\`\`\`tsx
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { NavigationContainer } from "@react-navigation/native"
+
+const Stack = createNativeStackNavigator()
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+\`\`\`
+
+Then inside any screen, you navigate by name, not by URL:
+
+\`\`\`tsx
+function HomeScreen({ navigation }) {
+  return (
+    <View style={styles.container}>
+      <Pressable
+        style={styles.button}
+        onPress={() => navigation.navigate("Profile", { userId: "123" })}
+      >
+        <Text style={styles.buttonText}>View Profile</Text>
+      </Pressable>
+    </View>
+  )
+}
+\`\`\`
+
+No \`<Link href="/profile/123">\`. You call \`navigation.navigate()\` with the screen name and params. Getting used to stacks, tabs, and drawers takes time, but once it clicks, the pattern is clean.
+
+## Platform-Specific Code
+
+Even with cross-platform code, iOS and Android behave differently in places. React Native gives you a clean way to handle this:
+
+\`\`\`tsx
+import { Platform, StyleSheet } from "react-native"
+
+const styles = StyleSheet.create({
+  header: {
+    paddingTop: Platform.OS === "ios" ? 44 : 24,
+    backgroundColor: Platform.select({
+      ios: "#1a1a2e",
+      android: "#0f0f23",
+    }),
+  },
+  shadow: Platform.select({
+    ios: {
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+    },
+    android: {
+      elevation: 4,
+    },
+  }),
+})
+\`\`\`
+
+iOS uses shadow properties. Android uses elevation. Status bar heights differ. Keyboard behavior differs. These are small things individually, but they accumulate. Having \`Platform.select()\` built into the framework makes it manageable.
+
+## Lists and Performance
+
+On the web, you render a list with \`.map()\` and call it a day. In mobile, long lists need virtualization out of the box because you're working with constrained memory and smaller screens.
+
+\`\`\`tsx
+import { FlatList, View, Text } from "react-native"
+
+interface Project {
+  id: string
+  title: string
+  status: string
+}
+
+function ProjectList({ projects }: { projects: Project[] }) {
+  return (
+    <FlatList
+      data={projects}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <View style={styles.row}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.status}>{item.status}</Text>
+        </View>
+      )}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
+      ListEmptyComponent={
+        <Text style={styles.empty}>No projects yet.</Text>
+      }
+    />
+  )
+}
+\`\`\`
+
+\`FlatList\` only renders what's visible on screen. It handles scroll performance, recycling views, and memory management. On the web, you'd need to bring in react-window or react-virtualized. Here, it's a core component.
+
+## Expo: The Build System That Makes It Possible
+
+Expo is what makes React Native approachable for a web developer. Without it, you're managing Xcode, Android Studio, Gradle configs, and CocoaPods. With Expo, the development loop looks like:
+
+\`\`\`bash
+# Start the dev server
+npx expo start
+
+# Build for both platforms
+eas build --platform all
+
+# Deploy an over-the-air update (no app store review)
+eas update --branch production
+\`\`\`
+
+The over-the-air updates via EAS are a game changer. You push a JS bundle update and users get it without downloading a new version from the App Store. For bug fixes and small changes, you skip the review process entirely.
+
 ## What Surprised Me
 
 - **Navigation is its own beast.** React Navigation works, but the mental model is different from web routing. Stacks, tabs, drawers. It takes time to internalize.
-- **Platform differences are real.** Even with cross-platform code, you'll hit moments where iOS and Android behave differently. Keyboard handling, status bars, gestures: the details matter.
+- **Platform differences are real.** Even with cross-platform code, you'll hit moments where iOS and Android behave differently. Keyboard handling, status bars, gestures. The details matter.
 - **Performance is good enough.** For the majority of applications, React Native performance is not the bottleneck. Your architecture decisions matter more than the framework choice.
+- **Debugging is different.** React DevTools work, but you'll also use Flipper, platform-specific logs, and occasionally Xcode's console. The tooling ecosystem is more fragmented than the web.
 
 ## My Approach
 
@@ -477,11 +891,14 @@ I'm not trying to become a mobile specialist. I'm building a toolkit that lets m
 - Keeping shared business logic in TypeScript packages
 - Using Expo for build and deployment tooling
 - Leaning on well-maintained community libraries instead of building from scratch
+- Writing platform-specific code only when the default behavior isn't right
 
 ## The Takeaway
 
-Mobile development doesn't have to be a separate career path. With the right tools and the right expectations, a web engineer can build quality mobile experiences. The key is being honest about what you know, what you don't, and where the framework can carry you.`,
-    tags: ["React Native", "Mobile Development", "Cross-Platform", "Tooling"],
-    readTime: "4 min read",
+Mobile development doesn't have to be a separate career path. With the right tools and the right expectations, a web engineer can build quality mobile experiences. The key is being honest about what you know, what you don't, and where the framework can carry you.
+
+If you're a React developer considering mobile, start with Expo and build something small. The gap between web and mobile is smaller than it's ever been.`,
+    tags: ["React Native", "Mobile Development", "Cross-Platform", "Expo"],
+    readTime: "8 min read",
   },
 ]
