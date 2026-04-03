@@ -145,6 +145,21 @@ const Navbar = () => {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-textOrange group-hover:w-full transition-all duration-300" />
               </motion.li>
             </Link>
+
+            <Link
+              href="/blog"
+              className="group flex items-center font-medium text-textDark hover:text-textOrange cursor-pointer duration-300 nav-link relative"
+            >
+              <motion.li
+                initial={{ y: -10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.1, delay: 0.6 }}
+                className="relative"
+              >
+                <span className="text-textOrange">06.</span>Writing
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-textOrange group-hover:w-full transition-all duration-300" />
+              </motion.li>
+            </Link>
           </ul>
         </div>
 
@@ -264,6 +279,21 @@ const Navbar = () => {
                       className="group-hover:translate-x-2 transition-transform duration-300"
                     >
                       <span className="text-textOrange">05.</span>Contact
+                    </motion.li>
+                  </Link>
+
+                  <Link
+                    href="/blog"
+                    onClick={() => setShowMenu(false)}
+                    className="group flex items-center font-medium text-textDark hover:text-textOrange cursor-pointer duration-300 nav-link"
+                  >
+                    <motion.li
+                      initial={{ x: 20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ duration: 0.2, delay: 0.7, ease: "easeIn" }}
+                      className="group-hover:translate-x-2 transition-transform duration-300"
+                    >
+                      <span className="text-textOrange">06.</span>Writing
                     </motion.li>
                   </Link>
                 </ul>
