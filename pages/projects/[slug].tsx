@@ -23,6 +23,42 @@ interface ProjectDetail {
 }
 
 const projectsData: { [key: string]: ProjectDetail } = {
+  "cypher-ai-tooling": {
+    id: "cypher-ai-tooling",
+    title: "AI Tooling Layer",
+    description: "A tooling layer that allows AI agents to natively interact with the Cypher Learning platform",
+    longDescription: "Leading the development of a tooling architecture that enables AI agents to natively interact with the Cypher Learning platform. This layer gives intelligent agents the ability to operate across the LMS, unlocking automation, content generation, and adaptive learning workflows at scale. The goal is to make AI a first-class citizen within the platform rather than a bolt-on feature.",
+    status: "Active",
+    stakeholder: "Cypher Learning",
+    websiteUrl: "https://www.cypherlearning.com",
+    websiteLabel: "Visit Cypher Learning",
+    iconName: "FiCode",
+    color: "from-cyan-800/60 to-cyan-700/40",
+    features: [
+      "Model Context Protocol (MCP) integration for agent-to-platform communication",
+      "Agent Context Protocol (ACP) design for orchestrating multi-agent workflows",
+      "Building tools that allow agents to natively interact with the LMS",
+      "Tooling layer that exposes platform capabilities to AI agents",
+      "Tooling registry for managing and discovering agent capabilities",
+      "Automated content generation workflows",
+      "Adaptive learning path orchestration",
+      "Scalable agent execution framework",
+    ],
+    techStack: ["TypeScript", "Model Context Protocol", "Agent Context Protocol", "AI Agents", "LMS Platform", "API Architecture"],
+    overview: [
+      "Cypher Learning is a leading LMS platform serving organizations worldwide. The AI Tooling Layer introduces a native interface for AI agents to interact with the platform's core systems.",
+      "At the core of this work is the Model Context Protocol (MCP), which enables structured communication between AI agents and platform services. The Agent Context Protocol (ACP) provides orchestration for multi-agent workflows, allowing agents to collaborate on complex tasks like course creation and learner assessment.",
+      "The project focuses on building a robust tooling layer and registry that treats AI as infrastructure rather than a feature. This includes designing tools, defining the tooling surface, and enabling the platform to evolve with the rapidly changing AI landscape.",
+    ],
+    keyHighlights: [
+      "Leading the POC effort for AI tooling at an enterprise LMS",
+      "Implementing Model Context Protocol (MCP) for agent-to-platform communication",
+      "Designing Agent Context Protocol (ACP) for multi-agent orchestration",
+      "Building a tooling registry for agent capability discovery",
+      "Enabling AI-native workflows across the learning platform",
+    ],
+    year: "2026",
+  },
   "decypher": {
     id: "decypher",
     title: "DeCypher",
