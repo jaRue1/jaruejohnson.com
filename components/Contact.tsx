@@ -29,7 +29,7 @@ function Contact() {
               viewport={{ once: true }}
               className="font-titleFont text-lg text-textOrange font-semibold flex items-center tracking-wide"
             >
-              04. What's Next
+              05. What's Next
             </motion.p>
 
             <motion.h2
@@ -49,9 +49,10 @@ function Contact() {
               viewport={{ once: true }}
               className="max-w-[600px] text-center text-textLight leading-relaxed"
             >
-              Although I am not currently looking for any new opportunities, my
-              inbox is always open. Whether you have a questions or just want to
-              say hello, I will try my best to get back with you.
+              I'm always interested in connecting with fellow engineers,
+              founders, and anyone building something meaningful. Whether you
+              have a question, a project idea, or just want to say hello, my
+              inbox is open.
             </motion.p>
 
             {/* Email CTA */}
