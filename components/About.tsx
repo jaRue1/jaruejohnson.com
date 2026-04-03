@@ -19,6 +19,8 @@ function About() {
     { name: "ExpressJs", url: "https://expressjs.com/" },
     { name: "AWS", url: "https://aws.amazon.com/" },
     { name: "GCP", url: "https://cloud.google.com/gcp" },
+    { name: "Go", url: "https://go.dev/" },
+    { name: "React Native", url: "https://reactnative.dev/" },
     { name: "Ruby on Rails", url: "https://rubyonrails.org/" },
     { name: "Hotwire", url: "https://hotwired.dev/" },
     { name: "MySQL", url: "https://www.mysql.com/" },
@@ -102,12 +104,12 @@ function About() {
                 viewport={{ once: true }}
               >
                 <span className="text-textOrange">
-                  Hello, I'm Jarue "Rue" Johnson, born and raised in Florida, and
-                  I've been in love with technology since I was 16.
+                  Born and raised in Florida.
                 </span>{" "}
-                My dad, a engineer himself, was the one who introduced me to the
-                world of tech. Learning from him and many others, I've grown a lot,
-                not just as an engineer, but as a person too.
+                I got into technology early, inspired by my dad who was an engineer
+                himself. What started as curiosity turned into a career that's taken
+                me from writing my first lines of code to leading engineering teams
+                and architecting platforms used by real businesses.
               </motion.p>
 
               <motion.p
@@ -117,12 +119,13 @@ function About() {
                 viewport={{ once: true }}
               >
                 <span className="text-textOrange">
-                  What really makes me happy is using my tech skills to help others.
+                  I care about building software that solves real problems.
                 </span>{" "}
-                My love for helping people has been with me since I was a kid. Plus,
-                I'm a big fan of sports and music. What's really cool is that I get
-                to mix these interests with my love for coding, and that's where the
-                magic happens!
+                Not code for the sake of code, but products that move the needle
+                for the people who use them. Whether it's building out AI
+                tooling for Cypher Learning, shipping a full-stack product
+                serving real businesses, or a personal project I'm iterating on,
+                I'm most motivated when the work has tangible impact.
               </motion.p>
 
               <motion.p
@@ -132,13 +135,13 @@ function About() {
                 viewport={{ once: true }}
               >
                 <span className="text-textOrange">
-                  The awesome thing about coding is that there are no real limits.
+                  Today, my focus is on engineering, platform-level
+                  architecture, and building my own products.
                 </span>{" "}
-                You can do so much with it, and the only limits are the ones you put
-                on yourself! In short, I'm not just an engineer, but also someone
-                who loves to solve problems and dream big. I'm excited to keep
-                learning and growing, and to use technology to make a real
-                difference in the world.
+                I spend my time designing scalable systems, mentoring engineers,
+                and turning ideas into working software. Outside of work, I'm a
+                fan of sports, music, and exploring new technologies that push
+                the craft forward.
               </motion.p>
 
               <motion.p
