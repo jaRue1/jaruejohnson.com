@@ -18,11 +18,21 @@ const AllowDefaultDiagram = dynamic(
   () => import("../../components/diagrams/AllowDefaultDiagram"),
   { ssr: false, loading: () => <div className="my-8 h-[300px] rounded-2xl border border-green-900/50 bg-gray-900/40 animate-pulse" /> }
 )
+const CurrentLabDiagram = dynamic(
+  () => import("../../components/diagrams/CurrentLabDiagram"),
+  { ssr: false, loading: () => <div className="my-8 h-[560px] rounded-2xl border border-gray-700/40 bg-gray-900/40 animate-pulse" /> }
+)
+const FutureLabDiagram = dynamic(
+  () => import("../../components/diagrams/FutureLabDiagram"),
+  { ssr: false, loading: () => <div className="my-8 h-[700px] rounded-2xl border border-gray-700/40 bg-gray-900/40 animate-pulse" /> }
+)
 
 const diagramMap: Record<string, React.ComponentType> = {
   "network-topology": NetworkTopologyDiagram,
   "block-inter-vlan": BlockInterVlanDiagram,
   "allow-default-to-all": AllowDefaultDiagram,
+  "current-lab": CurrentLabDiagram,
+  "future-lab": FutureLabDiagram,
 }
 
 interface ArticlePageProps {
@@ -30,13 +40,12 @@ interface ArticlePageProps {
 }
 
 function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
-  // Split on both **bold** and `code` patterns
-  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/)
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/)
   return parts.map((part, j) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
         <strong key={`${keyPrefix}-${j}`} className="text-textOrange font-semibold">
-          {part.slice(2, -2)}
+          {renderInline(part.slice(2, -2), `${keyPrefix}-${j}-b`)}
         </strong>
       )
     }
@@ -49,6 +58,22 @@ function renderInline(text: string, keyPrefix: string): React.ReactNode[] {
           {part.slice(1, -1)}
         </code>
       )
+    }
+    if (part.startsWith("[") && part.includes("](")) {
+      const match = part.match(/\[([^\]]+)\]\(([^)]+)\)/)
+      if (match) {
+        return (
+          <a
+            key={`${keyPrefix}-${j}`}
+            href={match[2]}
+            target={match[2].startsWith("http") ? "_blank" : undefined}
+            rel={match[2].startsWith("http") ? "noopener noreferrer" : undefined}
+            className="text-textOrange hover:underline transition-colors duration-300"
+          >
+            {match[1]}
+          </a>
+        )
+      }
     }
     return part
   })
@@ -91,6 +116,65 @@ function renderContent(content: string) {
             {codeLines.join("\n")}
           </code>
         </pre>
+      )
+      continue
+    }
+
+    // Tables
+    if (line.startsWith("|")) {
+      const tableLines: string[] = []
+      while (i < lines.length && lines[i].startsWith("|")) {
+        tableLines.push(lines[i])
+        i++
+      }
+      const headers = tableLines[0]
+        .split("|")
+        .filter((c) => c.trim())
+        .map((c) => c.trim())
+      const rows = tableLines
+        .slice(2)
+        .map((row) =>
+          row
+            .split("|")
+            .filter((c) => c.trim())
+            .map((c) => c.trim())
+        )
+      elements.push(
+        <div key={`table-${i}`} className="my-6 overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="border-b border-gray-700/50 bg-gray-800/60">
+                {headers.map((h, j) => (
+                  <th
+                    key={j}
+                    className="px-4 py-3 text-left text-sm font-semibold text-textOrange"
+                  >
+                    {renderInline(h, `th-${i}-${j}`)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, ri) => (
+                <tr
+                  key={ri}
+                  className={`border-b border-gray-700/30 ${
+                    ri % 2 === 0 ? "bg-gray-900/40" : "bg-gray-900/20"
+                  }`}
+                >
+                  {row.map((cell, ci) => (
+                    <td
+                      key={ci}
+                      className="px-4 py-3 text-sm text-textLight"
+                    >
+                      {renderInline(cell, `td-${i}-${ri}-${ci}`)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )
       continue
     }

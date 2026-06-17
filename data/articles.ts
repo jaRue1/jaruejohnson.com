@@ -11,6 +11,254 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    title: "Writing Code Isn't Enough Anymore, Part II: I Bought a DGX Spark",
+    slug: "i-bought-an-nvidia-dgx-spark",
+    date: "2026-06-17",
+    excerpt:
+      "128GB of unified memory, a Grace Blackwell superchip, and the honest truth about running 70B models in your apartment.",
+    mediumUrl: "https://medium.com/@jaruejohnson/writing-code-isnt-enough-anymore-part-ii-i-bought-a-dgx-spark-66ef8b8da796",
+    content: `"A lot of people are selling dreams about local AI. I wanted to find out what's real."
+
+I've been watching the local AI space closely for the past year. Every week there's a new post about someone running models locally like it's trivial. "Just run Llama on your Mac!" "Local AI is free!" And yeah, technically you can. But nobody talks about the 4.7 tokens per second. Nobody talks about the memory ceiling. Nobody shows you the benchmarks that don't match the marketing.
+
+This is the article where I show the receipts.
+
+I'd been running AI agents through OpenClaw against cloud APIs for months. The setup worked great until April 2026, when [Anthropic](https://anthropic.com) changed their policy to block third-party harnesses from Claude Pro and Max subscriptions. That killed my workflow overnight. But the policy change was just the push. The real motivation was simpler: I wanted to know the truth about local inference. What actually works. What doesn't. Where the limits are.
+
+So I bought a $5,000 [NVIDIA](https://nvidia.com) DGX Spark and plugged it into my home lab network. I pulled the most popular open models, ran real workloads, and measured what actually happened. Some of it was great. Some of it was humbling. All of it was real.
+
+If you haven't read the first article in this series, [Writing Code Isn't Enough Anymore](/blog/writing-code-isnt-enough-anymore/), that covers how I built the segmented network this machine sits on. This article covers what I put ON that network: the AI hardware, the models, and the reality of running local inference.
+
+## The Thesis
+
+Running models locally isn't free: it's a different kind of cost. Hardware upfront instead of tokens per month. The question is whether it's worth it, and the answer is more nuanced than the hype suggests.
+
+The DGX Spark isn't replacing my cloud AI subscriptions. I'm paying $420/month across [Cursor](https://cursor.com) Pro, [Claude Code](https://anthropic.com) Max, and Claude Pro. Those tools work. They're fast. They're reliable. The Spark is adding a capability: local inference that I control, on hardware I own. Whether that capability is production-ready is exactly what this article explores.
+
+## The Hardware: What You're Actually Getting
+
+| Component | Spec |
+|-----------|------|
+| GPU | NVIDIA GB10 Grace Blackwell Superchip |
+| Memory | 128GB unified LPDDR5X (shared CPU/GPU) |
+| Storage | 4TB NVMe Gen5 SSD |
+| CPU | ARM64 (Grace) |
+| OS | Ubuntu 24.04 (Noble) |
+| Pre-installed | Python 3.12, Docker 29.2.1, CUDA 13.0, Claude Code |
+| Price | ~$4,999 ([PNY](https://pny.com) Founders Edition) |
+
+The key phrase here is "unified memory." The CPU and GPU share the same 128GB pool. This is different from datacenter GPUs like the [H100](https://nvidia.com/en-us/data-center/h100/), where the GPU has its own dedicated HBM. The upside: no copying data between CPU and GPU memory. The downside: that 128GB is ALL you get for everything. The model, the OS, your tools, and inference overhead all share the same pool.
+
+## AI Models: A Crash Course for Software Engineers
+
+If you're a software engineer who's curious about local AI but hasn't tried it yet, this section is for you. I'm going to explain the fundamentals using programming analogies, because that's the mental model that actually stuck for me.
+
+**What is a model?** A massive file of numbers called parameters or weights, learned during training. A 70 billion parameter model is literally a file with 70 billion tuned numbers. Running it means loading those numbers into memory and doing matrix math against them for every prompt. That's it. No magic. Just math at scale.
+
+**Tokens.** Models don't read words. They read tokens, which are chunks of text, roughly three-quarters of a word. "cat" is 1 token. "understanding" is 2 tokens ("under" + "standing"). Code tokenizes less efficiently than prose, which matters because everything in AI is measured in tokens: context windows, input, output, speed.
+
+**Context window.** How many tokens the model can see at once. Think of it as working memory. A 128K context window means roughly 96,000 words in a single conversation. Anything outside the window doesn't exist to the model. It's gone.
+
+**Quantization.** This is where it gets practical. Quantization reduces the precision of each parameter to shrink the memory footprint. Think Java's \`double\` (64-bit) versus \`float\` (32-bit). Same concept, applied to model weights:
+
+- **FP16 (16-bit):** ~2 bytes per parameter. Essentially lossless quality.
+- **INT8 (8-bit):** ~1 byte per parameter. Very close to original quality.
+- **INT4 (4-bit):** ~0.5 bytes per parameter. Noticeable quality loss on reasoning tasks.
+
+The math is simple: parameter count multiplied by bytes per parameter equals memory needed. So 70B parameters at INT8 (1 byte each) equals roughly 70GB. But real-world [Ollama](https://ollama.com) pulls use efficient GGUF quantization, so the actual \`llama3.3:70b\` Q8 pull was only 42GB on disk.
+
+**Ollama.** This is the runtime that serves models. It is NOT a model itself. Ollama is to models what Node.js is to Express: the runtime that loads and serves them. You can download multiple models to disk, but only run one large model in memory at a time. Swapping means unloading from memory and reloading from disk, roughly 30 to 60 seconds. No re-downloading required.
+
+**Mixture of Experts (MoE).** A single model with internal subnetworks that only partially activate per token. A 120B MoE model with 30B active parameters runs at 30B speed but needs the full 120B loaded in memory. It's one model, not multiple. This matters when you're calculating memory requirements.
+
+## The Network: Where the Spark Lives
+
+I covered the full network build in [the previous article](/blog/writing-code-isnt-enough-anymore/): three VLANs, inter-VLAN traffic blocked at the firewall, wired-only isolation for sensitive workloads. The Spark goes on Sentinel (VLAN 30), plugged directly into Port 4 of the [USW Enterprise 8 PoE](https://ui.com) at 2.5 GbE. WiFi disabled, fixed IP: 10.10.30.100. It sits next to the Mac Mini (10.10.30.244) which runs OpenClaw. The only path to these machines from the rest of my network is through [Tailscale](https://tailscale.com).
+
+## The Setup: From Unboxing to First Inference
+
+**1. Physical Setup and VLAN Assignment**
+
+Plug into Port 4 of the switch. Skip WiFi during the DGX initial setup wizard. In the UniFi controller: go to the port manager, select Port 4, set Virtual Network Override to Sentinel. Assign fixed IP 10.10.30.100. Reboot to pick up the new address.
+
+Then kill WiFi permanently:
+
+\`\`\`bash
+nmcli radio wifi off
+\`\`\`
+
+**2. Ollama Network Configuration**
+
+By default, Ollama only listens on localhost. To make it accessible from other machines on the network:
+
+\`\`\`bash
+sudo mkdir -p /etc/systemd/system/ollama.service.d
+sudo tee /etc/systemd/system/ollama.service.d/override.conf > /dev/null <<EOF
+[Service]
+Environment="OLLAMA_HOST=0.0.0.0"
+Environment="OLLAMA_KEEP_ALIVE=24h"
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+\`\`\`
+
+Now Ollama is accessible at http://10.10.30.100:11434 from any machine on the Sentinel network. The \`OLLAMA_KEEP_ALIVE=24h\` setting keeps the model loaded in memory for 24 hours instead of unloading after 5 minutes of inactivity. Loading a 42GB model takes 30 to 60 seconds. You don't want that happening between every prompt.
+
+**3. Tailscale**
+
+\`\`\`bash
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+\`\`\`
+
+Tailscale IP: 100.113.104.82. Now the Spark is reachable from ANY machine on the Tailscale mesh, not just local Sentinel devices. My laptop on Tank, my phone on Zion, a machine at a coffee shop: all can reach the Spark securely through the WireGuard tunnel.
+
+**A note on open source alternatives.** Tailscale works well, but it's not open source. The more I build critical infrastructure on proprietary tools, the more I think about what happens if the company changes their terms. [NetBird](https://netbird.io) is the open source alternative I'm migrating to: [WireGuard](https://wireguard.com)-based mesh networking, peer-to-peer connections, and a self-hosted coordination server. Being able to see the code, audit it, fork it if you need to, and self-host the control plane is the right foundation when you're building something you depend on daily.
+
+**4. Dev Tool Bootstrap**
+
+The Spark runs [Ubuntu](https://ubuntu.com) 24.04 on ARM64. That architecture matters because some tools need aarch64-specific builds. Here's what I installed:
+
+- nvm with Node.js v24 LTS
+- pyenv with Python 3.12
+- rbenv with Ruby 3.3
+- Go 1.23.4 (ARM64 binary)
+- AWS CLI (ARM64)
+- Terraform
+- Hermes AI, Codex CLI, OpenCode
+
+The architecture decision: keep the Spark lean. Its primary job is inference. CLI tools and harnesses are fine because they're lightweight when idle. No heavy IDEs. The MacBook stays the dev workstation. The Mac Mini runs OpenClaw. The Spark runs the model. Each machine has a job.
+
+**5. Pull the Models**
+
+\`\`\`bash
+ollama pull llama3.3:70b      # Meta Llama 3.3, 42GB on disk (Q8)
+ollama pull qwen3:32b          # Alibaba Qwen3, 20GB on disk
+\`\`\`
+
+Both fit on the 4TB SSD simultaneously.
+
+**6. Verify from the Mac Mini**
+
+\`\`\`bash
+curl http://10.10.30.100:11434
+# "Ollama is running"
+
+curl -s http://10.10.30.100:11434/api/generate -d '{
+  "model": "qwen3:32b",
+  "prompt": "Say hello from the DGX Spark",
+  "stream": false
+}'
+\`\`\`
+
+First response came back in about 8 seconds. The Spark was live.
+
+## The Reality Check: Performance Benchmarks
+
+This is the most important section of this article. Here are the real numbers.
+
+| Scenario | Model | tok/s |
+|----------|-------|-------|
+| Solo | qwen3:32b | ~10 tok/s |
+| Solo | llama3.3:70b Q8 | ~4.7 tok/s |
+| Solo | llama3.3:70b Q4 | ~4.5 tok/s |
+| Both loaded | memory exceeded | degraded |
+
+My target for production agent workflows is 30 to 50 tok/s. I'm at 10 tok/s on the best case. That's a 3x to 5x gap.
+
+**Why the gap exists.** The GB10 uses LPDDR5X unified memory with roughly 546 GB/s bandwidth. That's not HBM. For a 32B Q4 model (about 20GB in memory), the theoretical maximum is around 27 tok/s. Getting 10 means I'm running at roughly 37% of theoretical. There's room to optimize, but there's a hard ceiling set by the memory bandwidth.
+
+**What this means in practice.** At 10 tok/s, a 200-token response takes 20 seconds. For interactive use, that's noticeable. For an agent loop with 500 steps, that's roughly 3 hours. For overnight batch work like code review, refactoring passes, or test generation, that's acceptable. For real-time interactive coding where you need sub-second responses, it's not there yet.
+
+**The memory wall.** I tried loading both models simultaneously. Combined memory: roughly 133GB. The 128GB pool couldn't hold both. Performance collapsed as the system started swapping. One model at a time. Period.
+
+**Optimizations still to explore:** reduced context window (\`num_ctx: 8192\` instead of 131K), \`OLLAMA_FLASH_ATTENTION=1\`, smaller and faster models like \`qwen3:14b\`, running [llama.cpp](https://github.com/ggerganov/llama.cpp) directly to bypass Ollama overhead, and further quantization tuning.
+
+## Should You Docker Your Inference Server?
+
+No.
+
+The Spark is a dedicated inference machine chasing a performance target it hasn't hit yet. [Docker](https://docker.com) adds overhead. Even small overhead matters when every bit of throughput counts. Native Ollama has direct GPU and memory access. There's nothing to isolate from on a single-purpose machine.
+
+Docker makes sense for services around Ollama: web UIs, vector databases, API gateways. Not for the inference layer itself. Keep the model serving as close to the metal as possible until you hit your performance targets. Then you can afford the convenience tax.
+
+## OpenClaw: Pointing the Agent at Local Inference
+
+Here's the OpenClaw configuration that connects to the Spark:
+
+\`\`\`json5
+{
+  models: {
+    mode: "merge",
+    providers: {
+      ollama: {
+        baseUrl: "http://10.10.30.100:11434/v1",
+        api: "openai-completions",
+        injectNumCtxForOpenAICompat: true,
+        models: [
+          {
+            id: "qwen3:32b",
+            name: "Qwen3 32B (Spark)",
+            contextWindow: 32768,
+            maxTokens: 4096,
+          },
+          {
+            id: "llama3.3:70b",
+            name: "Llama 3.3 70B (Spark)",
+            contextWindow: 128000,
+            maxTokens: 4096,
+          },
+        ],
+      },
+    },
+  },
+}
+\`\`\`
+
+Two things to note. First, append \`/v1\` to the Ollama URL for the OpenAI-compatible endpoint. Without it, the client can't communicate with Ollama. Second, set \`injectNumCtxForOpenAICompat: true\` or Ollama silently ignores your context window settings and uses its default.
+
+This is the full circle moment. The same agent framework that was running against cloud APIs is now pointing at hardware in my apartment.
+
+I want to give [OpenCode](https://opencode.ai) a serious shoutout here. Their tool was pivotal in validating everything in this article. For $5 the first month ($10/month after), you get a cohesive AI coding harness that lets you test different open models side by side. I ran the same prompts through Qwen3.7 Max, Kimi K2.7 Code, and even Big Pickle to compare against my local Spark results. If you're a developer who wants to get into AI, start with OpenCode. Not Claude, not Codex. OpenCode. You learn so much more because you're exposed to the full range of open models and how they actually behave. Full disclosure: this isn't a sponsorship. I'm not affiliated with OpenCode in any way. I just think their product is genuinely great.
+
+## What's Next
+
+The Spark is live, but the home office isn't done. Three more pieces complete the picture. Here's where things stand today:
+
+[DIAGRAM:current-lab]
+
+And here's what the full build looks like once everything is in place:
+
+[DIAGRAM:future-lab]
+
+**Mini Rack.** A MiniRack8 from [MiniRackHQ.com](https://minirackhq.com) ($1,500). This is a 10" server rack that ships with a Raspberry Pi 5 (8GB RAM, 512GB NVMe, PoE+ Hat), a 12-port patch panel, its own network switch, an LCD touchscreen, a 4-outlet PDU, 10 Cat6 cables, and a toolkit. It goes right next to my existing network rack. The Pi handles lightweight infrastructure services: self-hosted NetBird (replacing Tailscale), monitoring, DNS, and whatever else needs to run 24/7 without burning compute on the Spark or Mac Mini.
+
+**Laptop Rack.** Organizes the three worker machines (Linux laptop, Windows HP Omen, old MacBook Pro) into one clean spot. All three are on the Tailscale mesh, all three can run agent harnesses pointed at the Spark. Right now they're scattered around the office. That changes.
+
+**[ZimaCube](https://zimaspace.com) 2 NAS (~$1,182).** This is the missing storage layer. 8TB usable in RAID 1 (two mirrored WD Red Plus drives), 10GbE networking, Thunderbolt 4, running [ZimaOS](https://zimaspace.com) with Docker and SMB built in. Every machine on the network mounts it as a shared drive. Obsidian vaults, project files, model snapshots, media, backups: all centralized. A rclone container pushes critical files to S3 with a lifecycle rule that tiers them down to Glacier Deep Archive after 30 days. Cloud backup cost: roughly $1 to $3 per month.
+
+Once those three pieces are in place, the home office has every layer covered: network (UniFi), compute (DGX Spark + Mac Mini), storage (ZimaCube), infrastructure automation (Raspberry Pi), mesh connectivity (NetBird), and AI agents (OpenClaw + harnesses on every machine).
+
+Beyond the hardware, here's what I'm working on:
+
+- **Performance tuning.** Context window reduction, flash attention, quantization experiments. Target: 30 tok/s on qwen3:32b. I'll publish the results.
+- **Second DGX Spark.** Two Sparks linked via ConnectX-7 DAC cable gives 256GB combined memory. That opens the door to Qwen3-Coder 480B or two concurrent 70B workstreams.
+- **Model comparisons.** Running the same prompts against hosted open models and local models side by side. I want to quantify exactly what you gain and lose running locally.
+- **More models.** The open model space moves fast. New releases every few weeks. I'll keep pulling, testing, and sharing what actually performs.
+
+## The Honest Answer
+
+Is the DGX Spark worth $5,000? For learning, absolutely. For overnight batch work, probably. For replacing cloud APIs in real-time workflows, not yet. 10 tok/s isn't 50. But "not yet" is a better answer than "I don't know," and that's what running your own hardware gives you.
+
+I plugged it in, ran the models, and measured. The numbers are in this article because I wish someone had published theirs before I bought mine. Real hardware, real limits, real data. That's all I wanted when I started looking into local inference, and it's what I hope this gives you.
+
+The engineers who will thrive in the next five years aren't just the ones who can write code. They're the ones who understand the full stack: the network it runs on, the hardware underneath, and the models on top of it. You don't need to master it all on day one. You just need to start building.
+
+If you've got questions about the setup, want to compare benchmarks, or want to tell me I'm wrong about something, reach out. I'm always happy to talk shop.`,
+    tags: ["AI", "Infrastructure", "Home Lab", "DGX Spark", "Local Inference"],
+    readTime: "12 min read",
+  },
+  {
     title: "Writing Code Isn't Enough Anymore: Build Skills That Always Mattered",
     slug: "writing-code-isnt-enough-anymore",
     date: "2026-03-12",
@@ -201,9 +449,7 @@ The network is live and segmented, but there's more to build:
 - IDS/IPS deep dive: what the Cloud Gateway Max actually catches and how to read the logs
 - DNS filtering: content-level security policies per VLAN
 
-If anyone finds this useful, then all of this work was worth it. Thank you for taking the time out of your day to read this, I really appreciate it.
-
-If you've got questions about the setup or want to compare notes on your own lab, drop a comment.`,
+Thank you for taking the time to read this. If you've got questions about the setup or want to compare notes on your own lab, drop a comment.`,
     mediumUrl: "https://medium.com/@jaruejohnson",
     tags: ["Networking", "Infrastructure", "AI", "Home Lab"],
     readTime: "9 min read",
