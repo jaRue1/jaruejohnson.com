@@ -9,7 +9,234 @@ export interface Article {
   readTime: string
 }
 
-export const articles: Article[] = [
+export const articles: Article[
+  {
+    title: "How an Experienced Engineer Reads a New Codebase",
+    slug: "how-an-experienced-engineer-reads-a-new-codebase",
+    date: "2026-08-16",
+    excerpt:
+      "I joined a company running a 20-year-old Ruby on Rails LMS. Thousands of files, years of migrations, and patterns that predate half the team. Here is how I built context without drowning in it.",
+    content: `"Your manager says 'ship something this week.' You've been on the team for a few days. Most engineers start opening files one by one. That's why they're lost for a month."
+
+Earlier this year I joined Cypher Learning as a staff engineer. The platform is a learning management system that's been in production for roughly 20 years. That's 20 years of Rails migrations. 20 years of contributors. 20 years of patterns that made sense at the time and now coexist with patterns that replaced them. The codebase is large, and it carries the full weight of its history.
+
+I didn't have months to absorb it by osmosis. I needed to build context fast, figure out where the important logic lived, and start contributing without breaking things that had been working since before I got there.
+
+So I did what I always do: I interrogated the codebase with Git.
+
+Git isn't just version control. It's an X-ray machine. The commit history tells you where the action is, who knows what, and which files actually matter. Most of any large repo is dead weight for your first week. You need to find the 10% that runs the business, and you need to find it fast.
+
+I use a framework I call HEAT. Four steps, each one building on the last. By the end you'll have a working mental model of any codebase, and you won't have read more than a fraction of it.
+
+## H: Hotspots
+
+Every codebase has hotspots: files that get changed constantly. These are where the real business logic lives. They're where bugs keep showing up. They're where features get added. And they're almost never the files you'd guess by looking at the directory tree.
+
+One command ranks every file by how often it's been changed:
+
+\`\`\`bash
+git log --pretty=format: --name-only | sort | uniq -c | sort -rn | head -20
+\`\`\`
+
+That's it. One line. It prints every file that's ever been committed, counts duplicates, sorts by frequency, and shows you the top 20. Run it on any repo you work in right now and look at the output. I guarantee at least half of those files are ones you interact with daily, and a few will surprise you.
+
+To give you a feel for what this looks like, here's a representative example of the kind of output you'd see on a large Rails LMS (these aren't real numbers from any production codebase, just a realistic illustration):
+
+\`\`\`
+    847 app/models/user.rb
+    612 app/models/course.rb
+    498 config/routes.rb
+    431 app/controllers/courses_controller.rb
+    387 db/schema.rb
+    294 app/models/enrollment.rb
+    256 app/models/assignment.rb
+    201 Gemfile.lock
+    189 app/controllers/api/v1/users_controller.rb
+\`\`\`
+
+In a project like this, the User model would be touched hundreds of times over the project's life. That file isn't just a model. It's the center of gravity for the entire platform. Every feature the LMS has ever shipped, from enrollment to grading to notifications, touches the User model. Start there.
+
+The files at the bottom of the list, the ones with two or three commits? Ignore them. They were written once and nobody's had a reason to touch them since. They work. Move on.
+
+On a 20-year-old codebase, the full history can be noisy. You can scope to the last 300 commits to see what's hot right now:
+
+\`\`\`bash
+git log --format='%H' -- . | head -300 | xargs -I{} git diff-tree --no-commit-id --name-only -r {} | sort | uniq -c | sort -rn | head -20
+\`\`\`
+
+Same idea, tighter window. This shows you what the current team is working on versus what was active five years ago. On a long-lived codebase, the difference is significant.
+
+## E: Entry Points
+
+Hotspots tell you where the action is. Entry points tell you where the action starts.
+
+Every request that hits your application comes in through a door: a route, a controller action, a background job, a webhook handler. Find those doors and you understand the skeleton of the entire system.
+
+For a Rails app, the first thing you read is the routes file:
+
+\`\`\`bash
+cat config/routes.rb
+\`\`\`
+
+On a 20-year-old LMS, that routes file might be over a thousand lines. Namespaced API routes, admin panels, legacy redirects, and mounted engines all stacked on top of each other. Don't try to memorize it. Skim it and look for the shape: how many namespaces exist, whether the API is versioned, and which resources have the most custom routes.
+
+Then narrow down. If the User model is your hotspot, find every route that touches it:
+
+\`\`\`bash
+grep -n "users\|sessions\|registrations\|passwords" config/routes.rb
+\`\`\`
+
+For controllers specifically:
+
+\`\`\`bash
+grep -rn "def create\|def update\|def destroy" app/controllers/ --include="*.rb" | head -30
+\`\`\`
+
+Now you have a map of every door into the system. Combine this with the hotspots: if \`user.rb\` is your number one hotspot, find the controller actions that touch it. That's where you start reading, not at the top of the directory tree.
+
+## The Legacy Gotchas
+
+This is where a 20-year-old codebase gets interesting. The patterns you find in the hotspots aren't always the patterns you'd expect.
+
+**STI (Single Table Inheritance).** In a long-lived Rails app, you'll find models that inherit from other models using the same database table. A \`type\` column determines which class gets instantiated. It's a Rails convention that works until it doesn't, and on a large codebase you can find yourself tracing a method call into a parent class, then a concern, then a module, then back to a child class that overrides it.
+
+\`\`\`bash
+grep -rn "< Application" app/models/ --include="*.rb" | head -20
+\`\`\`
+
+That shows you which models use STI. Knowing this upfront saves you from the confusion of reading a controller that references a model you can't find a table for.
+
+**Concerns and modules stacked deep.** When a model has been the center of gravity for 20 years, it accumulates behavior. A User model on a mature LMS might include a dozen or more concerns. Imagine something like this:
+
+\`\`\`ruby
+class User < ApplicationRecord
+  include Authenticatable
+  include Enrollable
+  include Notifiable
+  include Gradeable
+  include Reportable
+end
+\`\`\`
+
+Each concern adds methods, callbacks, scopes, and validations. The model file itself might be small, but the effective class is hundreds of methods spread across dozens of files. Running \`grep -rn "def " app/models/concerns/\` gives you the real surface area.
+
+**Raw SQL and hand-rolled queries.** Older parts of the codebase might bypass ActiveRecord entirely for performance-critical paths:
+
+\`\`\`bash
+grep -rn "execute\|find_by_sql\|connection.select" app/ --include="*.rb" | wc -l
+\`\`\`
+
+That count tells you how much of the data layer lives outside the ORM. These queries won't show up in model associations or scopes. They're invisible unless you look for them.
+
+**Migrations that tell a story.** On a 20-year-old codebase, the migration history is a timeline of every business decision the product ever made:
+
+\`\`\`bash
+ls db/migrate/ | wc -l
+ls db/migrate/ | tail -20
+\`\`\`
+
+Read the last 20 migration filenames. They tell you what the team is building right now. Read the first 20, and you'll understand the original data model before years of evolution changed it.
+
+## A: One Action, End to End
+
+This is the step that builds your mental model faster than anything else.
+
+Pick one action a user performs. One button click. One form submission. One API call. Then follow it from the route to the controller to the model to the database and back.
+
+Don't try to understand the whole system. Follow one path. On a large LMS, I'd pick something like "student submits an assignment":
+
+1. Find the route: \`POST /courses/:course_id/assignments/:id/submissions\`
+2. Open the controller: see what service or model method it calls.
+3. Open the model: see what callbacks fire, what validations run, what jobs get enqueued.
+4. Check the schema: what tables does this touch? What columns matter?
+5. Trace the response back up: what gets returned to the user?
+
+That single path teaches you the conventions of the codebase: how errors are handled, where validation lives, how the ORM is used, what patterns the team follows for async work. On a legacy codebase, this is where you discover the real conventions versus the documented ones. The patterns in the code are the truth. The wiki might be three years out of date.
+
+One complete trace is worth ten partial explorations. The map builds itself once you have one full route from entry to database and back.
+
+## T: Tests
+
+Tests are the most underrated documentation in any codebase, and on a legacy codebase they're also the most honest.
+
+\`\`\`bash
+find . -name "*_spec.rb" -o -name "*_test.rb" | wc -l
+find . -name "*_spec.rb" -path "*/models/*" | head -20
+\`\`\`
+
+Start with the tests for the hotspot files. If \`user.rb\` is your top hotspot, find \`user_spec.rb\` and read it. On an LMS, you'd expect to see test names like these:
+
+\`\`\`
+it "enrolls a student in a course"
+it "prevents duplicate enrollments"
+it "deactivates user without destroying records"
+it "cascades notification preferences on role change"
+it "scopes visible courses by enrollment status"
+\`\`\`
+
+That's five lines, and you already know more about the kinds of things a User model handles than you would from reading 500 lines of implementation. Tests document behavior in a way that comments can't, because tests actually run. If they pass, the behavior they describe is real.
+
+If a hotspot file has no tests, that's also information. On a 20-year-old codebase, untested hotspots are where the risk concentrates. That's good to know before you start changing things.
+
+## Bonus: Who Wrote This?
+
+Here's the one Git command I run that has nothing to do with code and everything to do with getting unblocked:
+
+\`\`\`bash
+git shortlog -sn -- app/models/user.rb
+\`\`\`
+
+The output gives you a ranked list of contributors. On any long-lived project, you'll see something like:
+
+\`\`\`
+    142  developer-a
+     87  developer-b
+     34  developer-c
+      6  dependabot[bot]
+\`\`\`
+
+The top contributor has 142 commits on that file. That person isn't just a contributor; they're the institutional knowledge for it. When you have a question about user behavior, that's who you talk to. Not the person with the most Slack messages. The person who wrote the code.
+
+On a team where people have been around for years, this command is even more powerful. You can map entire subsystems to owners:
+
+\`\`\`bash
+git shortlog -sn -- app/models/concerns/enrollable.rb
+git shortlog -sn -- app/services/grading/
+git shortlog -sn -- lib/integrations/
+\`\`\`
+
+Three commands, and you have a social map of the codebase. You know exactly who to ask about enrollment logic, grading services, and third-party integrations.
+
+## Putting It All Together
+
+Here's the full sequence. This is exactly what I ran during my first week at Cypher:
+
+1. Run the hotspot command. Identify the top 10 files. Five minutes.
+2. Open \`config/routes.rb\`. Map the namespaces, the API versions, and the most active resources. Ten minutes.
+3. Pick the highest-traffic route that touches a hotspot. Follow it end to end. Thirty minutes.
+4. Read the tests for the files you just traced. Fifteen minutes.
+5. Run \`git shortlog\` on the folders you explored. Two minutes.
+6. Check for legacy patterns: STI models, concern stacking, raw SQL counts. Ten minutes.
+
+Under ninety minutes, and you have a working mental model. You know where the business logic lives, how requests flow through the system, what legacy patterns to watch for, and who to ask when you get stuck.
+
+Compare that to the alternative: opening files randomly for three days, building a vague sense of the codebase, and still not being confident enough to make a change.
+
+## Why This Works
+
+Not all code is equal. In any codebase, a small fraction of the files contain the vast majority of the business logic. The rest is boilerplate, configuration, one-time setup, or code that was written once and forgotten.
+
+On a 20-year-old LMS, this is even more true. The codebase might have thousands of files, but the core behavior lives in a few dozen models, a few dozen controllers, and a handful of service objects. The rest is scaffolding.
+
+Git history is the filter. It tells you what the team actually cares about, where the complexity lives, and what's been stable long enough to ignore. You're not reading the codebase. You're reading the story of the codebase, and on a 20-year-old project, that story has a lot of chapters. HEAT helps you skip to the ones that matter.
+
+Most codebases are 80% noise and 20% signal. HEAT finds the signal.
+
+If you've got your own tricks for reading a legacy codebase, or you want to compare notes on navigating a long-lived project, reach out. I'm always happy to talk shop.`,
+    tags: ["Git", "Developer Productivity", "Legacy Code", "Ruby on Rails", "Engineering"],
+    readTime: "9 min read",
+  },
+] = [
   {
     title: "What Is a Forward-Deployed Engineer?",
     slug: "what-is-a-forward-deployed-engineer",
