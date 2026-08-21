@@ -9,7 +9,114 @@ export interface Article {
   readTime: string
 }
 
-export const articles: Article[
+export const articles: Article[] = [
+  {
+    title: "Writing Code Forces You to Be Honest",
+    slug: "writing-code-forces-you-to-be-honest",
+    date: "2026-08-21",
+    excerpt:
+      "Reading code lets you skim past the hard parts and nod along. Writing it makes you confront every gap in your understanding.",
+    content: `"You don't really understand something until you have to build it. Reading gives you the illusion. Writing takes it away."
+
+I've been thinking about this for a while, and it keeps proving itself true in ways I don't expect. There's a fundamental difference between reading code and writing code, and it's not about skill level or experience. It's about honesty.
+
+Reading code lets you lie to yourself. Writing code won't.
+
+## The Illusion of Understanding
+
+You open a pull request. You scan the service layer. You see a function that queries the database, maps the results, and returns them. You nod. Makes sense. You move on.
+
+But you didn't actually understand it. You understood the shape of it. You recognized the pattern. Your brain filled in the gaps with "yeah, that's probably how I'd do it" and kept scrolling. That's not understanding. That's pattern matching dressed up as comprehension.
+
+I catch myself doing this constantly. I'll read through a module and think I get it, and then three days later I need to modify it and realize I missed half the picture. The error handling I glossed over? It's doing something subtle. The naming I didn't question? It's misleading. The edge case buried in a conditional? I skipped right past it because the happy path made sense and my brain was satisfied.
+
+Reading code is a passive act. Your brain is optimized to conserve energy, and "close enough" feels the same as "exactly right" when you're just scanning.
+
+## Writing Forces Every Decision
+
+The moment you open a blank file and start typing, the lying stops. You can't skim past a function signature when you're the one writing it. You have to decide:
+
+- What does this function accept? What types? Are they nullable?
+- What does it return? What happens when there's nothing to return?
+- What's the name? Not "processData." What does it actually do?
+- What fails? What do you do when it fails?
+
+Every line is a commitment. Every variable name is a claim about what that value represents. Every conditional is a statement about what's possible and what isn't. You can't wave your hands at any of it.
+
+Here's a simple example. You're writing a function that looks up a user by email:
+
+\`\`\`typescript
+async function findUserByEmail(email: string): Promise<User | null> {
+  const normalized = email.trim().toLowerCase()
+  if (!normalized.includes("@")) {
+    return null
+  }
+  return this.userRepository.findOne({ where: { email: normalized } })
+}
+\`\`\`
+
+Reading that, you nod. Writing it, you had to answer six questions: Do I trim? Do I lowercase? What counts as invalid? Do I throw or return null? Do I normalize before or after validation? Does the repository handle its own errors or do I wrap it?
+
+None of those decisions are visible when you're reading. All of them are mandatory when you're writing. That's the honesty. The code forces you to commit to an answer for every question the problem contains, including the ones you didn't know you were supposed to ask.
+
+## The Gap Between "I Get It" and "I Can Build It"
+
+Early in my career, I thought understanding and building were the same skill. They're not. They're not even close.
+
+"I get it conceptually" means you can follow someone else's logic. "I can build it" means you've internalized the problem deeply enough to produce your own logic, handle the edges they handled, and discover the edges they missed. Those are two completely different levels of engagement with the same problem.
+
+I've seen this play out in interviews, in onboarding, in code reviews. Someone says "yeah, I understand how the auth middleware works." Then you ask them to write a guard that checks a custom permission scope, and they stall. Not because they're bad engineers. Because reading the existing middleware gave them a map, and writing a new one requires navigating the actual terrain.
+
+\`\`\`typescript
+// Reading this feels like understanding:
+@UseGuards(RolesGuard)
+@Roles('admin')
+async deleteUser() { ... }
+
+// Writing this requires understanding:
+@Injectable()
+export class ScopedPermissionGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean {
+    const requiredScopes = this.reflector.get<string[]>('scopes', context.getHandler())
+    const userScopes = context.switchToHttp().getRequest().user?.scopes ?? []
+    return requiredScopes.every(scope => userScopes.includes(scope))
+  }
+}
+\`\`\`
+
+The map is not the territory. Reading gives you the map. Writing makes you walk the ground.
+
+## Code Review Is Where Writing Pays Off
+
+This is the part that surprises people. Code review gets dramatically better when you write regularly, because writing trains you to spot the decisions that reading lets you skip.
+
+When I review a pull request after spending weeks writing code in the same area, I see things I'd never catch otherwise. I notice when an error is swallowed instead of propagated, because I had to make that same decision last week. I notice when a variable name is ambiguous, because I struggled with naming the same concept. I notice when a function does two things, because I had to split one apart myself.
+
+Writing gives you a library of decisions you've already made. Code review is where you compare someone else's decisions to yours and ask: did they see the same problem I did? Did they handle the thing I almost missed?
+
+You can't do that if you've only been reading. You don't have the reference points.
+
+## This Isn't About AI
+
+I want to be clear: this isn't an argument against AI coding agents or LLMs. I use them daily. They're part of my workflow and they make me faster.
+
+But here's what doesn't change: the engineer who reviews and ships the code must understand it deeply enough to defend every line. If an agent writes a function and you merge it, you own it. When it breaks at 2am, "the AI wrote it" isn't an answer. You need to know why that function handles errors the way it does, why it chose that data structure, why the edge case is covered or isn't.
+
+The agent can write the first draft. It can scaffold the boilerplate. It can suggest patterns you haven't considered. But the act of reviewing that output honestly, questioning every decision, and committing to ship it? That's still writing. That's still the confrontation with complexity that makes you better.
+
+The tool changes. The honesty requirement doesn't.
+
+## The Engineers Who Will Matter
+
+There's a version of this industry where everyone reads, nobody writes, and AI fills the gap. I don't think that version works. Not because AI isn't good enough, but because the people deploying it won't be good enough to judge its output.
+
+The engineers who will matter in five years are the ones who still write. Still build. Still confront the complexity instead of skimming past it. Not because writing code is sacred, but because it's the fastest way to develop the judgment that everything else depends on.
+
+You can read a thousand pull requests and learn the shape of good software. But you won't learn the weight of it until you carry it yourself.`,
+    tags: ["Software Engineering", "Code Quality", "Career Growth", "Craft"],
+    readTime: "5 min read",
+  },,
+
   {
     title: "How an Experienced Engineer Reads a New Codebase",
     slug: "how-an-experienced-engineer-reads-a-new-codebase",
@@ -236,7 +343,7 @@ If you've got your own tricks for reading a legacy codebase, or you want to comp
     tags: ["Git", "Developer Productivity", "Legacy Code", "Ruby on Rails", "Engineering"],
     readTime: "9 min read",
   },
-] = [
+
   {
     title: "What Is a Forward-Deployed Engineer?",
     slug: "what-is-a-forward-deployed-engineer",
