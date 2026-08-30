@@ -11,6 +11,120 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    title: "The Networking Strategy Nobody Teaches Engineers",
+    slug: "networking-strategy-nobody-teaches-engineers",
+    date: "2026-08-30",
+    excerpt:
+      "The most valuable professional relationships I've built didn't come from conferences or LinkedIn. They came from one-on-one conversations where two engineers actually talked shop.",
+    content: `"Every meaningful opportunity in my career traces back to a single conversation with one person. Not a panel. Not a Slack thread. A conversation."
+
+I've been to the conferences. I've done the meetups. I've posted in the Slack communities, joined the Discord servers, and connected with hundreds of people on LinkedIn. And I can count on one hand the professional relationships that came from any of it.
+
+The relationships that actually changed my trajectory, the ones that led to contracts, collaborations, referrals, and the kind of trust where someone will vouch for you without hesitation, all came from the same place: sitting down with one person and having a real conversation about the work.
+
+Nobody teaches engineers how to network this way. So here's what I've learned doing it.
+
+## Why Passive Networking Doesn't Work
+
+Engineers default to passive networking because it feels efficient. You show up to a conference, you're in a room with 500 people, the math looks great. You join a Slack community with 10,000 members. You attend a meetup and hand out your card. Volume, right?
+
+Except volume isn't the game. At a conference, you have 90-second conversations between talks. You exchange pleasantries with someone while you're both looking at your phones. You connect on LinkedIn afterward, and then what? Neither of you follows up. The connection sits there, a node in a graph that never gets traversed.
+
+Meetups are slightly better because they're smaller, but the format is the same: a presentation, some socializing, and surface-level conversations about what stack everyone uses. You leave with a few names and no real understanding of who those people are or what they're working on.
+
+The problem isn't that these events are useless. It's that they optimize for breadth when what actually matters is depth. One person who genuinely knows your work and trusts your judgment is worth more than 200 people who recognize your name from a conference lanyard.
+
+## The One-on-One Approach
+
+Here's what actually works: reach out to one person. Ask them something specific about their work. Have a conversation.
+
+That's it. That's the strategy.
+
+I started doing this a few years ago, almost by accident. I read a blog post by an engineer who had solved a problem I was actively stuck on. Instead of just bookmarking the post and moving on, I sent them a message. Not "great article!" Something specific. I told them I was dealing with a similar issue, explained what I'd tried, and asked how they'd handled a particular edge case the post didn't cover.
+
+They responded within a day. We went back and forth for a week. By the end of it, I had a solution to my problem and they had context on a use case they hadn't considered. That exchange turned into a relationship where we'd periodically share what we were building, trade notes on tooling, and check in when one of us was evaluating something new.
+
+One message. One real question. That's the entry point.
+
+## Finding the Right People
+
+You don't need to network with everyone. You need to find the people whose work overlaps with yours in interesting ways. Here's where I look:
+
+**Open source contributors.** If you use a library and you've read the source code, you already know more about the maintainer's thinking than most people who attend their conference talk. Reach out about a specific design decision. Ask why they chose one approach over another. Contributors love talking about the why behind their code because most people only ever file issues about the what.
+
+**Blog authors.** If someone writes about a problem you've actually solved (or are solving), that's a conversation waiting to happen. Not flattery. A real exchange between two people who've been in the same trench.
+
+**Conference speakers you actually learned from.** Not the keynote speaker with 50,000 followers. The person who gave a 25-minute talk about a specific problem and clearly built something real. Those people are usually approachable and rarely get the follow-up they deserve.
+
+**Colleagues on adjacent teams.** This is the most overlooked one. The engineer on the platform team who built the thing your service depends on. The person on the data team whose pipeline feeds your feature. You work at the same company and you've probably never had a real conversation about how your systems interact.
+
+Here's a trick: use your version control to figure out who to start with.
+
+\`\`\`bash
+git shortlog -sn -- src/modules/payments/
+\`\`\`
+
+\`\`\`
+    87  Sarah Chen
+    34  Marcus Williams
+     6  dependabot[bot]
+     2  intern-2025
+\`\`\`
+
+That output shows you who actually wrote the payments module, ranked by commit count. The person at the top isn't just a colleague. They're the domain expert. Reaching out with "I saw you wrote most of the payments module; I had a question about the retry logic" is the kind of specific, work-grounded opening that starts real conversations.
+
+## What to Actually Talk About
+
+The worst networking conversations are about networking. "What do you do? Where do you work? What's your stack?" Those questions produce Wikipedia answers. Nobody gets excited reciting their LinkedIn summary.
+
+Here's what I've found works:
+
+**Their current challenge.** "What's the hardest technical problem you're working on right now?" People light up when you ask this because it's the thing they're thinking about constantly and nobody at work wants to hear about it for the fourth time. You're a fresh set of ears with no politics attached.
+
+**Something you're building.** Share what you're actually working on. Not a pitch. Not a product demo. Just: "I'm building X and I ran into Y. Have you ever dealt with something like that?" This frames the conversation as two engineers comparing notes, which is exactly what it is.
+
+**A pattern you're both using differently.** You both use event-driven architecture, but they handle retries differently. You both run Postgres, but their indexing strategy is something you haven't seen. The differences between how two competent engineers solve the same class of problem are where the best conversations live.
+
+Here's the template I use for cold outreach:
+
+\`\`\`
+Subject: Question about [specific thing they built/wrote]
+
+I [read your post / saw your commit / used your library] on [specific topic].
+I'm working on [related problem] and noticed [specific detail].
+[One concrete question].
+
+No rush. Appreciate any thoughts.
+\`\`\`
+
+Short. Specific. No "let's hop on a call" until there's a reason to.
+
+## How One Conversation Compounds
+
+A single genuine relationship does more work than a hundred weak ties. Here's the compounding effect I've seen play out repeatedly.
+
+You have a real conversation with someone. A few months later, they're hiring and they think of you, not because you applied, but because they know how you think. Or they're building something that needs a skill you mentioned, and they reach out directly. Or someone in their network needs help with exactly the kind of problem you've solved, and your name comes up in a conversation you're not even part of.
+
+I've gotten contract work this way. I've gotten introductions to people I never would have reached on my own. I've had engineers I spoke with once two years ago send me a message saying "I remember you were dealing with X; I just ran into the same thing, here's what worked." That kind of long-term compounding doesn't come from a LinkedIn connection request. It comes from the fact that we had a real exchange and both walked away with something useful.
+
+## Give First
+
+Before you ask anyone for anything (a referral, an introduction, advice on a job) give them something useful. This doesn't need to be grand. Share an article that's relevant to what they told you they're working on. Point them to a tool you've been using that solves a problem they mentioned. Introduce them to someone in your network who's working on a related problem.
+
+The bar is low because most people don't do this at all. When you consistently show up with something valuable and no ask attached, you become the person people want to help when you do eventually need something.
+
+I keep a running note of what the people in my network are working on. When I come across something relevant, a library, a technique, a job posting, I send it their way with a line or two of context. It takes five minutes and it keeps the relationship alive between the conversations that matter.
+
+## Start This Week
+
+Pick one person whose work you respect. Someone whose code you've read, whose blog post taught you something, whose talk made you rethink an approach. Send them a message. Not "let's connect." Something specific about their work that shows you've actually engaged with it.
+
+One conversation. That's how every meaningful professional relationship I've built started. The engineers who figure this out early have a compounding advantage that no amount of conference attendance can match.`,
+    tags: ["Career", "Networking", "Professional Development", "Engineering Culture"],
+    readTime: "6 min read",
+  },,
+
+  {
     title: "Writing Code Forces You to Be Honest",
     slug: "writing-code-forces-you-to-be-honest",
     date: "2026-08-21",
