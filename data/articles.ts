@@ -11,6 +11,164 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    title: "What Is a Forward-Deployed Engineer?",
+    slug: "what-is-a-forward-deployed-engineer",
+    date: "2026-08-02",
+    mediumUrl: "https://medium.com/@jaruejohnson/what-is-a-forward-deployed-engineer-c10f9b2c1296",
+    excerpt:
+      "Eight months embedded in a Forbes 30 Under 30 company as a forward-deployed engineer: hand-stacking pallets to learn the domain, a 60-day compliance gauntlet, a production deadlock with perfect timing, and the ERP their business now runs on.",
+    content: `"What does it mean to be forwardly deployed? Everyone in tech is suddenly hiring for the title, and I just spent eight months living it. This is what the job actually looks like."
+
+One morning, a national distributor sent StrawFish a purchase order for a few hundred cases of product. Before anyone at the company had opened a laptop, the platform had already pulled the order down, confirmed it wasn't a duplicate, resolved the buyer's item numbers, checked the stock, planned the pallets, and queued an acknowledgment back to the partner. Nobody touched that order, and these days, most orders never get touched at all. This is what the platform does, and this is the story of how it got built. Majorlinkx published the [official case study](https://majorlinkx.io/case-studies/13), and what I want to give you here is the part a case study can't: what it was actually like to build.
+
+## The Arrangement
+
+First, the setup, stated once and plainly. My day job is being a full-time staff engineer at Cypher Learning, and outside of that I do contract work for Majorlinkx, a development agency where I was the founding engineer and helped stand up the engineering team. Majorlinkx leadership closed the StrawFish engagement, and I was deployed as the staff engineer on it: the forward-deployed engineer, embedded from December 2025 through July 2026.
+
+Forward-deployed is a post, not a vanity title. You interact directly with the core stakeholders, you take acceptance criteria from the people who sign things, and you own the architecture, the code, the infrastructure, the roadmap, and the incident response when something breaks. The engineer building the system should sit inside the operation, not at the end of a ticket queue.
+
+## Not a Mom-and-Pop
+
+StrawFish makes biodegradable straws out of seashells, and that sentence undersells them badly. They're a Boca Raton company whose founders made the Forbes 30 Under 30 list in 2024 for Social Impact, and their products move through the largest foodservice distributors in the country; do your own research on them. At that scale, nobody emails orders around. Everything is EDI, and the clock starts the moment a purchase order lands.
+
+EDI at this level means national distributors expect an answer back in minutes: order confirmed, here's the ship notice, here's the invoice. The volume and the compliance requirements that come with it demand a platform built around how the business actually operates, not rented from a vendor who picked the roadmap. Off the shelf means per-seat pricing forever and a feature set someone else controls. StrawFish chose to build something they would own outright, and Majorlinkx deployed me.
+
+## Learning the Business With My Hands
+
+I had never touched EDI or food distribution before this project, and closing that gap is the entire point of the forward-deployed model. I learned the operation physically: sitting with the C-suite, holding the products, packing sample shipments to feel how orders actually leave the building. When it came time to build the pallet engine, I stacked cases on a real pallet myself. A case stopped being a variable named \`caseCount\` and became an object I had physically lifted, and every requirements conversation got faster because we were finally talking about the same reality.
+
+Embedding also surfaced the edge cases early. What happens when a partner resends a PO, or the carrier API is down at label time, or stock can't cover an order that's already been acknowledged? Those questions come from proximity, not from a requirements document.
+
+## Breaking Down Something This Big
+
+An ERP is inventory plus orders plus EDI plus shipping plus invoicing plus auth plus infrastructure, all at once, and the way through wasn't trying to build everything. It was sequencing.
+
+**Source of truth first.** The first milestone was establishing the ERP as the single source of truth for inventory and orders. Once that was true, every later decision got simpler, because "where does this data go" was never a debate again.
+
+**Then integrations, outward from the core.** The EDI trading partner to receive orders, the carrier API to rate, label, and ship them, and the accounting software to bill for them. Each integration extended the platform's reach.
+
+What kept this honest was constant conversation. I was in the StrawFish office a minimum of three days a week, and we refined requirements ad nauseam: not just what they wanted built, but why they needed it, every single time. The sessions were recorded and became written specs before anything became code, and the archive tells the story better than I can: the first folder is dated December 10, 2025, the most recent is dated the day I'm writing this, and there are 335 spec files in between.
+
+The operational rule was blunt: if it wasn't spoken about, it wasn't implemented. That forced assumptions into the open while they were still cheap, and some of the platform's best behavior came from a stakeholder looking at a shipped screen and saying "we love it, but this is how we actually operate." You only get that sentence if you ship fast enough for them to react to real software.
+
+On the business side, everything ran through [Nexus](/projects/nexus-nexusos/), the client portal Majorlinkx runs on, using a concept we built for this engagement called Project Units: billable units derived straight from the invoice, agreed to by the client before anything gets built. StrawFish always knew what work mapped to what payment, I always knew what done meant, and more than 450 requests closed through that system in eight months.
+
+## The Pallet Engine
+
+This was the hardest technical problem in the platform, and it's the one I'd want another engineer to grill me on.
+
+When a distributor orders 342 cases across three SKUs, someone has to decide how that becomes pallets on a truck: which cases stack together, how many layers per pallet, what the mixed pallet looks like when the math doesn't come out even, and whether the load hits the fill rate that makes the freight economical. The pallet algorithm is domain-specific knowledge that doesn't exist in a textbook, so I learned it physically, and then I made it software. The engine plans that 342-case order into twelve full-truckload pallets, eleven full and one mixed remainder, at a 93 percent average fill rate, and it isn't a black box: operators drag layers between pallets to override the plan, and the system recalculates around them. The software earns trust by conceding that the floor sometimes knows better.
+
+## The Compliance Gauntlet
+
+Two of the eight months had nothing to do with building features. They were pure compliance, the part of enterprise software nobody puts in the demo.
+
+Here's what surprised me most. Building your own EDI platform means inheriting the full compliance surface that national distributors require. Every EDI partner must certify against scenarios like short shipments and backorders. StrawFish never short-ships and never backorders, but the rules apply to everyone, so we designed, built, and certified entire exception flows that will almost certainly never run in production. That's the strange economics of enterprise certification: a real slice of the work exists purely to prove you could handle situations the business will never create.
+
+The EDI trading partner onboarding had its own friction: documentation that was out of date in places, expected payloads that weren't documented anywhere, and one of the larger partners sending payloads that didn't match their own spec, with address fields missing and shapes shifting between requests. We had to be exactly right about data that was inconsistently wrong, and I led those communications myself. It's unglamorous work, and it's exactly the work that gets a platform certified.
+
+One certification milestone came with a ten-day deadline. We finished it in seven days, with three days left to spare.
+
+## What It Runs On
+
+The platform is a set of containerized services running in StrawFish's own cloud account: traffic through a web application firewall and CDN, the ERP and CRM UIs served at the edge, API calls into a load balancer, services in private subnets with managed PostgreSQL and Redis, and CI/CD pipelines deploying with migrations gated ahead of each release.
+
+[DIAGRAM:strawfish-platform]
+
+The EDI lifecycle is the spine. Four document types carry an order from "we want product" to "pay us":
+
+| Document | What it is | Direction |
+|----------|------------|-----------|
+| 850 | Purchase order | Partner to StrawFish |
+| 855 | Acknowledgment: confirmed, here's what ships | StrawFish to partner |
+| 856 | Advance ship notice: it's on a truck | StrawFish to partner |
+| 810 | Invoice | StrawFish to partner |
+
+An 850 lands and becomes an allocated purchase order without anyone opening the app, and acceptance kicks off the return leg: the acknowledgment, the carrier label, the ship notice, and the invoice through the accounting integration, all from one event chain. An order the stock can't cover goes to a human for review, and anything that fails to enqueue sends an alert instead of dying quietly.
+
+[DIAGRAM:edi-lifecycle]
+
+## What It Actually Processes
+
+The platform was built to scale far past what StrawFish needs today, and the throughput numbers show what that looks like in practice.
+
+The platform can receive and process over 500 orders per second. Each order hits the EDI endpoint, gets deduplicated, has its item numbers resolved against the partner's mapping, passes through inventory checks with row-level locking, gets allocated, has its pallets planned, and queues an acknowledgment back to the partner. That entire chain runs through a set of Redis-backed queues and job processors without a human opening a browser.
+
+Per-partner queues process independently and in parallel, which means adding a new trading partner doesn't slow down any existing one. After a successful 856 advance ship notice, the platform generates the 810 invoice in roughly 70 milliseconds on the platform side.
+
+The infrastructure is built for more than 50 times the current volume, which means StrawFish can onboard new partners and absorb volume growth without an architecture change.
+
+The platform can also integrate with any EDI partner. The polling, deduplication, and document exchange logic is configurable per partner, not hardcoded, so onboarding a new trading partner is a configuration change, not a development project. StrawFish now has its own technical arm for EDI, independent of any single network provider.
+
+The team focuses on selling and working exceptions rather than data entry.
+
+The numbers, for scale:
+
+| Metric | Count |
+|--------|-------|
+| Months, kickoff to live | 8 (roughly 6 build, 2 compliance) |
+| Spec files written | 335 |
+| Requests closed | 450+ |
+
+Containerized services behind a load balancer, Redis-backed queues for async processing, infrastructure as code across multiple environments, and CI/CD pipelines gating every release. Nuxt and TypeScript on the front, NestJS behind it, PostgreSQL under everything.
+
+## The Day It Deadlocked
+
+One day, twenty-five orders from a single trading partner arrived at once. We had recently scaled from one worker task to two, and each worker runs its inventory-check consumer with \`concurrency: 1\`, which sounds safe until you internalize that BullMQ concurrency is per-worker, not per-queue. Two tasks means two consumers.
+
+The inventory check uses \`SELECT ... FOR UPDATE\` on stock rows so the platform can never oversell, and all twenty-five orders drew from the same catalog. You can see it coming:
+
+\`\`\`
+Worker A: holds stock rows for Order 1, waits on rows held by Worker B
+Worker B: holds stock rows for Order 2, waits on rows held by Worker A
+Postgres kills one side. BullMQ retries it. The deadlock reforms.
+\`\`\`
+
+Recovery took two hours. Killing the deadlocked connections didn't help, because the retries walked straight back into the same trap; the durable fix was Terraform, consolidating the worker topology while the polling cron sat paused so nothing new wandered in.
+
+Then came the cleanup, which is where a platform shows its character. Seventeen of the twenty-five orders had processed normally, and the rest were stuck, falsely failed, or missing a field where a two-step write got severed mid-deadlock. Every one got a targeted fix the same day: a resubmit escape hatch, the write moved to creation time, and backfills with a recovery note preserved on each corrected row.
+
+**Lesson one: BullMQ concurrency is per-worker.** If your queue guards shared rows with locks, adding workers is how you manufacture deadlocks.
+
+**Lesson two: even the lessons you already know will find you at scale.** Every seasoned engineer knows a multi-step write without a transaction is a data gap, and I knew it too. It got through anyway, in exactly one place, in a large codebase where I was the primary lead. If I'm being honest, it was my only real technical miss of the project, and I'm willing to take it: it was a difficult lesson, but the system failed loudly, the feedback loop surfaced it within hours, and the audit trail made every correction traceable.
+
+**Lesson three: one bigger worker beats two smaller ones at this volume.** When the day comes that demands real parallelism, the answer is lock ordering or advisory locks, not more consumers.
+
+The platform's job was never to be unbreakable. Its job is to break loudly, recover fast, and leave a trail, and that day it did all three.
+
+## Entity Views and the Art of the Half-Step
+
+The ask sounded simple: warehouse workers shouldn't see everything on a purchase order, while logistics admins need a different slice of the same record. Stakeholders wanted what they had before, per-role column visibility on everything.
+
+I did the deep dive on what rebuilding a views engine like that would take, and even with agentic development, the honest answer was too long for power that would mostly go unused. The granularity was only needed on purchase orders, so that's what we built: configurable views scoped to POs, shipped in a fraction of the time, with a clean extension point if it ever needs to generalize.
+
+That's the actual job at this level. It isn't building what was asked for. It's building the smallest thing that makes the request unnecessary.
+
+## The Factory
+
+Now for the part my [Writing Code Isn't Enough Anymore](/blog/writing-code-isnt-enough-anymore/) series has been circling for a year: how one embedded engineer ships a platform that's conventionally quoted in years, in eight months.
+
+The refinement sessions were recorded, and the recordings fed what we call a context agent, whose whole job is holding everything about StrawFish: how the business operates, what's been decided, and why. It lives in a private workspace on infrastructure we control, running local models, so proprietary client data never leaves. If you've read [the DGX Spark article](/blog/i-bought-an-nvidia-dgx-spark/), this is what that hardware is for.
+
+Implementation ran through what we internally call the Factory, a workspace that manages multiple AI coding agents and contexts in parallel, with me as the architect and reviewer across all of them. Features that would normally take weeks came together in days, and when the CEO or CFO raised something new, it could go from request to spec to pull request to production the same day, with status visible in the portal the whole way.
+
+That speed is what made the feedback culture work: stakeholders iterated on live software weekly instead of squinting at mockups for months. And here's the honest core of it: the agents were never the bottleneck. Knowing what to build was the bottleneck. That's why the embedding, the constant refinement, and the pallet stacking mattered. Writing code isn't enough anymore, because the leverage is in knowing exactly what code to write.
+
+## They Own It
+
+The repository has lived in StrawFish's GitHub organization since day one, the infrastructure runs in their cloud account, and the data, the Terraform, and the roadmap are all theirs. That ownership is the point: when a vendor quotes them a price now, they can say no, and when a partner wants something unusual, it's a few weeks of work instead of a ticket in someone else's backlog. The architecture is ready for AI and a CRM layer without a rewrite, with every byte of proprietary data staying on infrastructure they control.
+
+The platform handles the order lifecycle end to end, from EDI intake through invoicing, and scales to meet whatever volume the business grows into. The next user costs nothing to add. The next trading partner is a row in a settings screen. And the platform keeps getting more valuable to StrawFish specifically, because it was molded to their operation one refinement session at a time.
+
+## What This Was Really About
+
+For eight months I was the architect, the product manager, the infrastructure engineer, the integration negotiator, and the person the C-suite reached for when they needed something real by the end of the week. One embedded engineer, with an agent factory behind him and a client willing to build, shipped the platform that a Forbes 30 Under 30 company now runs its order flow on.
+
+The official case study is live at [Majorlinkx](https://majorlinkx.io/case-studies/13), and you can see the company itself at [strawfish.co](https://strawfish.co/). If you're wondering whether the forward-deployed path is real engineering or a rebrand of consulting, or you want to compare notes on EDI, pallet math, or agentic pipelines, reach out. I'm always happy to talk shop.`,
+    tags: ["Forward Deployed Engineering", "ERP", "EDI", "AWS", "Agentic Development"],
+    readTime: "10 min read",
+  },
+  {
     title: "Writing Code Isn't Enough Anymore, Part II: I Bought a DGX Spark",
     slug: "i-bought-an-nvidia-dgx-spark",
     date: "2026-06-17",
