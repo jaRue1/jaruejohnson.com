@@ -26,6 +26,14 @@ const FutureLabDiagram = dynamic(
   () => import("../../components/diagrams/FutureLabDiagram"),
   { ssr: false, loading: () => <div className="my-8 h-[700px] rounded-2xl border border-gray-700/40 bg-gray-900/40 animate-pulse" /> }
 )
+const StrawfishAwsDiagram = dynamic(
+  () => import("../../components/diagrams/StrawfishAwsDiagram"),
+  { ssr: false, loading: () => <div className="my-8 h-[600px] rounded-2xl border border-gray-700/40 bg-gray-900/40 animate-pulse" /> }
+)
+const EdiLifecycleDiagram = dynamic(
+  () => import("../../components/diagrams/EdiLifecycleDiagram"),
+  { ssr: false, loading: () => <div className="my-8 h-[440px] rounded-2xl border border-gray-700/40 bg-gray-900/40 animate-pulse" /> }
+)
 
 const diagramMap: Record<string, React.ComponentType> = {
   "network-topology": NetworkTopologyDiagram,
@@ -33,6 +41,8 @@ const diagramMap: Record<string, React.ComponentType> = {
   "allow-default-to-all": AllowDefaultDiagram,
   "current-lab": CurrentLabDiagram,
   "future-lab": FutureLabDiagram,
+  "strawfish-platform": StrawfishAwsDiagram,
+  "edi-lifecycle": EdiLifecycleDiagram,
 }
 
 interface ArticlePageProps {

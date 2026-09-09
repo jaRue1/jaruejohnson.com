@@ -6,6 +6,8 @@ import SectionTitle from "../../components/SectionTitle"
 import { articles } from "../../data/articles"
 
 export default function Blog() {
+  const sortedArticles = [...articles].sort((a, b) => b.date.localeCompare(a.date))
+
   return (
     <>
       <Head>
@@ -54,7 +56,7 @@ export default function Blog() {
 
           {/* Article Cards */}
           <div className="grid gap-8 md:gap-10">
-            {articles.map((article, index) => (
+            {sortedArticles.map((article, index) => (
               <motion.div
                 key={article.slug}
                 initial={{ opacity: 0, y: 30 }}
