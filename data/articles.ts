@@ -11,6 +11,148 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    title: "1.58 Bits Per Weight: Why Microsoft BitNet Changes Local AI",
+    slug: "microsoft-bitnet-changes-local-ai",
+    date: "2026-11-01",
+    excerpt:
+      "Every weight in the model is negative one, zero, or positive one. Multiplication disappears. A consumer CPU runs a 100-billion-parameter model. The math behind BitNet is why this works.",
+    content: `"Every modern GPU burns hundreds of watts multiplying 32-bit floating-point numbers. Microsoft found a way to skip the multiplication entirely."
+
+If you've been following local AI, you know the bottleneck: memory bandwidth and compute. Running a 70B model means loading 70 billion floating-point weights and multiplying them against your input thousands of times per second. That's why GPUs exist for this workload. That's why an H100 costs $30,000 and draws 700 watts. The entire hardware stack is optimized for one thing: fast floating-point multiplication at scale.
+
+BitNet b1.58 asks a different question: what if we didn't multiply at all?
+
+The project has over 41,000 stars on GitHub, and after digging into the source code and running the benchmarks, I understand why. This isn't an incremental optimization. It's an architectural shift that changes what hardware you need to run AI.
+
+## What BitNet Actually Does
+
+In a standard transformer model, every weight is a floating-point number. FP16 gives you 16 bits of precision per weight. FP32 gives you 32. Quantization (which I've written about before) reduces that to 8 bits or 4 bits, trading some quality for a smaller memory footprint.
+
+BitNet b1.58 takes this to the extreme. Every single weight in the transformer is restricted to one of three values: -1, 0, or +1. That's 1.58 bits per parameter (because log2(3) = 1.58).
+
+| Approach | Bits per weight | Values per weight | Memory for 70B model |
+|----------|----------------|-------------------|---------------------|
+| FP32 | 32 | ~4.3 billion | ~280 GB |
+| FP16 | 16 | ~65,000 | ~140 GB |
+| INT8 | 8 | 256 | ~70 GB |
+| INT4 | 4 | 16 | ~35 GB |
+| BitNet b1.58 | 1.58 | 3 | ~14 GB |
+
+Look at that last row. A 70-billion-parameter model in 14 GB. That's not a typo. That's what happens when every weight is one of three values.
+
+## Why Multiplication Disappears
+
+This is the part that breaks your intuition if you're used to thinking about neural networks as giant matrix multiplications.
+
+In a standard transformer layer, the forward pass looks like this:
+
+\`\`\`
+output = input_vector * weight_matrix
+\`\`\`
+
+Every element of that matrix multiply is a floating-point multiplication followed by an addition. For a single layer with a 4096-dimensional hidden state, that's millions of multiply-add operations.
+
+When every weight is -1, 0, or +1, the multiplication becomes trivial:
+
+\`\`\`
+weight = -1  ->  output -= input    (negate and add)
+weight =  0  ->  skip               (zero contribution)
+weight = +1  ->  output += input    (just add)
+\`\`\`
+
+No floating-point multiplier needed. No FPU. No GPU tensor cores. Just integer addition and subtraction, which every CPU has been doing since the 1970s. The operation that previously required specialized hardware now runs on the most basic arithmetic unit in any processor.
+
+Here's what that looks like in the actual BitNet C++ kernel:
+
+\`\`\`cpp
+// Simplified from bitnet.cpp inference kernel
+// Instead of: sum += weight[i] * activation[i]  (FP multiply-add)
+// BitNet does: branch on ternary weight, add or subtract
+for (int i = 0; i < dim; i++) {
+    int8_t w = ternary_weight[i];  // -1, 0, or +1
+    if (w == 1)       sum += activation[i];
+    else if (w == -1) sum -= activation[i];
+    // w == 0: skip entirely
+}
+\`\`\`
+
+In practice, the kernel is heavily vectorized. On x86, it uses AVX-512 instructions to process 64 ternary weights in a single clock cycle. On ARM, it uses NEON SIMD to do the same. The actual implementation packs weights into 2-bit representations and uses lookup tables to dispatch the add/subtract/skip operations in bulk.
+
+## Memory Bandwidth Is the Real Win
+
+Engineers fixate on compute (FLOPS, tokens per second), but the real bottleneck in inference is memory bandwidth: how fast you can move weights from RAM to the processor.
+
+A standard FP16 model with 70B parameters needs to stream 140 GB of weights through memory for every forward pass. At DDR5 bandwidth of roughly 50 GB/s, just loading the weights takes almost 3 seconds. The GPU sits idle waiting for data.
+
+BitNet shrinks that traffic by over 80%. The same 70B model is 14 GB. At the same bandwidth, the weights load in under 300 milliseconds. The processor spends less time waiting and more time computing. This is why BitNet's benchmarks show 2x to 6x speedup over full-precision models on the same hardware, and it's why the speedup grows with model size: bigger models are more bandwidth-bound.
+
+| Platform | Speedup vs FP16 | Energy reduction |
+|----------|----------------|-----------------|
+| x86 CPU (AVX-512) | 2.37x to 6.17x | 71.9% to 82.2% |
+| ARM CPU (NEON) | 1.37x to 5.07x | 55.4% to 70.0% |
+
+Those energy numbers matter too. Running AI inference at 70 to 80% less energy per token means the laptop battery lasts. It means the electricity bill for a home lab drops. It means you can run agents continuously on hardware that doesn't need active cooling.
+
+## What You Can Run Today
+
+Microsoft ships an official model: BitNet-b1.58-2B-4T, a 2.4-billion-parameter model trained on 4 trillion tokens. The community has ported larger architectures:
+
+| Model | Parameters | Platform |
+|-------|-----------|----------|
+| BitNet-b1.58-2B-4T (official) | 2.4B | x86, ARM |
+| bitnet_b1_58-3B (community) | 3.3B | x86, ARM |
+| Llama3-8B-1.58-100B-tokens | 8.0B | x86, ARM |
+| Falcon3 family | 1B to 10B | x86, ARM |
+
+The setup is more involved than Ollama (for now), but it's a one-time build:
+
+\`\`\`bash
+git clone --recursive https://github.com/microsoft/BitNet.git
+cd BitNet
+conda create -n bitnet-cpp python=3.10
+conda activate bitnet-cpp
+pip install -r requirements.txt
+
+huggingface-cli download microsoft/BitNet-b1.58-2B-4T-gguf --local-dir models/BitNet-b1.58-2B-4T
+python setup_env.py -md models/BitNet-b1.58-2B-4T -q i2_s
+\`\`\`
+
+Then run inference:
+
+\`\`\`bash
+python run_inference.py -m models/BitNet-b1.58-2B-4T/ggml-model-i2_s.gguf -p "You are a helpful assistant" -cnv
+\`\`\`
+
+That's a ternary language model running on your CPU. No GPU. No cloud. No API key.
+
+## What This Means for Agentic AI
+
+This is where I think most people are underestimating the impact.
+
+The current model for AI agents is: your agent runs locally, but the model it calls lives in the cloud. Every tool call, every reasoning step, every iteration of the agent loop sends a request over the internet and waits for a response. You're paying per token. You're dependent on uptime. Your code and your prompts leave your machine.
+
+BitNet makes a different architecture viable. An agent that runs entirely on your laptop, air-gapped if you want, with zero API costs and zero network latency. The model is small enough to fit in RAM. The inference is fast enough on CPU to support iterative agent loops. And the weights never leave your hardware.
+
+For engineers building tools that handle sensitive codebases, proprietary data, or regulated environments, this matters. The question "can I run this without sending data to a third party?" finally has a practical answer for models in the billions of parameters.
+
+## The Tradeoff
+
+I want to be honest about where this stands. A 2.4B ternary model is not Claude. It's not GPT-4. The quality ceiling is lower because you're working with fewer parameters and less precision per parameter. For complex multi-step reasoning, long-form generation, and tasks that require deep world knowledge, bigger models running in the cloud are still better.
+
+But that gap is closing. The community ports are already pushing into the 8B to 10B range. The architectural insight (ternary weights eliminate multiplication) doesn't have a size limit. When someone trains a 70B ternary model from scratch on a quality dataset, that's a model that fits in 14 GB of RAM and runs on a CPU. That changes the calculus for a lot of workloads.
+
+## Why Engineers Should Pay Attention
+
+BitNet isn't just a quantization trick. Standard quantization takes a trained FP16 model and rounds its weights down to fewer bits after training. You're degrading a model that was designed for high precision. BitNet trains natively in 1.58 bits. The model learns to represent knowledge using only -1, 0, and +1 from the start. That's a fundamentally different optimization target, and it's why the quality holds up better than you'd expect for the bit count.
+
+The source code is open. The C++ runtime is readable. The math is simple enough that you can trace it from the paper to the kernel to the output. If you've been wanting to understand how AI inference actually works at the hardware level, BitNet is one of the best starting points because there's so little abstraction between the weights and the arithmetic.
+
+The era of giant GPU clusters isn't over. But the assumption that you need one to run useful models is no longer true. 1.58 bits per weight. Addition instead of multiplication. A consumer CPU instead of a datacenter GPU. The math works, and the code is on GitHub.`,
+    tags: ["AI", "Local Inference", "Microsoft", "BitNet", "Architecture"],
+    readTime: "7 min read",
+  },,
+
+  {
     title: "The Networking Strategy Nobody Teaches Engineers",
     slug: "networking-strategy-nobody-teaches-engineers",
     date: "2026-08-30",
