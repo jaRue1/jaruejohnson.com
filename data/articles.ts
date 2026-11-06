@@ -11,6 +11,131 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    title: "Jev Is Not an LLM (and That's the Point)",
+    slug: "jev-is-not-an-llm",
+    date: "2026-11-06",
+    excerpt:
+      "Jev represents a fundamentally different approach to AI reasoning than the large language models most engineers are building on, and understanding the distinction changes how you evaluate every tool in your stack.",
+    content: `"Not every AI system works the same way. The sooner engineers internalize that, the better their tool choices get."
+
+Every week I see another comparison chart: Claude vs. GPT vs. Gemini vs. whatever shipped on Tuesday. And every one of those charts evaluates the tools on the same axis, as though they're all doing the same thing under the hood. For the most part, they are. They're large language models. They predict the next token. They're extraordinarily good at it.
+
+But not every AI system is an LLM, and treating them all the same way leads to bad decisions. Jev is the example I keep coming back to, because it's architecturally different in a way that matters for how you use it.
+
+## How LLMs Actually Work
+
+Let's be precise for a second, because "AI" has become a word that means nothing.
+
+A large language model is a neural network trained on massive amounts of text. During training, it learns statistical relationships between tokens: chunks of text roughly three-quarters of a word long. When you prompt it, it predicts the most probable next token given everything that came before it. Then it predicts the next one. And the next one. That's generation.
+
+This is pattern completion at scale. The model doesn't "understand" your question in any human sense. It has learned, through billions of examples, what a good answer to a question like yours tends to look like. And because the training data is so vast and the architecture so deep, the approximation is shockingly good. Good enough that it feels like understanding. Good enough that it writes working code, explains complex systems, and holds coherent multi-turn conversations.
+
+But the mechanism is still statistical prediction. When an LLM writes a function, it's generating tokens that pattern-match against the millions of functions it saw during training. It's not stepping through the logic the way you do when you write that function by hand. It's producing output that looks like what stepping through the logic would produce.
+
+That distinction is easy to dismiss when the output is correct. It becomes impossible to ignore when it's wrong.
+
+## What Jev Does Differently
+
+Jev is a reasoning-first system. Instead of predicting the next token in a sequence, it decomposes a problem into discrete steps, maintains a working state across those steps, and applies structured reasoning to advance from one step to the next.
+
+The analogy I use is the difference between a calculator and mental math. A calculator applies formal rules to symbols and gives you a precise answer. A person doing mental math in their head is using a mix of memorized facts, shortcuts, estimation, and pattern recognition. Both can arrive at the right answer. The process is fundamentally different, and the failure modes are different.
+
+Here's what the difference looks like concretely. Ask both systems: "Write a function that finds the longest increasing subsequence in an array."
+
+An LLM generates this directly:
+
+\`\`\`python
+def longest_increasing_subsequence(arr):
+    if not arr:
+        return []
+    n = len(arr)
+    dp = [1] * n
+    parent = [-1] * n
+    for i in range(1, n):
+        for j in range(i):
+            if arr[j] < arr[i] and dp[j] + 1 > dp[i]:
+                dp[i] = dp[j] + 1
+                parent[i] = j
+    max_idx = dp.index(max(dp))
+    result = []
+    while max_idx != -1:
+        result.append(arr[max_idx])
+        max_idx = parent[max_idx]
+    return result[::-1]
+\`\`\`
+
+The code is correct. The model produced it because it has seen thousands of LIS implementations. It pattern-matched against training data and emitted the most likely solution. It didn't reason about why the iterative DP approach is better than recursion. It recognized the shape of the question.
+
+A reasoning system arrives at the same code through decomposition:
+
+\`\`\`
+Step 1: Brute force checks all subsequences. O(2^n). Not viable.
+Step 2: Overlapping subproblems exist. LIS ending at i depends on LIS at earlier indices.
+Step 3: Dynamic programming applies. dp[i] = length of LIS ending at arr[i].
+Step 4: For each i, check all j < i where arr[j] < arr[i]. dp[i] = max(dp[j] + 1).
+Step 5: Track parent pointers to reconstruct the subsequence.
+Step 6: Time O(n^2), space O(n). Acceptable for most inputs.
+-> Now generate the implementation.
+\`\`\`
+
+Same output. Different process. The LLM produced code that matches a pattern. The reasoning system produced code by working through the problem. Both are valid. The failure modes are where they diverge.
+
+An LLM's failure mode is confident hallucination. It generates the next most-probable token, and sometimes the most probable token is wrong. The model doesn't know it's wrong because it was never tracking correctness; it was tracking probability. The output reads fluently. The logic might be broken. You've seen this if you've ever had an AI tool generate a function that looks perfect, passes a code review at a glance, and then fails on an edge case that any human stepping through the logic would have caught.
+
+A reasoning system's failure mode is different. It fails at decomposition: it breaks the problem into the wrong steps, or it applies the wrong rule at a step boundary, or it loses track of its working state. These failures tend to be more visible and more debuggable. The system was trying to reason through something and got a step wrong. You can inspect where.
+
+That's the architectural difference. It's not about which system is "smarter." It's about what kind of errors you're signing up for.
+
+## Why This Matters for Engineers
+
+If you're building with AI tools (which at this point means most of us), the architecture underneath shapes what the tool is good at and where it breaks.
+
+LLMs are exceptional at generation. You want to draft a document, scaffold a component, translate between languages, summarize a codebase, brainstorm approaches? An LLM is the right tool. It's fast, it's fluent, and the breadth of its training means it can handle almost any domain you throw at it.
+
+Reasoning systems are better suited for tasks where correctness matters more than fluency. Multi-step logic problems. Formal verification. Planning a sequence of operations where each step depends on the result of the previous one. Code that needs to handle state transitions precisely. The kind of work where "close enough" isn't close enough.
+
+The mistake I see engineers making is evaluating every AI tool with the same rubric. They run the same benchmark prompt through five different systems and compare the outputs. But if one system is pattern-completing and another is step-reasoning, the benchmark results tell you which system's architecture happens to suit that particular prompt. They don't tell you which system will be more reliable for your actual workload.
+
+The better question isn't "which tool gives the best answer?" It's "how does this tool arrive at its answer, and does that process match the kind of work I'm doing?"
+
+## The Hybrid Future
+
+The most capable AI systems going forward will combine both approaches. Pattern completion for generation speed and breadth. Structured reasoning for correctness and multi-step logic. You're already seeing early versions of this in how some tools use chain-of-thought prompting to simulate reasoning on top of an LLM. That's a patch, not an architecture, but it points in the right direction.
+
+The tools that get this right will use the LLM layer for what it's best at (rapid generation and broad knowledge retrieval) and route specific subtasks to a reasoning layer when the problem requires it. The routing decision itself becomes the interesting engineering problem: when do you need speed and when do you need rigor?
+
+\`\`\`
+User prompt -> Router
+  |
+  +--> Generation tasks -> LLM layer (fast, fluent, broad)
+  |      "Scaffold a React component"
+  |      "Summarize this file"
+  |
+  +--> Reasoning tasks -> Reasoning layer (slower, precise, auditable)
+         "Plan a migration across 3 services with dependency ordering"
+         "Debug why this state machine transitions incorrectly"
+\`\`\`
+
+For engineers, the practical takeaway is: learn to identify which mode a tool is operating in. When your AI coding assistant generates a utility function in half a second, that's pattern completion. When it plans a migration strategy across three services with dependency ordering, you want reasoning. If the tool is using the same mechanism for both, you should know that, because the reliability profile is very different.
+
+## What I'd Tell Engineers Evaluating AI Tools
+
+Stop treating AI tools as interchangeable. Under the surface, they vary in architecture, training methodology, inference strategy, and failure modes. Two tools can produce identical output on a demo prompt and behave completely differently on your production workload.
+
+Ask three questions before you adopt anything:
+
+**How does this system arrive at its answer?** Token prediction? Step decomposition? A hybrid? This shapes what the tool is good at.
+
+**What are the failure modes?** Confident hallucination and wrong decomposition require different mitigation strategies. Know which one you're dealing with.
+
+**Does the architecture match my workload?** If you need fast generation across broad topics, an LLM is hard to beat. If you need multi-step correctness on a narrow domain, a reasoning-first system might be the better fit.
+
+Jev isn't better or worse than an LLM. It's a different kind of tool, built on a different premise, with different strengths. The engineers who understand that distinction will make better choices than the ones comparing benchmark scores on a leaderboard.`,
+    tags: ["AI", "Reasoning", "Architecture", "Developer Tools"],
+    readTime: "5 min read",
+  },,
+
+  {
     title: "1.58 Bits Per Weight: Why Microsoft BitNet Changes Local AI",
     slug: "microsoft-bitnet-changes-local-ai",
     date: "2026-11-01",
