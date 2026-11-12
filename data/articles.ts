@@ -11,6 +11,173 @@ export interface Article {
 
 export const articles: Article[] = [
   {
+    title: "How LLMs Actually Improve: From Bit Mapping to Tool Use",
+    slug: "how-llms-actually-improve",
+    date: "2026-11-12",
+    excerpt:
+      "Most engineers use LLMs daily without understanding the specific enhancements that made them useful, and that gap costs them when choosing the right tool for the job.",
+    content: `"If you've been using AI coding tools for the past year, you've benefited from at least five major architectural improvements and probably couldn't name one of them."
+
+That's not a dig. I couldn't name them either until I started running models locally and had to understand why a 70B model fits on 128GB of RAM, why some models feel smarter than others at the same size, and why a model that generates perfect prose can also call an API endpoint with structured JSON. None of that happened by accident. Each capability traces back to a specific engineering decision that solved a specific problem.
+
+This article walks through six enhancements that took LLMs from research curiosities to the tools we ship production code with. I'm writing it because understanding your tools makes you better at using them, and right now most engineers are picking AI tools based on vibes instead of architecture.
+
+## Quantization: Making Big Models Fit on Small Hardware
+
+Every parameter in a neural network is a number. A 70 billion parameter model is literally 70 billion numbers stored in a file. The question is: how precisely do you store each number?
+
+Full precision (FP32) uses 4 bytes per parameter. That means a 70B model needs 280GB just for the weights. No consumer hardware touches that. Half precision (FP16) cuts it to 2 bytes, so 140GB. Still enormous. INT8 drops to 1 byte: 70GB. INT4 goes to half a byte: 35GB.
+
+| Precision | Bytes per param | 70B model size | Quality impact |
+|-----------|----------------|----------------|----------------|
+| FP32 | 4 | ~280 GB | Baseline |
+| FP16 | 2 | ~140 GB | Essentially lossless |
+| INT8 | 1 | ~70 GB | Very close to original |
+| INT4 | 0.5 | ~35 GB | Noticeable on reasoning |
+
+This is quantization: reducing the precision of each weight to shrink the memory footprint. Think of it like converting a \`double\` to a \`float\` in Java, applied 70 billion times.
+
+The tradeoff is real. INT4 models feel measurably dumber on multi-step reasoning tasks. The model is rounding its own thoughts, and the rounding errors compound across long chains of inference. For code completion and simple Q&A, you barely notice. For complex architectural planning or debugging subtle logic errors, the gap shows.
+
+This is why you can run \`llama3.3:70b\` on a machine with 128GB of unified memory. The Q8 quantized version pulls at about 42GB on disk. Without quantization, that model wouldn't leave the datacenter.
+
+**Why engineers should care:** When you're choosing between a Q4 and Q8 version of the same model, you're not just picking a file size. You're picking a quality ceiling. If your use case is code autocomplete, Q4 is fine. If you're asking the model to reason about distributed system failures, spend the memory on Q8.
+
+## Attention: The Bottleneck That Got Fast
+
+The original transformer architecture computes attention between every token and every other token in the sequence. That's O(n²) in both time and memory, where n is the sequence length. Double the context window, quadruple the compute. This is why early models topped out at 2,048 tokens.
+
+Flash attention, introduced by Tri Dao in 2022, restructured the attention computation to minimize memory reads and writes between GPU SRAM and HBM. The math is identical. The result is identical. But the wall-clock time drops by 2x to 4x, and the memory usage drops from O(n²) to O(n). No quality loss. Pure implementation optimization.
+
+\`\`\`
+Standard attention:
+  for each token i:
+    compute score against ALL other tokens  -> O(n) per token, O(n^2) total
+    store full n x n attention matrix in HBM
+
+Flash attention:
+  for each block of tokens:
+    compute scores within block            -> tiled in SRAM, never writes full matrix
+    accumulate result incrementally         -> O(n) total memory
+\`\`\`
+
+Sliding window attention takes a different approach: instead of attending to every token, each token only attends to a fixed window of recent tokens (say, 4,096). Tokens outside the window are invisible. This makes inference linear in sequence length, but it means the model literally cannot reference something from 5,000 tokens ago unless the information propagated forward through the window.
+
+Sparse attention is the middle ground: attend to everything, but use learned patterns to skip most of the computation. Some tokens attend broadly, most attend locally. The model learns which positions matter.
+
+**Why engineers should care:** When your AI coding tool responds in 2 seconds instead of 20, flash attention is a big part of why. When a model seems to "forget" context from earlier in a long conversation, sliding window attention might be the reason. These aren't bugs. They're architectural choices with real tradeoffs.
+
+## Context Window Expansion: From a Paragraph to a Codebase
+
+GPT-2 had a context window of 1,024 tokens. That's roughly 750 words: about three paragraphs. GPT-3 doubled it to 2,048. GPT-3.5 pushed to 4,096. Claude 3 hit 200,000. Gemini claims over 1 million.
+
+Expanding the context window isn't just allocating more memory. Position matters in language. "The cat sat on the mat" means something different from "The mat sat on the cat." The model needs to know where each token sits in the sequence, and the original transformer used fixed position embeddings that maxed out at the training length.
+
+Rotary Position Embeddings (RoPE) encode position through rotation in the embedding space. The elegant part: relative position between two tokens is captured by the angle between their rotated vectors, which means the model can generalize to longer sequences than it was trained on. ALiBi (Attention with Linear Biases) takes a simpler approach: it adds a linear penalty to attention scores based on distance, so farther tokens naturally receive less attention. No learned parameters, no finetuning required.
+
+\`\`\`python
+# RoPE intuition: position encoded as rotation
+# Two tokens at positions i and j
+# Their relative distance |i - j| determines the rotation angle
+# The dot product of their rotated embeddings naturally decays with distance
+
+def rotate_embedding(x, position, dim):
+    theta = 10000 ** (-2 * (dim // 2) / d_model)
+    angle = position * theta
+    return x * cos(angle) + rotate_half(x) * sin(angle)
+\`\`\`
+
+Context extension methods like YaRN and NTK-aware scaling let you stretch a model trained on 4K context to 32K or beyond by interpolating the position encodings. The model wasn't trained on long contexts, but the math works well enough for practical use.
+
+**Why engineers should care:** This is why you can paste an entire file into a coding agent and ask "what does this do?" Three years ago, you'd have had to chunk it manually and lose cross-reference context. The 128K+ context windows that modern coding tools rely on exist because of RoPE and its successors. When you hit a context limit and the model starts forgetting your earlier instructions, you're hitting the boundary of these techniques.
+
+## Instruction Tuning and RLHF: Making Models Follow Directions
+
+Download base Llama 3.3 and prompt it with "Write a Python function that sorts a list." You will not get a Python function. You'll get a continuation of what looks like a training document, maybe a blog post about sorting algorithms, maybe the next sentence of an academic paper. Base models are text completers, not instruction followers. They predict what comes next in a document, and "a helpful answer to a question" is not what comes next in most training documents.
+
+Instruction tuning fixes this by finetuning the base model on thousands of (instruction, response) pairs:
+
+\`\`\`json
+{
+  "instruction": "Write a Python function that sorts a list of integers in ascending order",
+  "response": "def sort_ascending(nums: list[int]) -> list[int]:\\n    return sorted(nums)"
+}
+\`\`\`
+
+The model learns that when it sees an instruction-shaped input, it should produce a response-shaped output.
+
+RLHF (Reinforcement Learning from Human Feedback) goes further. Human raters rank model outputs from best to worst. Those rankings train a reward model that scores outputs. The language model is then optimized against that reward model using reinforcement learning. The result: the model doesn't just follow instructions; it follows them in the way humans prefer. It explains its reasoning, it asks for clarification when the prompt is ambiguous, it avoids harmful outputs.
+
+**Why engineers should care:** This is the difference between a model you can use and one you can't. Every time you prompt an AI coding tool and get a well-structured answer instead of a hallucinated blog post, instruction tuning and RLHF are why. It's also why the same base model can feel completely different depending on who fine-tuned it. Meta releases the weights; the instruction tuning is what makes them useful.
+
+## Tool Use: The Enhancement That Created Agents
+
+For years, LLMs could only output text. They could describe how to query a database, but they couldn't query it. They could explain how to call an API, but they couldn't call it. Tool use changed that.
+
+The concept is straightforward. You define a set of tools as JSON schemas:
+
+\`\`\`json
+{
+  "name": "search_codebase",
+  "description": "Search files in the repository by keyword",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "query": { "type": "string" },
+      "file_pattern": { "type": "string" }
+    },
+    "required": ["query"]
+  }
+}
+\`\`\`
+
+The model learns to emit a structured tool call instead of (or alongside) natural language:
+
+\`\`\`json
+{
+  "tool": "search_codebase",
+  "arguments": { "query": "handlePayment", "file_pattern": "*.ts" }
+}
+\`\`\`
+
+The host application executes the tool, returns the result, and the model continues reasoning with the new information. This loop (reason, call tool, observe result, reason again) is what turns a text generator into an agent.
+
+**Why engineers should care:** This is the single most important enhancement for software engineering use cases. Every AI coding tool that can read your files, run your tests, execute shell commands, or interact with your database does so through tool use. Without it, the model is a chatbot. With it, the model is a collaborator that can actually touch your codebase. When you evaluate coding agents, the quality of tool use (how reliably the model calls the right tool with the right arguments) matters more than raw text generation quality.
+
+## Mixture of Experts: Bigger Without Being Slower
+
+A dense model activates every parameter for every token. A 70B dense model does 70B parameters worth of computation on every single token. Mixture of Experts (MoE) changes the economics.
+
+An MoE model has a router network and multiple expert sub-networks. For each token, the router selects a subset of experts (typically 2 out of 8 or 16), and only those experts process the token. The rest sit idle.
+
+The result: a model with 120B total parameters might only activate 30B per token. You get the knowledge capacity of a 120B model at the inference speed of a 30B model. The catch is that the full 120B must be loaded in memory, because any token might route to any expert. You save compute, not memory.
+
+\`\`\`
+Dense 70B:     [=========================] 70B active per token
+MoE 120B:      [======]..................  30B active, 90B idle per token
+                ^ router picks 2 of 8 experts
+
+Memory needed:  120 GB (full model)
+Compute used:   ~30B parameters worth
+Speed:          Faster than dense 70B
+\`\`\`
+
+| Model type | Total params | Active per token | Memory needed | Speed |
+|------------|-------------|-----------------|---------------|-------|
+| Dense 70B | 70B | 70B | ~70 GB (Q8) | Baseline |
+| MoE 120B (30B active) | 120B | 30B | ~120 GB (Q8) | Faster than dense 70B |
+
+**Why engineers should care:** When you see a model advertised as "120B parameters, runs like a 30B," it's MoE. The quality-to-speed ratio is genuinely better. But the memory requirement is the full model size, not the active size. If you're running locally, this is the difference between fitting on your hardware and not. If you're using a cloud API, MoE is why some providers offer larger models at lower latency than you'd expect.
+
+## The Point
+
+None of these enhancements exist in isolation. Quantization makes big models portable. Attention improvements make long contexts feasible. Context expansion makes coding tools useful. Instruction tuning makes the model follow your prompt. Tool use makes it an agent. MoE gives you scale without proportional cost.
+
+When you choose between Claude and GPT and Llama, you're not choosing between brands. You're choosing between different combinations of these architectural decisions: how they quantize, how they handle attention, how large their context window is, how they were aligned, how they call tools, and whether they use MoE. Knowing the architecture won't make you an ML researcher. But it will make you the engineer in the room who knows why one tool works for a given job and another doesn't.`,
+    tags: ["AI", "Machine Learning", "Architecture", "Engineering"],
+    readTime: "8 min read",
+  },
+  {
     title: "Jev Is Not an LLM (and That's the Point)",
     slug: "jev-is-not-an-llm",
     date: "2026-11-06",
@@ -133,8 +300,7 @@ Ask three questions before you adopt anything:
 Jev isn't better or worse than an LLM. It's a different kind of tool, built on a different premise, with different strengths. The engineers who understand that distinction will make better choices than the ones comparing benchmark scores on a leaderboard.`,
     tags: ["AI", "Reasoning", "Architecture", "Developer Tools"],
     readTime: "5 min read",
-  },,
-
+  },
   {
     title: "1.58 Bits Per Weight: Why Microsoft BitNet Changes Local AI",
     slug: "microsoft-bitnet-changes-local-ai",
@@ -275,8 +441,7 @@ The source code is open. The C++ runtime is readable. The math is simple enough 
 The era of giant GPU clusters isn't over. But the assumption that you need one to run useful models is no longer true. 1.58 bits per weight. Addition instead of multiplication. A consumer CPU instead of a datacenter GPU. The math works, and the code is on GitHub.`,
     tags: ["AI", "Local Inference", "Microsoft", "BitNet", "Architecture"],
     readTime: "7 min read",
-  },,
-
+  },
   {
     title: "The Networking Strategy Nobody Teaches Engineers",
     slug: "networking-strategy-nobody-teaches-engineers",
@@ -389,8 +554,7 @@ Pick one person whose work you respect. Someone whose code you've read, whose bl
 One conversation. That's how every meaningful professional relationship I've built started. The engineers who figure this out early have a compounding advantage that no amount of conference attendance can match.`,
     tags: ["Career", "Networking", "Professional Development", "Engineering Culture"],
     readTime: "6 min read",
-  },,
-
+  },
   {
     title: "Writing Code Forces You to Be Honest",
     slug: "writing-code-forces-you-to-be-honest",
@@ -496,8 +660,7 @@ The engineers who will matter in five years are the ones who still write. Still 
 You can read a thousand pull requests and learn the shape of good software. But you won't learn the weight of it until you carry it yourself.`,
     tags: ["Software Engineering", "Code Quality", "Career Growth", "Craft"],
     readTime: "5 min read",
-  },,
-
+  },
   {
     title: "How an Experienced Engineer Reads a New Codebase",
     slug: "how-an-experienced-engineer-reads-a-new-codebase",
@@ -724,7 +887,6 @@ If you've got your own tricks for reading a legacy codebase, or you want to comp
     tags: ["Git", "Developer Productivity", "Legacy Code", "Ruby on Rails", "Engineering"],
     readTime: "9 min read",
   },
-
   {
     title: "What Is a Forward-Deployed Engineer?",
     slug: "what-is-a-forward-deployed-engineer",
